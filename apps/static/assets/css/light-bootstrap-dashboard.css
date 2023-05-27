@@ -182,6 +182,13 @@ input:focus {
 .documentation .navbar {
   z-index: 21; }
 
+  .logo-image {
+    width: 80%;    /* Ajusta el ancho de la imagen al ancho de su contenedor */
+    margin:auto;
+    display:block;
+    height: auto;   /* Hace que la altura sea automática para mantener las proporciones de la imagen */
+}
+
 .sidebar,
 body > .navbar-collapse {
   position: absolute;

@@ -1,4 +1,4 @@
-<div class="sidebar" data-image="{{ config.ASSETS_ROOT }}/img/sidebar-5.jpg">
+<div class="sidebar" data-color= "blue" data-image="{{ config.ASSETS_ROOT }}/img/sidebar-5.jpg">
     <!--
 Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
 
@@ -6,8 +6,8 @@ Tip 2: you can also add an image using data-image tag
 -->
     <div class="sidebar-wrapper">
         <div class="logo">
-            <a href="/" class="simple-text">
-                Flask Light
+            <a href="/" >
+                <img class= "logo-image" src="{{ config.ASSETS_ROOT }}/img/logo.png" alt="Logo">
             </a>
         </div>
         <ul class="nav">
@@ -41,25 +41,34 @@ Tip 2: you can also add an image using data-image tag
                     <i class="nc-icon nc-atom"></i>
                     <p>Icons</p>
                 </a>
-            </li>
-            <li class="nav-item nav-item {% if 'maps' in segment %} active {% endif %}">
-                <a class="nav-link" href="/maps.html">
-                    <i class="nc-icon nc-pin-3"></i>
-                    <p>Maps</p>
-                </a>
-            </li>
+
+            <!--  QUITAR DEL MENU PORQUE NO NOS HACE FALTA POR AHORA:
+                </li>
+                <li class="nav-item nav-item {% if 'maps' in segment %} active {% endif %}">
+                    <a class="nav-link" href="/maps.html">
+                        <i class="nc-icon nc-pin-3"></i>
+                        <p>Maps</p>
+                    </a>
+                </li>
+            -->
             <li class="nav-item nav-item {% if 'notif' in segment %} active {% endif %}">
                 <a class="nav-link" href="/notifications.html">
                     <i class="nc-icon nc-bell-55"></i>
                     <p>Notifications</p>
                 </a>
             </li>
-            <li class="nav-item nav-item {% if '404' in segment %} active {% endif %}">
-                <a class="nav-link" href="/page-404.html">
-                    <i class="nc-icon nc-settings-gear-64"></i>
-                    <p>Error 404</p>
-                </a>
-            </li>
+
+            <!--  QUITAR DEL MENU PORQUE NO NOS HACE FALTA POR AHORA:
+
+                <li class="nav-item nav-item {% if '404' in segment %} active {% endif %}">
+                    <a class="nav-link" href="/page-404.html">
+                        <i class="nc-icon nc-settings-gear-64"></i>
+                        <p>Error 404</p>
+                    </a>
+                </li>
+            -->
+
+
             <li>
                 <a class="nav-link" href="{{ url_for('authentication_blueprint.logout') }}">
                     <i class="nc-icon nc-button-power"></i>
