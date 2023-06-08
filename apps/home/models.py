@@ -18,7 +18,7 @@ class Clientes(db.Model):
     CIF = db.Column(db.String(9), unique=True, nullable=False)
     Nombre = db.Column(db.String(60), nullable=False)
     Direccion = db.Column(db.String(60))
-    Telefono = db.Column(db.String(15))
+    Telefono = db.Column(db.Numeric)
     Tipo_Cliente = db.Column(db.String(20))
 
 class Proyectos(db.Model):
@@ -38,7 +38,7 @@ class Proveedores(db.Model):
     CIF = db.Column(db.String(9), unique=True, nullable=False)
     Nombre = db.Column(db.String(60), nullable=False)
     Direccion = db.Column(db.String(60))
-    Telefono = db.Column(db.String(15))
+    Telefono = db.Column(db.Numeric)
     Tipo_Proveedor = db.Column(db.String(20), nullable=False)
 
 class Bancos(db.Model):
@@ -58,7 +58,7 @@ class Registros(db.Model):
     Concepto = db.Column(db.String(60), nullable=False)
     Tipo = db.Column(db.String(10), nullable=False)
     Importe = db.Column(db.Float, nullable=False)
-    Tipo_Pago = db.Column(db.Float, nullable=False)
+    Tipo_Pago = db.Column(db.String(10), nullable=False)
     Fecha_Factura = db.Column(db.Date, nullable=False)
     Fecha_Vencimiento = db.Column(db.Date, nullable=False)
     id_Banco = db.Column(db.Integer, db.ForeignKey('Bancos.id_Banco'), nullable=False)
