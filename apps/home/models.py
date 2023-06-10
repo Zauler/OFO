@@ -11,6 +11,7 @@ class Gestores(db.Model):
     Apellidos = db.Column(db.String(60), nullable=False)
     DNI = db.Column(db.String(9), unique=True, nullable=False)
     Zona_Geo = db.Column(db.String(60))
+    proyectos = db.relationship('Proyectos', back_populates='gestor')
 
 class Clientes(db.Model):
     __tablename__ = 'Clientes'
@@ -20,6 +21,8 @@ class Clientes(db.Model):
     Direccion = db.Column(db.String(60))
     Telefono = db.Column(db.Numeric)
     Tipo_Cliente = db.Column(db.String(20))
+    proyectos = db.relationship('Proyectos', back_populates='cliente')
+    registros = db.relationship('Registros', back_populates='cliente')
 
 class Proyectos(db.Model):
     __tablename__ = 'Proyectos'
@@ -29,8 +32,9 @@ class Proyectos(db.Model):
     Descripcion = db.Column(db.String(60), nullable=False)
     id_Cliente = db.Column(db.Integer, db.ForeignKey('Clientes.id_Cliente'), nullable=False)
     id_Gestor = db.Column(db.Integer, db.ForeignKey('Gestores.id_Gestor'), nullable=False)
-    cliente = db.relationship('Clientes')
-    gestor = db.relationship('Gestores')
+    cliente = db.relationship('Clientes', back_populates='proyectos')
+    gestor = db.relationship('Gestores', back_populates='proyectos')
+    resgistros = db.relationship('Registros', back_populates='proyecto')
 
 class Proveedores(db.Model):
     __tablename__ = 'Proveedores'
@@ -40,6 +44,7 @@ class Proveedores(db.Model):
     Direccion = db.Column(db.String(60))
     Telefono = db.Column(db.Numeric)
     Tipo_Proveedor = db.Column(db.String(20), nullable=False)
+    registros = db.relationship('Registros', back_populates='proveedor')
 
 class Bancos(db.Model):
     __tablename__ = 'Bancos'
@@ -48,6 +53,7 @@ class Bancos(db.Model):
     Banco = db.Column(db.String(60), nullable=False)
     Cash = db.Column(db.Float)
     Linea_max_confirming = db.Column(db.Float)
+    registros = db.relationship('Registros', back_populates='banco')
 
 class Registros(db.Model):
     __tablename__ = 'Registros'
@@ -64,10 +70,10 @@ class Registros(db.Model):
     id_Banco = db.Column(db.Integer, db.ForeignKey('Bancos.id_Banco'), nullable=False)
     Fact_Emit_Recib = db.Column(db.Boolean, nullable=False)
     Pago_Emit_Recib = db.Column(db.Boolean, nullable=False)
-    proyecto = db.relationship('Proyectos')
-    banco = db.relationship('Bancos')
-    proveedor = db.relationship('Proveedores')
-    cliente = db.relationship('Clientes')
+    proyecto = db.relationship('Proyectos', back_populates='registros')
+    banco = db.relationship('Bancos', back_populates='registros')
+    proveedor = db.relationship('Proveedores',back_populates='registros')
+    cliente = db.relationship('Clientes', back_populates='registros')
 
     __table_args__ = (
         CheckConstraint(
