@@ -2,6 +2,9 @@
 """
 Copyright (c) 2019 - present AppSeed.us
 """
+import pandas as pd
+
+from apps import db
 from apps.config import *
 from apps.home import blueprint
 from apps.home.models import *
@@ -28,10 +31,10 @@ def index():
     # motor = Config.SQLALCHEMY_DATABASE_URI
     # print(type(motor))
 
-    registros = Registros.query.select_from(Registros)
-    for registro in registros:
-        if registro.proveedor != None:
-            print(f"{registro.id_Registro} - {registro.proyecto.Nombre} - {registro.proveedor.Nombre}")
+   # registros = Registros.query.select_from(Registros)
+   # for registro in registros:
+   #     if registro.proveedor != None:
+   #         print(f"{registro.id_Registro} - {registro.proyecto.Nombre} - {registro.proveedor.Nombre}")
 
     # print("N REGISTROS: ", registros.count())
     # print(type(registros))
@@ -45,8 +48,13 @@ def index():
     # gestor_asignado = proyecto.gestor
     # print(f"Gestor del Proyecto: {gestor_asignado.Nombre}")
 
+    #query = db.session.query(Proyectos.id_Proyecto, Gestores.Nombre).join(Gestores)
+    #df = pd.read_sql(query.statement, db.session.bind)
+    #print(df.head(2))
 
-
+    query = db.session.query(Registros.id_Registro, Clientes.Nombre ,Clientes.Telefono ).join(Clientes)
+    df = pd.read_sql(query.statement, db.session.bind)
+    print(df.head(20))
 
     return render_template('home/index.html', segment='index')
 

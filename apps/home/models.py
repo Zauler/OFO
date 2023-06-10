@@ -34,7 +34,7 @@ class Proyectos(db.Model):
     id_Gestor = db.Column(db.Integer, db.ForeignKey('Gestores.id_Gestor'), nullable=False)
     cliente = db.relationship('Clientes', back_populates='proyectos')
     gestor = db.relationship('Gestores', back_populates='proyectos')
-    resgistros = db.relationship('Registros', back_populates='proyecto')
+    registros = db.relationship('Registros', back_populates='proyecto')
 
 class Proveedores(db.Model):
     __tablename__ = 'Proveedores'
@@ -72,7 +72,7 @@ class Registros(db.Model):
     Pago_Emit_Recib = db.Column(db.Boolean, nullable=False)
     proyecto = db.relationship('Proyectos', back_populates='registros')
     banco = db.relationship('Bancos', back_populates='registros')
-    proveedor = db.relationship('Proveedores',back_populates='registros')
+    proveedor = db.relationship('Proveedores', back_populates='registros')
     cliente = db.relationship('Clientes', back_populates='registros')
 
     __table_args__ = (
