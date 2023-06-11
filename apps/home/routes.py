@@ -8,7 +8,7 @@ from apps import db
 from apps.config import *
 from apps.home import blueprint
 from apps.home.models import *
-from sqlalchemy.orm import Session
+from sqlalchemy import join
 from flask import render_template, request
 from flask_login import login_required
 from jinja2 import TemplateNotFound
@@ -17,44 +17,45 @@ from jinja2 import TemplateNotFound
 @blueprint.route('/index')
 @login_required
 def index():
-    # sesion = Session()
-
-    # query = sesion.query(Registros).all
-
-    # gestor = Gestores.query.filter_by(Nombre="Federico").first()
-    #registros = Registros.query.get(5)
-    #print(f"Concepto de Registro: {registros.Concepto}")
-    # banco_asignado = registros.banco
-    # print(f"Banco del Registro: {banco_asignado.Banco}")
-
-
-    # motor = Config.SQLALCHEMY_DATABASE_URI
-    # print(type(motor))
-
-   # registros = Registros.query.select_from(Registros)
-   # for registro in registros:
-   #     if registro.proveedor != None:
-   #         print(f"{registro.id_Registro} - {registro.proyecto.Nombre} - {registro.proveedor.Nombre}")
-
-    # print("N REGISTROS: ", registros.count())
-    # print(type(registros))
-
-    #print(f"El gestor es: {gestor.Nombre}")
-    #print(registros.Concepto)
-    #print(dir(gestor.query))
-
-    # proyecto = Proyectos.query.get(1)
-    # print(f"Proyecto: {proyecto.Nombre}")
-    # gestor_asignado = proyecto.gestor
-    # print(f"Gestor del Proyecto: {gestor_asignado.Nombre}")
-
-    #query = db.session.query(Proyectos.id_Proyecto, Gestores.Nombre).join(Gestores)
-    #df = pd.read_sql(query.statement, db.session.bind)
-    #print(df.head(2))
-
-    query = db.session.query(Registros.id_Registro, Clientes.Nombre ,Clientes.Telefono ).join(Clientes)
-    df = pd.read_sql(query.statement, db.session.bind)
-    print(df.head(20))
+        
+    queryClientes = db.session.query(Registros.id_Registro, Proyectos.Nombre, Clientes.Nombre,
+                             Registros.Concepto, Registros.Tipo, Registros.Importe,
+                              Registros.Tipo_Pago, Registros.Fecha_Factura, Registros.Fecha_Vencimiento,
+                               Bancos.Banco, Registros.Fact_Emit_Recib,
+                               Registros.Pago_Emit_Recib, Gestores.Nombre).select_from(Registros).join(Clientes,
+                               Registros.id_Cliente == Clientes.id_Cliente).join(Proyectos,
+                                Registros.id_Proyecto == Proyectos.id_Proyecto).join(Bancos,
+                                Registros.id_Banco == Bancos.id_Banco).join(Gestores,
+                                Proyectos.id_Gestor == Gestores.id_Gestor)
+    
+    queryProveedores = db.session.query(Registros.id_Registro, Proyectos.Nombre, Proveedores.Nombre,
+                            Registros.Concepto, Registros.Tipo, Registros.Importe,
+                            Registros.Tipo_Pago, Registros.Fecha_Factura, Registros.Fecha_Vencimiento,
+                            Bancos.Banco, Registros.Fact_Emit_Recib,
+                            Registros.Pago_Emit_Recib, Gestores.Nombre).select_from(Registros).join(Proveedores,
+                            Registros.id_Proveedor == Proveedores.id_Proveedor).join(Proyectos,
+                            Registros.id_Proyecto == Proyectos.id_Proyecto).join(Bancos,
+                            Registros.id_Banco == Bancos.id_Banco).join(Gestores,
+                            Proyectos.id_Gestor == Gestores.id_Gestor)
+    
+    # queryPrueba = db.session.query(Registros.id_Registro, Registros.Concepto, Registros.Tipo,
+    #                                 Registros.Importe,Registros.Fecha_Factura, Registros.Fecha_Vencimiento,
+    #                                 Registros.Fact_Emit_Recib,Registros.Pago_Emit_Recib)
+    # columnas_fecha = ["Fecha_Factura", "Fecha_Vencimiento"]
+    # dfPrueba = pd.read_sql(queryPrueba.statement, db.session.bind, parse_dates=columnas_fecha)
+    
+    dfClientes = pd.read_sql(queryClientes.statement, db.session.bind) 
+    dfProveedores = pd.read_sql(queryProveedores.statement, db.session.bind)
+    
+    df = pd.concat([dfClientes, dfProveedores], ignore_index=True)
+    df.sort_values(by="id_Registro",ignore_index=True,inplace=True)
+    
+    columnas=[
+        'id_Registro', 'Proyecto', 'Proveedor', 'Concepto', 'Tipo', 'Importe', 'Tipo_Pago', 'Fecha_Factura', 'Fecha_Vencimiento', 'Banco',
+        'Fact_Emit_Recib', 'Pago_Emit_Recib', 'Gestor']
+    
+    df.columns = columnas
+    df.to_csv("datos/df.csv", sep=";", index=False)
 
     return render_template('home/index.html', segment='index')
 
