@@ -15,31 +15,33 @@ from flask import render_template, request
 from flask_login import login_required
 from jinja2 import TemplateNotFound
 from datetime import datetime
+from apps.home.consultasDB import *
+
 
 
 @blueprint.route('/index')
 @login_required
 def index():
         
-    queryClientes = db.session.query(Registros.id_Registro, Proyectos.Nombre, Clientes.Nombre,
-                             Registros.Concepto, Registros.Tipo, Registros.Importe,
-                              Registros.Tipo_Pago, Registros.Fecha_Factura, Registros.Fecha_Vencimiento,
-                               Bancos.Banco, Registros.Fact_Emit_Recib,
-                               Registros.Pago_Emit_Recib, Gestores.Nombre).select_from(Registros).join(Clientes,
-                               Registros.id_Cliente == Clientes.id_Cliente).join(Proyectos,
-                                Registros.id_Proyecto == Proyectos.id_Proyecto).join(Bancos,
-                                Registros.id_Banco == Bancos.id_Banco).join(Gestores,
-                                Proyectos.id_Gestor == Gestores.id_Gestor)
+    # queryClientes = db.session.query(Registros.id_Registro, Proyectos.Nombre, Clientes.Nombre,
+    #                          Registros.Concepto, Registros.Tipo, Registros.Importe,
+    #                           Registros.Tipo_Pago, Registros.Fecha_Factura, Registros.Fecha_Vencimiento,
+    #                            Bancos.Banco, Registros.Fact_Emit_Recib,
+    #                            Registros.Pago_Emit_Recib, Gestores.Nombre).select_from(Registros).join(Clientes,
+    #                            Registros.id_Cliente == Clientes.id_Cliente).join(Proyectos,
+    #                             Registros.id_Proyecto == Proyectos.id_Proyecto).join(Bancos,
+    #                             Registros.id_Banco == Bancos.id_Banco).join(Gestores,
+    #                             Proyectos.id_Gestor == Gestores.id_Gestor)
     
-    queryProveedores = db.session.query(Registros.id_Registro, Proyectos.Nombre, Proveedores.Nombre,
-                            Registros.Concepto, Registros.Tipo, Registros.Importe,
-                            Registros.Tipo_Pago, Registros.Fecha_Factura, Registros.Fecha_Vencimiento,
-                            Bancos.Banco, Registros.Fact_Emit_Recib,
-                            Registros.Pago_Emit_Recib, Gestores.Nombre).select_from(Registros).join(Proveedores,
-                            Registros.id_Proveedor == Proveedores.id_Proveedor).join(Proyectos,
-                            Registros.id_Proyecto == Proyectos.id_Proyecto).join(Bancos,
-                            Registros.id_Banco == Bancos.id_Banco).join(Gestores,
-                            Proyectos.id_Gestor == Gestores.id_Gestor)
+    # queryProveedores = db.session.query(Registros.id_Registro, Proyectos.Nombre, Proveedores.Nombre,
+    #                         Registros.Concepto, Registros.Tipo, Registros.Importe,
+    #                         Registros.Tipo_Pago, Registros.Fecha_Factura, Registros.Fecha_Vencimiento,
+    #                         Bancos.Banco, Registros.Fact_Emit_Recib,
+    #                         Registros.Pago_Emit_Recib, Gestores.Nombre).select_from(Registros).join(Proveedores,
+    #                         Registros.id_Proveedor == Proveedores.id_Proveedor).join(Proyectos,
+    #                         Registros.id_Proyecto == Proyectos.id_Proyecto).join(Bancos,
+    #                         Registros.id_Banco == Bancos.id_Banco).join(Gestores,
+    #                         Proyectos.id_Gestor == Gestores.id_Gestor)
     
     # queryPrueba = db.session.query(Registros.id_Registro, Registros.Concepto, Registros.Tipo,
     #                                 Registros.Importe,Registros.Fecha_Factura, Registros.Fecha_Vencimiento,
@@ -47,18 +49,18 @@ def index():
     # columnas_fecha = ["Fecha_Factura", "Fecha_Vencimiento"]
     # dfPrueba = pd.read_sql(queryPrueba.statement, db.session.bind, parse_dates=columnas_fecha)
     
-    dfClientes = pd.read_sql(queryClientes.statement, db.session.bind) 
-    dfProveedores = pd.read_sql(queryProveedores.statement, db.session.bind)
+    # dfClientes = pd.read_sql(queryClientes.statement, db.session.bind) 
+    # dfProveedores = pd.read_sql(queryProveedores.statement, db.session.bind)
     
-    df = pd.concat([dfClientes, dfProveedores], ignore_index=True)
-    df.sort_values(by="id_Registro",ignore_index=True,inplace=True)
+    # df = pd.concat([dfClientes, dfProveedores], ignore_index=True)
+    # df.sort_values(by="id_Registro",ignore_index=True,inplace=True)
     
-    columnas=[
-        'id_Registro', 'Proyecto', 'Proveedor', 'Concepto', 'Tipo', 'Importe', 'Tipo_Pago', 'Fecha_Factura', 'Fecha_Vencimiento', 'Banco',
-        'Fact_Emit_Recib', 'Pago_Emit_Recib', 'Gestor']
+    # columnas=[
+    #     'id_Registro', 'Proyecto', 'Proveedor', 'Concepto', 'Tipo', 'Importe', 'Tipo_Pago', 'Fecha_Factura', 'Fecha_Vencimiento', 'Banco',
+    #     'Fact_Emit_Recib', 'Pago_Emit_Recib', 'Gestor']
     
-    df.columns = columnas
-    df.to_csv("datos/df.csv", sep=";", index=False)
+    # df.columns = columnas
+    # df.to_csv("datos/df.csv", sep=";", index=False)
 
     
     # sesion = Session()
@@ -198,6 +200,127 @@ def route_template(template):
 
     except:
         return render_template('home/page-500.html'), 500
+
+
+
+@blueprint.route('/table.html', methods=('GET', 'POST', 'PUT'))
+@login_required
+def table():
+    
+    # # METODO POST
+    # if request.method == 'POST':
+    #     proyecto = request.form['proyecto']
+    #     proveedor = request.form['proveedor']
+    #     concepto = request.form['concepto']
+    #     importe = request.form['importe']
+    #     modalidad = request.form['tipo']
+    #     tipoPago = request.form['tipoPago']
+    #     fecha_fact = request.form['fechaFactura']
+    #     banco = request.form['entidad']
+
+    #     if modalidad == "Compra":
+    #         fecha_venc = request.form['fechaVencimiento']
+    #     else:
+    #         fecha_venc = request.form['fechaVencimientoDate']
+    #         ano,mes,dia = fecha_venc.split("-")
+    #         fecha_venc = (f"{dia}/{mes}/{ano}")
+
+
+    #     # Le cambiamos el formato a la fecha de factura para aparezca como DD-MM-YYYY
+    #     ano,mes,dia = fecha_fact.split("-")
+    #     fecha_fact = (f"{dia}/{mes}/{ano}")
+        
+    #     lista_datos = [proyecto,proveedor,concepto,modalidad,importe,tipoPago,fecha_fact,fecha_venc,banco,'False','False','False',False]  # Los 4 últimos "False" corresponden a los checkbox
+
+    #     with open('datos/pedidos.csv', 'a', newline='', encoding='utf-8') as file:
+    #         writer = csv.writer(file)
+    #         writer.writerow(lista_datos)
+
+
+    # # METODO PUT
+    # if request.method == 'PUT':
+    #     respuesta = request.get_json()
+
+    #     if len(respuesta) == 3: # SI LA RESPUESTA QUE RECIBIMOS SOLO TIENE 3 PARÁMETROS
+    #         indice = (respuesta['indice'])
+    #         estado = (respuesta['estado'])
+    #         tipo = (respuesta['tipo'])
+
+    #         #MODIFICAR VALOR DE UN CHECBOX
+    #         if tipo == "anticipo":  # Si es un checkbox de anticipo
+    #             dfTemporal = pd.read_csv('datos/pedidos.csv')
+    #             dfTemporal.iloc[indice,9] = estado
+    #             dfTemporal.to_csv('datos/pedidos.csv',index=False)
+    #         elif tipo == "recompra":   # Si es un checkbox de cobrado
+    #             dfTemporal = pd.read_csv('datos/pedidos.csv')
+    #             dfTemporal.iloc[indice,10] = estado
+    #             dfTemporal.to_csv('datos/pedidos.csv',index=False)
+    #         elif tipo == "cobrado":   # Si es un checkbox de cobrado
+    #             dfTemporal = pd.read_csv('datos/pedidos.csv')
+    #             dfTemporal.iloc[indice,11] = estado
+    #             dfTemporal.to_csv('datos/pedidos.csv',index=False)
+    #         elif tipo == "pagoEmitido":   # Si es un checkbox de cobrado
+    #             dfTemporal = pd.read_csv('datos/pedidos.csv')
+    #             dfTemporal.iloc[indice,12] = estado
+    #             dfTemporal.to_csv('datos/pedidos.csv',index=False)
+                
+
+    #     elif len(respuesta) == 10:  # MODIFICAR UN REGISTRO
+    #         indiceM = (respuesta[0])
+    #         proyectoM = (respuesta[1])
+    #         tipoM = (respuesta[2])
+    #         proveedorM = (respuesta[3])
+    #         conceptoM = (respuesta[4])
+    #         importeM = float((respuesta[5]))
+    #         fechaF = (respuesta[6])
+    #         tipoPagoM = (respuesta[7])
+    #         fechaV = (respuesta[8])
+    #         entidadM = (respuesta[9])
+
+    #         # Actualizamos el registro del pedido seleccionado
+    #         dfTemporal = pd.read_csv('datos/pedidos.csv')
+    #         dfTemporal.iloc[indiceM,0] = proyectoM
+    #         dfTemporal.iloc[indiceM,1] = proveedorM
+    #         dfTemporal.iloc[indiceM,2] = conceptoM
+    #         dfTemporal.iloc[indiceM,3] = tipoM
+    #         dfTemporal.iloc[indiceM,4] = importeM
+    #         dfTemporal.iloc[indiceM,5] = tipoPagoM
+    #         dfTemporal.iloc[indiceM,6] = fechaF
+    #         dfTemporal.iloc[indiceM,7] = fechaV
+    #         dfTemporal.iloc[indiceM,8] = entidadM
+    #         dfTemporal.to_csv('datos/pedidos.csv',index=False)
+
+
+    #     elif len(respuesta) == 1:   # ELIMINAR UN REGISTRO
+    #         indiceM = int(respuesta['indice'])
+    #         dfTemporal = pd.read_csv('datos/pedidos.csv')
+    #         dfTemporal.drop([indiceM], axis=0, inplace=True)
+    #         dfTemporal.to_csv('datos/pedidos.csv',index=False)
+
+    # METODO GET            
+    df = ConsultasDB.consultaRegistros().drop('id_Registro',axis=1)
+    dfProveedores = ConsultasDB.consultaProveedores()
+    dfBancos = ConsultasDB.consultaBancos()
+    dfClientes = ConsultasDB.consultaClientes()
+    dfProyectos = ConsultasDB.consultaProyectos()
+
+    # # Vamos a crear un hilo nuevo que compruebe si hay cambios en los clientes de holded y si es así que actualice el dfClientes
+    # hilo1 = threading.Thread(target=fn.consultaContactos)
+    # hilo1.start()
+
+    # Convertimos el dataframe en una lista para pasarlo al template donde lo recogerá javascript
+    lista_condiciones_proveedores = (dfProveedores['Condiciones_confirming'].values).tolist()
+    listaContactos = (dfClientes['Nombre'].values).tolist()
+    listaProveedores = (dfProveedores['Nombre'].values).tolist()
+    listaProyectos = (dfProyectos['Nombre'].values).tolist()
+
+
+    return render_template("home/table.html", segment='table', tables=[df.to_html(header=True, classes='table table-hover table-striped table-bordered',
+                table_id="tabla_registros", index=True)],
+                proveedores = dfProveedores['Nombre'].values, bancos = dfBancos['Banco'],
+                condicionesProve=lista_condiciones_proveedores,
+                listaProyectos = listaProyectos,
+                listaContact=listaContactos, listaProve = listaProveedores)
 
 
 # Helper - Extract current page name from request

@@ -9,138 +9,1155 @@
 
     <div class="content">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card strpied-tabled-with-hover">
-                        <div class="card-header ">
-                            <h4 class="card-title">Striped Table with Hover</h4>
-                            <p class="card-category">Here is a subtitle for this table</p>
-                        </div>
-                        <div class="card-body table-full-width table-responsive">
-                            <table class="table table-hover table-striped">
-                                <thead>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Salary</th>
-                                    <th>Country</th>
-                                    <th>City</th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Dakota Rice</td>
-                                        <td>$36,738</td>
-                                        <td>Niger</td>
-                                        <td>Oud-Turnhout</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Minerva Hooper</td>
-                                        <td>$23,789</td>
-                                        <td>Curaçao</td>
-                                        <td>Sinaai-Waas</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Sage Rodriguez</td>
-                                        <td>$56,142</td>
-                                        <td>Netherlands</td>
-                                        <td>Baileux</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Philip Chaney</td>
-                                        <td>$38,735</td>
-                                        <td>Korea, South</td>
-                                        <td>Overland Park</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Doris Greene</td>
-                                        <td>$63,542</td>
-                                        <td>Malawi</td>
-                                        <td>Feldkirchen in Kärnten</td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>Mason Porter</td>
-                                        <td>$78,615</td>
-                                        <td>Chile</td>
-                                        <td>Gloucester</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="card card-plain table-plain-bg">
-                        <div class="card-header ">
-                            <h4 class="card-title">Table on Plain Background</h4>
-                            <p class="card-category">Here is a subtitle for this table</p>
-                        </div>
-                        <div class="card-body table-full-width table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Salary</th>
-                                    <th>Country</th>
-                                    <th>City</th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Dakota Rice</td>
-                                        <td>$36,738</td>
-                                        <td>Niger</td>
-                                        <td>Oud-Turnhout</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Minerva Hooper</td>
-                                        <td>$23,789</td>
-                                        <td>Curaçao</td>
-                                        <td>Sinaai-Waas</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Sage Rodriguez</td>
-                                        <td>$56,142</td>
-                                        <td>Netherlands</td>
-                                        <td>Baileux</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Philip Chaney</td>
-                                        <td>$38,735</td>
-                                        <td>Korea, South</td>
-                                        <td>Overland Park</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Doris Greene</td>
-                                        <td>$63,542</td>
-                                        <td>Malawi</td>
-                                        <td>Feldkirchen in Kärnten</td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>Mason Porter</td>
-                                        <td>$78,615</td>
-                                        <td>Chile</td>
-                                        <td>Gloucester</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+            <div class="row" style="flex-direction: column;">
+            <p style="color: slategrey; text-align: center;">AÑADIR REGISTRO</p>
             </div>
+            <div class="row" style="flex-direction: column;">
+                <form action="" method="post" id="form_registro">
+                    <!-- PRIMERA FILA DE CONTROLES -->
+                    <div class="form-row">
+
+                        <div class="form-group col-md">
+                            <label for="inputproyecto" style="color: slategrey; font-size:14px;">Proyecto</label>
+                            <select id="proyecto" name="proyecto" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
+                                <option>Elegir...</option>
+                                    {%- for i in listaProyectos%}
+                                    <option value="{{ i }}" >{{ i }}</option>
+                                    {%- endfor %}
+                                </select>
+                        </div>
+
+                        <!-- <div class="form-group col">
+                            <label for="inputproyecto" style="color: slategrey; font-size:14px;">Proyecto</label>
+                            <input type="text" id="proyecto" name="proyecto" placeholder="Título Proyecto"
+                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                        </div> -->
+
+                        <div class="form-group col">
+                            <label for="inputtipo" style="color: slategrey; font-size:14px;">Tipo</label>
+                            <select id="tipo" name="tipo" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
+                                <option>Elegir...</option>
+                                <option>Compra</option>
+                                <option>Venta</option>
+                            </select>
+                        </div>
+                        <div class="form-group col">
+                            <label for="inputproveedor" id='etiqProv' style="color: slategrey; font-size:14px;">Proveedor</label>
+                            <select id="proveedor" name="proveedor" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;"
+                            onchange = "cambioProveedor()">
+                                <option>Elegir...</option>
+                                {%- for i in proveedores %}
+                                <option value="{{ i }}" >{{ i }}</option>
+                                {%- endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputconcepto" style="color: slategrey; font-size:14px;">Concepto</label>
+                            <input type="text" id="concepto" name="concepto" placeholder="Compra de material..."
+                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                        </div>
+                        <div class="form-group col">
+                            <label for="inputimporte" style="color: slategrey; font-size:14px;">Importe</label>
+                            <input type="number" id="importe" name="importe" step="0.01" placeholder="0000.00"
+                            class="form-control form-control-sm"/>
+                        </div>
+                        
+                    </div>
+
+                    <!-- SEGUNDA FILA DE CONTROLES -->
+                    <div class="form-row">
+                        <div class="form-group col-md">
+                            <label for="inputfechaFactura" style="color: slategrey; font-size:14px;">Fecha de Factura</label>
+                            <input type="date" id="fechaFactura" name="fechaFactura" class="form-control form-control-sm"
+                            style="background-color: white;"/>
+                        </div>
+
+                        <div class="form-group col-md">
+                            <label for="inputtipoPago" style="color: slategrey; font-size:14px;">Tipo de Pago</label>
+                       <select id="tipoPago" name="tipoPago" class="col-md-10 form-control"
+                            style="font-size:14px; max-width: 100%;background-color: white;" >
+                                <option>Elegir...</option>
+                                <option>CONFIRMING</option>
+                                <option>TRANSFERENCIA</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md">
+                            <label for="inputfechaVencimiento" style="color: slategrey; font-size:14px;">Fecha de Vencimiento</label>
+                            <input type="text" id="fechaVencimiento" name="fechaVencimiento" class="form-control form-control-sm" readonly
+                            style="background-color: white;"/>
+                            <input type="date" id="fechaVencimientoDate" name="fechaVencimientoDate" class="form-control form-control-sm"
+                            style="background-color: white;"/>
+                        </div>
+
+                        <div class="form-group col-md">
+                            <label for="inputentidad" style="color: slategrey; font-size:14px;">Entidad Bancaria</label>
+                            <select id="entidad" name="entidad" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
+                                <option>Elegir...</option>
+                                    {%- for i in bancos %}
+                                    <option value="{{ i }}" >{{ i }}</option>
+                                    {%- endfor %}
+                                </select>
+                        </div>
+                    </div>
+                    <div class="form-row" style="justify-content: center;">
+                        <input type="submit" id="send-signup" name="signup" value="Registrar" class="btn btn-primary" style="margin: 2px;"/>
+                        <input type="reset" value="Limpiar formulario" class="btn btn-primary" style="margin: 2px;">
+                    </div>
+                    
+                    <hr>
+                </form>
+            </div>
+
+            <!-- FILTROS DE BUSQUEDA -->
+            <div class="row" style="flex-direction: column;">
+                <div class="form-row" style="justify-content: center;">
+                    <div class="form-group col-md">
+                        <input class="form-control" id="filtroProyecto" type="text" placeholder="Proyecto...">
+                    </div>
+                    <div class="form-group col-md">
+                        <input class="form-control" id="filtroProveedor" type="text" placeholder="Proveedor...">
+                    </div>
+                    <div class="form-group col-1">
+                        <input class="form-control" id="filtroTipo" type="text" placeholder="Venta...">
+                    </div>
+                    <div class="form-group col-md">
+                        <input class="form-control" id="filtroFechasFac" type="text" placeholder="Fechas..." style="color: rgb(213, 212, 212); font-size:11pt;">
+                    </div>
+                    <div class="form-group col-md">
+                        <input class="form-control" id="filtroFechasVenci" type="text" placeholder="Fechas..." style="color: rgb(213, 212, 212); font-size:11pt;">
+                    </div>
+                    <div class="form-group col-md">
+                        <input class="form-control" id="filtroPago" type="text" placeholder="Corfirming, transf...">
+                    </div>
+                    <div class="form-group col-1">
+                        <input class="form-control" id="filtroBanco" type="text" placeholder="Banco...">
+                    </div>
+                </div>
+            </div>  
+
+            <!-- TABLA -->
+            <div class="row" style="flex-direction: column;">
+                <div class="table-wrap" style="height: 400px; background-color: rgba(201, 38, 38, 0);font-size: x-small">
+                    {% for table in tables %}
+                        {{ table|safe }}
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            <!-- BOTÓN DE DESCARGA -->
+            <div class="form-row" style="justify-content: center;">
+                <input type="submit" id="descargaXLS" name="descargaXLS" value="Descargar XLS" class="btn btn-primary" style="margin-top: 10px;"/>
+            </div>
+            
         </div>
     </div>
 
+
 {% endblock content %}
 
-<!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+<!------------------------------------------- Specific Page JS goes HERE  ------------------------------------------------------>
+{% block javascripts %}
+
+    <!--<script type="text/javascript" src="{{url_for('static', filename='assets/js/miscript.js')}}"></script>-->
+
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+<script src="./static/assets/js/plugins/xlsx.full.min.js"></script>
+<script src="./static/assets/js/plugins/FileSaver.min.js"></script>
+<script src="./static/assets/js/plugins/tableexport.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.6/xlsx.core.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+
+<script type = "text/javascript">
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("form_registro").addEventListener('submit', validarFormulario);
+        // Añadimos la funcion validarFormulario para comprobar los datos antes de enviarlos
+        document.getElementById('importe').addEventListener('change', compruebaImporte);
+        document.getElementById('fechaFactura').addEventListener('change', cambioFecha);
+        document.getElementById('tipo').addEventListener('change', cambioTipo);
+        document.getElementById('descargaXLS').addEventListener('click', descargaXLS);
+        
+        $('#fechaVencimientoDate').hide(); //Ocultamos al inicio el input date de fecha de vencimiento
+
+        $('#filtroFechasFac').daterangepicker({ // DATAPICKER PARA FILTRAR POR FECHA
+            "autoApply": true,
+            "locale": {
+                "format": "DD/MM/YYYY",
+                "separator": " - ",
+                "weekLabel": "W",
+                "daysOfWeek": [
+                    "Do",
+                    "Lu",
+                    "Ma",
+                    "Mi",
+                    "Ju",
+                    "Vi",
+                    "Sa"
+                ],
+                "monthNames": [
+                    "Enero",
+                    "Febrero",
+                    "Marzo",
+                    "Abril",
+                    "Mayo",
+                    "Junio",
+                    "Julio",
+                    "Agosto",
+                    "Septiembre",
+                    "Octubre",
+                    "Noviembre",
+                    "Diciembre"
+                ],
+                "firstDay": 1
+            },
+            "alwaysShowCalendars": true,
+            "opens": "left",
+            "drops": "auto"
+        }, function(start, end, label) {
+            //console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+            filtroFechas(start,end,6);
+        });
+
+
+        $('#filtroFechasVenci').daterangepicker({ // DATAPICKER PARA FILTRAR POR FECHA
+            "autoApply": true,
+            "locale": {
+                "format": "DD/MM/YYYY",
+                "separator": " - ",
+                "weekLabel": "W",
+                "daysOfWeek": [
+                    "Do",
+                    "Lu",
+                    "Ma",
+                    "Mi",
+                    "Ju",
+                    "Vi",
+                    "Sa"
+                ],
+                "monthNames": [
+                    "Enero",
+                    "Febrero",
+                    "Marzo",
+                    "Abril",
+                    "Mayo",
+                    "Junio",
+                    "Julio",
+                    "Agosto",
+                    "Septiembre",
+                    "Octubre",
+                    "Noviembre",
+                    "Diciembre"
+                ],
+                "firstDay": 1
+            },
+            "alwaysShowCalendars": true,
+            "opens": "left",
+            "drops": "auto"
+        }, function(start, end, label) {
+            //console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+            filtroFechas(start,end,7);
+        });
+
+        addCheckbox();
+        addRowHandlers();
+
+        
+        // Añadimos la funcionalidad a los checkbox FACT. EMITIDA cuando se modifique su estado
+        lista_checkbox_Cobrado.forEach(function(elemento) {
+            elemento.addEventListener('change', function() {
+                var padre = (elemento.parentNode).parentNode;
+                var id = padre.getElementsByTagName("th")[0].innerHTML;
+                id = parseInt(id);
+                const datos = {indice: id, estado: this.checked, tipo: "cobrado"};
+
+                fetch('table.html', {
+                        method: 'PUT',
+                        body: JSON.stringify(datos), // data can be `string` or {object}!
+                        headers:{
+                            'Content-Type': 'application/json'
+                        }
+                }).then(res => res.json())
+                .then(response => console.log('Success:', JSON.stringify(response)))
+                .catch(error => console.error('Error:', error));
+            });
+        });
+
+        // Añadimos la funcionalidad a los checkbox PAGO EMITIDO cuando se modifique su estado
+        lista_checkbox_pagos.forEach(function(elemento) {
+            elemento.addEventListener('change', function() {
+                var padre = (elemento.parentNode).parentNode;
+                var id = padre.getElementsByTagName("th")[0].innerHTML;
+                id = parseInt(id);
+                const datos = {indice: id, estado: this.checked, tipo: "pagoEmitido"};
+
+                fetch('table.html', {
+                        method: 'PUT',
+                        body: JSON.stringify(datos), // data can be `string` or {object}!
+                        headers:{
+                            'Content-Type': 'application/json'
+                        }
+                }).then(res => res.json())
+                .then(response => console.log('Success:', JSON.stringify(response)))
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    }); 
+
+
+    // Leemos los datos provenientes del archipo ".py"
+    const data = '{{ condicionesProve | tojson | safe }}';  // Creamos una variable data con la lista de python de condiciones proveedor
+    const dataContactos = '{{ listaContact | tojson | safe }}';  // Creamos una variable data con la lista de python de los contactos
+    const dataProve = '{{ listaProve | tojson | safe }}';  // Creamos una variable data con la lista de python de los proveedores
+    const condicionesProve = JSON.parse(data);   // Parseamos los datos anteriores para convertirlo en un array de javascript
+    const contactos = JSON.parse(dataContactos);   // Parseamos los datos anteriores para convertirlo en un array de javascript
+    const listProveedores = JSON.parse(dataProve);   // Parseamos los datos anteriores para convertirlo en un array de javascript
+
+    proyecto_select = document.getElementById('proyecto');
+    proveedor_select=document.getElementById('proveedor');
+    concepto_text=document.getElementById('concepto');
+    importe_text = document.getElementById('importe');
+    modalidad_select = document.getElementById('tipo'); //Venta o Compra
+    tipoPago_select = document.getElementById('tipoPago');  //Confirming o transferencia
+    fechaFactura_text = document.getElementById('fechaFactura');
+    fechaVencimiento_text = document.getElementById('fechaVencimiento');//Si es una compra utilizaremos este input text readonly
+    fechaVencimiento_Date = document.getElementById('fechaVencimientoDate');//Si es una venta utilizaremos este input date editable
+    banco_select = document.getElementById('entidad');
+    //etiqTipo = document.getElementById('etiqTipo');
+
+    function filtroFechas (ini,fin,indice){// ocultará o mostrará una fila de la tabla en función de la fecha. Indice = columna de tabla
+        var table = document.getElementById("tabla_registros");
+        var rows = table.getElementsByTagName("tr");
+
+        for (var i = 1; i < rows.length; i++) {
+            var date = rows[i].getElementsByTagName("td")[indice];
+            var fechaTemp = crearFecha(date.innerHTML);
+            if (fechaTemp >= ini && fechaTemp<= fin) {
+                    rows[i].style.display = "";
+            } else {
+                    rows[i].style.display = "none";
+                }
+            }
+    }
+
+    function condicionesPago(){   // Comprobaremos cuales son las condiciones de un proveedor, si indica "NO" no se le hará confirming
+        if (document.getElementById('tipo').value == "Compra"){
+            const indice = document.getElementById("proveedor").selectedIndex -1;  // Obtenemos el indice de la selección de proveedor restando 1
+            if ((indice) > -1){   // Si el indice no es "-1" (opcion de texto "Elegir...") se ejecutará el resto del código
+                if (condicionesProve[indice]== 'NO'){
+                    tipoPago_select.selectedIndex = "2";    // Seleccionremos automáticamente la opción de Transferencia
+                } else {
+                    if (parseFloat(importe_text.value) > 3000){// Para importes mayores de 3.000€ elejiremos Confirming
+                        tipoPago_select.selectedIndex = "1";    // Seleccionremos la opción de Confirming
+                    } else {
+                        tipoPago_select.selectedIndex = "2";    // Seleccionremos la opción de Transferencia
+                    }  
+                }
+            }
+        } else {
+            tipoPago_select.selectedIndex = "2";    // Seleccionremos la opción de Transferencia por defecto para los clientes (no para los proveedores)
+        }
+        
+    }
+    
+    
+    function compruebaImporte(evento){   // Si están los campos cumplimentados se calculará la fecha de vencimiento
+        evento.preventDefault();
+        condicionesPago();  // Comprobaremos cuales son las condiciones de un proveedor, si indica "NO" no se le hará confirming
+        if (compruebaCampos()){
+            fechaVencimiento_text.value = calculaFechaVencimiento();
+        }
+    }
+
+
+    function compruebaCampos(){ // Comprueba si los campos de importe, fechaFactura, tipoPago están rellenos. Devuelve booleano
+        if (importe_text.value!='' && tipoPago_select.value != 'Elegir...' && proveedor_select.value != 'Elegir...' &&
+        fechaFactura_text.value != ''){
+
+            return true;
+        }
+    }
+
+    function sumarMes(fecha,meses){ // Sumaremos x meses a la fecha dada y devuelve una fecha
+        fecha.setMonth(fecha.getMonth() + meses); //Le sumamos x meses (normalmente será 1)
+        //fechaDef = fecha.toLocaleDateString('es-ES', opciones);  // Le indicamos que queremos que aparezca en formato español (D-M-A)
+        
+        return fecha;
+    }
+
+   
+    function sumarDias(fecha,dias){ // Sumaremos x días a la fecha dada y devuelve una fecha
+        fecha.setDate(fecha.getDate() + dias);
+
+        return fecha;
+    }
+
+
+    function forzarFecha(fecha,diaPago){//Calcula la distancia entre el día actual y el día de pago propuesto y elije el mes (mismo o superior)
+        var diaActual = fecha.getDate();
+        var mesActual = fecha.getMonth();
+        var anoActual = fecha.getFullYear();
+        var diasMes = new Date(anoActual, mesActual+1, 0).getDate();
+
+        if (diaActual <= diaPago){
+            var fechaPago = new Date(+anoActual, +mesActual, +diaPago); // Hay que restarle 1 al mes porque el indice empieza en cero
+        } else {
+            if (((diasMes+diaPago)-diaActual)<(diaActual-diaPago)){
+                var fechaPago = new Date(+anoActual, +mesActual+1, +diaPago);
+            } else {
+                var fechaPago = new Date(+anoActual, +mesActual, +diaPago);
+            }
+        }
+        return fechaPago;
+    }
+
+    
+    function forzarFechaDirecta(fecha,diaPago){ // Devuelve un mes más de la fecha dada y el día que se haya indicado como dia de pago
+        var fechaProp = sumarMes(fecha,1);  //Devuelve un objeto date con la fecha
+        fechaProp.setDate(diaPago);
+
+        return fechaProp;
+    }
+
+    
+    function crearFecha(fecha){ // Genera un objeto fecha a partir de un string
+        var expReg = /.{4}-.{2}-.{2}/gm; //Expresion regular YYYY-MM-DD
+        var expRegGuion = /-/gm; //Expresion regular para comprobar si hay "-"
+        var guion = expRegGuion.test(fecha);
+        var resultado = expReg.test(fecha);//Será true si empieza por el año YYYY y false si empieza por el dia DD
+        var separador = '';
+
+        if (guion) {//Comprobamos si el separador es '-' o '/'
+            separador = '-';
+        } else {
+            separador = '/';
+        }
+        
+        if (resultado){ //Comprueba si tiene el formato YYYY-MM-DD
+            const [ano, mes, dia] = fecha.split(separador);
+            var fechaDef = new Date(+ano, +mes - 1, +dia); // Hay que restarle 1 al mes porque el indice empieza en cero
+        } else {
+            const [dia, mes, ano] = fecha.split(separador);
+            var fechaDef = new Date(+ano, +mes - 1, +dia); // Hay que restarle 1 al mes porque el indice empieza en cero
+        }
+        return fechaDef;
+    }
+  
+  
+    function cambioFecha(){// Se ejecutará cuando cambiemos la fecha del Input Date (Fecha Factura) 
+        if (compruebaCampos() && modalidad_select.value == 'Compra'){ //Si es un Compra se calculará la fecha de vencimiento
+            const opciones = { day: 'numeric', month: 'numeric', year: 'numeric' }; // Estas son las opciones que queremos de formato
+            var fechaDef = calculaFechaVencimiento();
+            var fechaDefText = fechaDef.toLocaleDateString('es-ES', opciones);
+            fechaVencimiento_text.value = fechaDefText;
+        }
+    }
+    
+
+
+    function cambioTipo(){// Se ejecutará cuando cambiemos de tipo compra a venta
+        if (modalidad_select.value == 'Compra' || modalidad_select.value == 'Elegir...'){
+            $('#fechaVencimientoDate').value = "";
+            $('#fechaVencimientoDate').hide();
+            $('#fechaVencimiento').show();
+            document.getElementById('etiqProv').innerHTML = 'Proveedor';
+            llenarSelect(listProveedores);
+        } else {
+            $('#fechaVencimientoDate').show();
+            $('#fechaVencimiento').hide();
+            document.getElementById('etiqProv').innerHTML = 'Cliente';
+            llenarSelect(contactos);
+        }
+    }
+
+
+    proveedor_select.onchange = function cambioProveedor(){
+        proveed = proveedor_select.value;
+        if (proveed == 'Elegir...'){    // Si no se ha elegido nada todavía lo ponemos todo a "cero"
+            fechaFactura_text.value = "";
+            fechaVencimiento_text.value = "";
+            tipoPago_select.value = "Elegir...";
+            //modalidad_select.value = "Elegir...";
+            importe_text.value = "";
+            concepto_text.value = "";
+            document.getElementById("fechaVencimientoDate").value = '';
+            $('#fechaVencimientoDate').hide();
+            $('#fechaVencimiento').show();
+        } else {                        // Si elegimos una opción, habilitaremos el campo fecha de certificación
+            fechaVencimiento_text.value = '';
+            //modalidad_select.value = "Elegir...";
+            tipoPago_select.value = "Elegir...";
+            fechaFactura_text.value = '';
+            importe_text.value = "";
+            document.getElementById("fechaVencimientoDate").value = '';
+        }
+    }
+
+
+    function calculaFechaVencimiento(){ //Calcula la fecha en función de si es confirming o transferencia
+        var fechaFactura = crearFecha(fechaFactura_text.value);
+        var fechaDef = new Date;
+        
+        if (tipoPago_select.value == 'CONFIRMING'){
+            var fechaconfir = forzarFechaDirecta (fechaFactura, 5);  // Forzamos el día de pago del confirming al día 5 del siguiente mes de la factura
+            fechaDef = calculaFechaConfirm (fechaconfir);   //Calcula la fecha de confirming según las condiciones del proveedor a partir del día de pago (5 de cada mes)
+        } else {
+            fechaDef = calcularFechaTransferProveedor(proveedor_select.value);
+        }
+
+        return fechaDef;
+    }
+
+
+    function calculaFechaConfirm(fecha){ // Calcula la fecha de confirming según las condiciones del proveedor
+        const indice = document.getElementById("proveedor").selectedIndex;  // Obtenemos el indice de la selección de proveedor
+        var dias = parseInt(condicionesProve[indice-1]);
+        fechaDef = sumarDias(fecha,dias);
+
+        return fechaDef;
+    }
+
+    
+    function calcularFechaTransferProveedor(proveedor){ // Calcula la fecha de la trasferencia en funcion de las condiciones del proveedor
+        var fechaFactura = crearFecha(fechaFactura_text.value);
+        switch (proveedor) {
+            case 'Eurogruas Occidental':
+                var fechaPropuesta = sumarDias(fechaFactura,120);
+                var fechaDef = forzarFecha(fechaPropuesta,5);
+                return fechaDef;
+                break;
+            case 'Gruas y Transportes Jaldo':
+                var fechaDef = sumarDias(fechaFactura,60);
+                return fechaDef;
+                break;
+            case 'Grupo Electrostock':
+                var dia = fechaFactura.getDate();
+                if (dia>15){ //Sumamos 6 meses y hacemos que el día sea = 15
+                    var fechaPropuesta = sumarMes(fechaFactura,6);
+                    var mesActual = fechaPropuesta.getMonth();
+                    var anoActual = fechaPropuesta.getFullYear();
+                    var fechaDef = new Date(anoActual, mesActual, 15);  //Indicamos que el día es = 15
+                } else { 
+                    var fechaPropuesta = sumarMes(fechaFactura,5);
+                    var mesActual = fechaPropuesta.getMonth();
+                    var anoActual = fechaPropuesta.getFullYear();
+                    var fechaDef = new Date(anoActual, mesActual, 15);  //Indicamos que el día es = 15
+                }
+                return fechaDef;
+                break;
+            case 'IBC Solar (CREDITO)':
+                var fechaDef = sumarDias(fechaFactura,60);
+                return fechaDef;
+                break;
+            case 'Rexel Spain':
+                var fechaPropuesta = sumarDias(fechaFactura,120);
+                fechaDef = forzarFecha(fechaPropuesta,5);
+                return fechaDef;
+                break;
+            default:
+                var fechaDef = forzarFechaDirecta(fechaFactura,5);
+                return fechaDef;
+        }
+    }
+
+
+    function validarFormulario(evento) {//Comprobamos que los campos del formulario no están vacios
+        evento.preventDefault();
+        if (modalidad_select.value == "Elegir..." || modalidad_select.value == "Compra"){   //Si se ha seleccionado Compra
+            if(proyecto_select.value == "Elegir..." || proveedor_select.value == "Elegir..." || concepto_text.value == "" || importe_text.value == "" ||
+            modalidad_select.value == "Elegir..." || tipoPago_select.value == "Elegir..." ||
+            fechaFactura_text.value == "" || fechaVencimiento_text.value == "" || banco_select.value == "Elegir...") {
+                Swal.fire({
+                    title: 'Falta algún campo por cumplimentar',
+                    icon: 'error'
+                });
+                return;
+            } else {
+                this.submit();
+            }
+        } else {    //Si se ha seleccionado Venta
+            if(proyecto_select.value == "Elegir..." || proveedor_select.value == "Elegir..." || concepto_text.value == "" || importe_text.value == "" ||
+            modalidad_select.value == "Elegir..." || tipoPago_select.value == "Elegir..." ||
+            fechaFactura_text.value == "" || fechaVencimiento_Date.value == "" || banco_select.value == "Elegir...") {
+                Swal.fire({
+                    title: 'Falta algún campo por cumplimentar',
+                    icon: 'error'
+                });
+                return;
+            } else {
+                this.submit();
+            }
+        } 
+    }
+
+    function llenarSelect(lista){ //Llenamos el select con la información de los proveedores o de los clientes
+        var len = lista.length;
+        $("#proveedor").empty();
+        $("#proveedor").append("<option value='0'>Elegir...</option>");
+        for( var i = 0; i<len; i++){
+            var id = i+1;
+            var name = lista[i];
+            $("#proveedor").append("<option value='"+name+"'>"+name+"</option>");
+        }
+    }
+
+</script>
+
+<script type = "text/javascript">
+
+    //FUNCIONES DE BUSQUEDA PARA APLICAR A LOS FILTROS DE LA TABLA
+    $(document).ready(function(){
+        $("#filtroProyecto").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#tabla_registros tbody tr").filter(function() {
+                $(this).toggle($(this).find('td:eq(0)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
+            });
+        });
+        $("#filtroProveedor").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#tabla_registros tbody tr").filter(function() {
+                $(this).toggle($(this).find('td:eq(1)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
+            });
+        });
+        $("#filtroTipo").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#tabla_registros tbody tr").filter(function() {
+                $(this).toggle($(this).find('td:eq(3)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
+            });
+        });
+        $("#filtroPago").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#tabla_registros tbody tr").filter(function() {
+                $(this).toggle($(this).find('td:eq(5)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
+            });
+        });
+        $("#filtroBanco").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#tabla_registros tbody tr").filter(function() {
+                $(this).toggle($(this).find('td:eq(8)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
+            });
+        });   
+    });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // $(document).ready(function(){
+    //         $("#filtroProyecto").on("keyup", function() {
+    //             var value = $(this).val().toLowerCase();
+    //             $("#tabla_registros tr").filter(function() {
+    //             $(this).toggle($(this).find('td:eq(0)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
+    //             });
+    //         });
+    //         $("#filtroProveedor").on("keyup", function() {
+    //             var value = $(this).val().toLowerCase();
+    //             $("#tabla_registros tr").filter(function() {
+    //             $(this).toggle($(this).find('td:eq(1)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
+    //             });
+    //         });
+    //         $("#filtroTipo").on("keyup", function() {
+    //             var value = $(this).val().toLowerCase();
+    //             $("#tabla_registros tr").filter(function() {
+    //             $(this).toggle($(this).find('td:eq(3)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
+    //             });
+    //         });
+    //         $("#filtroPago").on("keyup", function() {
+    //             var value = $(this).val().toLowerCase();
+    //             $("#tabla_registros tr").filter(function() {
+    //             $(this).toggle($(this).find('td:eq(5)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
+    //             });
+    //         });
+    //         $("#filtroBanco").on("keyup", function() {
+    //             var value = $(this).val().toLowerCase();
+    //             $("#tabla_registros tr").filter(function() {
+    //             $(this).toggle($(this).find('td:eq(8)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
+    //             });
+    //         });   
+    // });
+
+
+    // $("th").click(function () { // FUNCION PARA ORDENAR POR UNA COLUMNA
+        // var table = $(this).parents("table").eq(0);
+        // var rows = table
+    //     .find("tr:gt(0)")
+    //     .toArray()
+    //     .sort(comparer($(this).index()));
+    //     this.asc = !this.asc;
+    //     if (!this.asc) {
+    //         rows = rows.reverse();
+    //     }
+    //     for (var i = 0; i < rows.length; i++) {
+    //         table.append(rows[i]);
+    //     }
+    //     setIcon($(this), this.asc);
+    // });
+
+    // function comparer(index) {
+    // return function (a, b) {
+    //     var valA = getCellValue(a, index),
+    //     valB = getCellValue(b, index);
+    //     return $.isNumeric(valA) && $.isNumeric(valB)
+    //     ? valA - valB
+    //     : valA.localeCompare(valB);
+    // };
+    // }
+
+    // function getCellValue(row, index) {
+    // return $(row).children("td").eq(index).html();
+    // }
+
+    // function setIcon(element, asc) {
+    // $("th").each(function (index) {
+    //     $(this).removeClass("sorting");
+    //     $(this).removeClass("asc");
+    //     $(this).removeClass("desc");
+    // });
+    // element.addClass("sorting");
+    // if (asc) element.addClass("asc");
+    // else element.addClass("desc");
+    // }
+
+
+    function addRowHandlers() {
+        var table = document.getElementById("tabla_registros");
+        var rows = table.getElementsByTagName("tr");
+        for (i = 0; i < rows.length; i++) {
+            var currentRow = table.rows[i];
+            var createClickHandler = function(row) {
+                return function() {
+                    var cell = row.getElementsByTagName("th")[0];
+                    var id = cell.innerHTML;
+                    cargarDatosAlert(id,row);
+                    //alert("respuesta: " + id);
+                };
+            };
+            //currentRow.onclick = createClickHandler(currentRow);
+            currentRow.ondblclick = createClickHandler(currentRow);
+        }
+    }
+
+    function addCheckbox() {    //AÑADE CHECKBOX A LAS COLUMNAS FACT. EMITIDA Y PAGO EMITIDO
+        var table = document.getElementById("tabla_registros");
+        var rows = table.getElementsByTagName("tr");
+        
+        for (i = 1; i < rows.length; i++) { //Factura emitida/recibida
+            var fila = table.rows[i];
+            var cell = fila.getElementsByTagName("td")[9];
+            var valor = cell.innerHTML;
+            if (valor == "False"){
+                cell.innerHTML = '<input type="checkbox" name="checkCobrado">';
+            } else {
+                cell.innerHTML = '<input type="checkbox" name="checkCobrado" checked>';
+            }
+        }
+
+        for (i = 1; i < rows.length; i++) { //Pago emitido/recibido
+            var fila = table.rows[i];
+            var cell = fila.getElementsByTagName("td")[10];
+            var valor = cell.innerHTML;
+            if (valor == "False"){
+                cell.innerHTML = '<input type="checkbox" name="checkVencimiento">';
+            } else {
+                cell.innerHTML = '<input type="checkbox" name="checkVencimiento" checked>';
+            }
+        }
+    }
+
+    function cambiarValor(){
+        alert(this.name);
+        //alert('pulsado');
+        var table = document.getElementById("tabla_registros");
+        var rows = table.getElementsByTagName("tr");
+        for (i = 0; i < rows.length; i++) {
+            var currentRow = table.rows[i];
+            var createClickHandler = function(row) {
+            return function() {
+                var cell = row.getElementsByTagName("td")[1];
+                var id = cell.innerHTML;
+                alert("pulsado: " + id);
+            };
+            };
+            //currentRow.onclick = createClickHandler(currentRow);
+        }
+    }
+
+
+    function descargaXLS(){
+        window.open("table.html/download", target="_blank")
+    }
+
+
+    function cargarDatosAlert(id,elemento){//CARGARÁ LOS DATOS DE LA FILA SELECCIONADA DENTRO DEL POPUP O ALERT
+
+        var proyecto = elemento.getElementsByTagName("td")[0].innerHTML;
+        var proveedor = elemento.getElementsByTagName("td")[1].innerHTML;
+        var concepto = elemento.getElementsByTagName("td")[2].innerHTML;
+        var tipo = elemento.getElementsByTagName("td")[3].innerHTML;
+        var importe = elemento.getElementsByTagName("td")[4].innerHTML;
+        var tipoPago = elemento.getElementsByTagName("td")[5].innerHTML;
+        var fechaFact = elemento.getElementsByTagName("td")[6].innerHTML;
+        var fechaVenc = elemento.getElementsByTagName("td")[7].innerHTML;
+        var banco = elemento.getElementsByTagName("td")[8].innerHTML;
+
+        //CONFIGURAMOS LA FECHA DE FACTURACION. SI LOS NUMEROS SON INFERIORES A 10 LE AÑADIMOS UN CERO
+        var [dia1, mes1, ano1] = fechaFact.split('/');
+        if (dia1.length==1){dia1="0"+dia1;};
+        if (mes1.length==1){mes1="0"+mes1;};
+        fechaFact = ano1 + "-" + mes1 + "-" + dia1;
+
+        //CONFIGURAMOS LA FECHA DE VENCIMIENTO. SI LOS NUMEROS SON INFERIORES A 10 LE AÑADIMOS UN CERO
+        var [dia2, mes2, ano2] = fechaVenc.split('/');
+        if (dia2.length==1){dia2="0"+dia2;};
+        if (mes2.length==1){mes2="0"+mes2;};
+        fechaVenc = ano2 + "-" + mes2 + "-" + dia2;
+
+
+        //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DE Compra o Venta
+        if (tipo == "Compra"){
+            cadenaHTML = `
+                <select id="tipoM" name="tipoM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
+                    <option selected>Compra</option>
+                    <option>Venta</option>
+                </select>`
+        } else {
+            cadenaHTML = `
+                <select id="tipoM" name="tipoM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
+                    <option>Compra</option>
+                    <option selected>Venta</option>
+                </select>`
+        }
+
+        //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DE TIPO DE PAGO
+        if (tipoPago == "CONFIRMING"){
+            cadenaHTMLpago = `
+                <select id="tipoPagoM" name="tipoPagoM" class="col-md-10 form-control"
+                    style="font-size:14px; max-width: 100%;background-color: white;" >
+                        <option selected>CONFIRMING</option>
+                        <option>TRANSFERENCIA</option>
+                </select>`
+        } else {
+            cadenaHTMLpago = `
+                <select id="tipoPagoM" name="tipoPagoM" class="col-md-10 form-control"
+                    style="font-size:14px; max-width: 100%;background-color: white;" >
+                        <option >CONFIRMING</option>
+                        <option selected>TRANSFERENCIA</option>
+                </select>`
+        }
+
+
+        //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DE LA ENTIDAD
+        if (banco == "BBVA"){
+            cadenaHTMLbanco = `
+                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
+                    style="font-size:14px; max-width: 100%;background-color: white;" >
+                        <option selected>BBVA</option>
+                        <option>CAJAMAR</option>
+                        <option>CAJARURAL</option>
+                        <option>CAIXA 400</option>
+                        <option>CAIXA 100</option>
+                        <option>CAIXA-BK</option>
+                        <option>IBERCAJA</option>
+                        <option>SABADELL</option>
+                        <option>SANTANDER</option>
+                </select>`
+        } else if (banco == "CAJAMAR"){
+            cadenaHTMLbanco = `
+                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
+                    style="font-size:14px; max-width: 100%;background-color: white;" >
+                        <option >BBVA</option>
+                        <option selected>CAJAMAR</option>
+                        <option>CAJARURAL</option>
+                        <option>CAIXA 400</option>
+                        <option>CAIXA 100</option>
+                        <option>CAIXA-BK</option>
+                        <option>IBERCAJA</option>
+                        <option>SABADELL</option>
+                        <option>SANTANDER</option>
+                </select>`
+        } else if (banco == "CAJARURAL"){
+            cadenaHTMLbanco = `
+                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
+                    style="font-size:14px; max-width: 100%;background-color: white;" >
+                        <option >BBVA</option>
+                        <option >CAJAMAR</option>
+                        <option selected>CAJARURAL</option>
+                        <option>CAIXA 400</option>
+                        <option>CAIXA 100</option>
+                        <option>CAIXA-BK</option>
+                        <option>IBERCAJA</option>
+                        <option>SABADELL</option>
+                        <option>SANTANDER</option>
+                </select>`
+        } else if (banco == "CAIXA 400"){
+            cadenaHTMLbanco = `
+                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
+                    style="font-size:14px; max-width: 100%;background-color: white;" >
+                        <option >BBVA</option>
+                        <option >CAJAMAR</option>
+                        <option >CAJARURAL</option>
+                        <option selected>CAIXA 400</option>
+                        <option>CAIXA 100</option>
+                        <option>CAIXA-BK</option>
+                        <option>IBERCAJA</option>
+                        <option>SABADELL</option>
+                        <option>SANTANDER</option>
+                </select>`
+        } else if (banco == "CAIXA 100"){
+            cadenaHTMLbanco = `
+                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
+                    style="font-size:14px; max-width: 100%;background-color: white;" >
+                        <option >BBVA</option>
+                        <option >CAJAMAR</option>
+                        <option >CAJARURAL</option>
+                        <option >CAIXA 400</option>
+                        <option selected>CAIXA 100</option>
+                        <option >CAIXA-BK</option>
+                        <option>IBERCAJA</option>
+                        <option>SABADELL</option>
+                        <option>SANTANDER</option>
+                </select>`
+        } else if (banco == "CAIXA-BK"){
+            cadenaHTMLbanco = `
+                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
+                    style="font-size:14px; max-width: 100%;background-color: white;" >
+                        <option >BBVA</option>
+                        <option >CAJAMAR</option>
+                        <option >CAJARURAL</option>
+                        <option >CAIXA 400</option>
+                        <option>CAIXA 100</option>
+                        <option selected>CAIXA-BK</option>
+                        <option>IBERCAJA</option>
+                        <option>SABADELL</option>
+                        <option>SANTANDER</option>
+                </select>`
+        } else if (banco == "IBERCAJA"){
+            cadenaHTMLbanco = `
+                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
+                    style="font-size:14px; max-width: 100%;background-color: white;" >
+                        <option >BBVA</option>
+                        <option >CAJAMAR</option>
+                        <option >CAJARURAL</option>
+                        <option >CAIXA 400</option>
+                        <option>CAIXA 100</option>
+                        <option >CAIXA-BK</option>
+                        <option selected>IBERCAJA</option>
+                        <option>SABADELL</option>
+                        <option>SANTANDER</option>
+                </select>`
+        } else if (banco == "SABADELL"){
+            cadenaHTMLbanco = `
+                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
+                    style="font-size:14px; max-width: 100%;background-color: white;" >
+                        <option >BBVA</option>
+                        <option >CAJAMAR</option>
+                        <option >CAJARURAL</option>
+                        <option >CAIXA 400</option>
+                        <option>CAIXA 100</option>
+                        <option >CAIXA-BK</option>
+                        <option>IBERCAJA</option>
+                        <option selected>SABADELL</option>
+                        <option>SANTANDER</option>
+                </select>`
+        } else if (banco == "SANTANDER"){
+            cadenaHTMLbanco = `
+                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
+                    style="font-size:14px; max-width: 100%;background-color: white;" >
+                        <option >BBVA</option>
+                        <option >CAJAMAR</option>
+                        <option >CAJARURAL</option>
+                        <option >CAIXA 400</option>
+                        <option>CAIXA 100</option>
+                        <option >CAIXA-BK</option>
+                        <option>IBERCAJA</option>
+                        <option >SABADELL</option>
+                        <option selected>SANTANDER</option>
+                </select>`
+        } 
+
+
+        //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DE LA ENTIDAD BANCARIA
+        cadenaHTMLentidad = `
+            <select id="entidadM" name="entidadM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
+                {%- for i in bancos %}
+                    <option value="{{ i }}" {% if i == "`+banco+`" %} selected {% endif %}>{{ i }}</option>
+                {%- endfor %}
+            </select>`
+
+
+        //CONFIGURAMOS EL ALERT
+        Swal.fire({
+            title: 'Modificar Registro',
+            width: '50%',
+            showCancelButton: true,
+            showDenyButton: true,
+            denyButtonText: `Eliminar`,
+            CancelButtonText: 'Cancelar',
+            returnInputValueOnDeny: false,
+            confirmButtonColor: "#089925",
+
+            html:
+                `
+                    <!-- PRIMERA FILA DE CONTROLES -->
+                    <div class="form-row" style="width:100%">
+                            <div class="form-group col">
+                                <label for="inputproyecto" style="color: slategrey; font-size:14px;">Proyecto</label>
+                                <input type="text" id="proyectoM" name="proyectoM" placeholder="Título Proyecto"
+                                class="form-control form-control-sm" value="`+proyecto+`" pattern="[^,]*"
+                                title="No se permiten comas en este campo"/>
+                           </div>
+                            <div class="form-group col">
+                               <label for="inputtipo" style="color: slategrey; font-size:14px;">Tipo</label>`+
+                               cadenaHTML+`
+                           </div>
+                           <div class="form-group col">
+                            <label for="inputproveedor" id="etiqProv" style="color: slategrey; font-size:14px;">Proveedor</label>
+                            <input type="text" id="proveedorM" name="proveedorM"
+                                class="form-control form-control-sm" value="`+proveedor+`" pattern="[^,]*"
+                                title="No se permiten comas en este campo"/>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputconcepto" style="color: slategrey; font-size:14px;">Concepto</label>
+                            <input type="text" id="conceptoM" name="conceptoM" placeholder="Compra de material..."
+                            class="form-control form-control-sm" value="`+concepto+`" pattern="[^,]*"
+                            title="No se permiten comas en este campo"/>
+                       </div>
+                        <div class="form-group col">
+                            <label for="inputimporte" style="color: slategrey; font-size:14px;">Importe</label>
+                            <input type="number" id="importeM" name="importeM" step="0.01" placeholder="0000.00"
+                            class="form-control form-control-sm" value="`+parseFloat(importe)+`"/>
+                        </div>
+                    </div>
+                    <!-- SEGUNDA FILA DE CONTROLES -->
+                    <div class="form-row" style="width:100%">
+                        <div class="form-group col-md">
+                            <label for="inputfechaFactura" style="color: slategrey; font-size:14px;">Fecha de Factura</label>
+                            <input type="date" id="fechaFacturaM" name="fechaFacturaM" class="form-control form-control-sm"
+                            style="background-color: white;" value="`+fechaFact+`"/>
+                        </div>
+                        <div class="form-group col-md">
+                            <label for="inputtipoPago" style="color: slategrey; font-size:14px;">Tipo de Pago</label>`+
+                            cadenaHTMLpago+`
+                        </div>
+                        <div class="form-group col-md">
+                            <label for="inputfechaVencimiento" style="color: slategrey; font-size:14px;">Fecha de Vencimiento</label>
+                            <input type="date" id="fechaVencimientoDateM" name="fechaVencimientoDateM" class="form-control form-control-sm"
+                            style="background-color: white;" value="`+fechaVenc+`"/>
+                        </div>
+                        <div class="form-group col-md">
+                            <label for="inputentidad" style="color: slategrey; font-size:14px;">Entidad Bancaria</label>`+
+                            cadenaHTMLbanco+`
+                        </div>
+                    </div>
+                `,
+                            
+            preConfirm: () => { 
+                // VAMOS A CARGAR LOS DATOS QUE HAY EN LOS INPUT
+                var fechaF = document.getElementById('fechaFacturaM').value
+                var [ano,mes,dia] = fechaF.split("-");
+                fechaF = dia + "/" + mes + "/" + ano;
+
+                var fechaV = document.getElementById('fechaVencimientoDateM').value
+                var [ano1,mes1,dia1] = fechaV.split("-");
+                fechaV = dia1 + "/" + mes1 + "/" + ano1;
+
+                var indice = parseInt(id) //Para que corresponda con el indice del csv "Compras.csv"
+
+                return [
+                    indice,
+                    document.getElementById('proyectoM').value,
+                    document.getElementById('tipoM').value,
+                    document.getElementById('proveedorM').value,
+                    document.getElementById('conceptoM').value,
+                    document.getElementById('importeM').value,
+                    fechaF,
+                    document.getElementById('tipoPagoM').value,
+                    fechaV,
+                    document.getElementById('entidadM').value
+                ];
+                
+            }
+        
+               
+        }) .then((result) => {
+            if (result.isConfirmed) {
+
+                fetch('table.html', {
+                        method: 'PUT',
+                        body: JSON.stringify(result.value), // data can be `string` or {object}!
+                        headers:{
+                            'Content-Type': 'application/json'
+                        }
+                }).then(res => res.json())
+                .then(response => console.log('Success:', JSON.stringify(response)))
+                .catch(error => console.error('Error:', error));
+
+                Swal.fire({
+                    title: 'Cambios realizados correctamente', 
+                    icon: 'success'
+                }) .then((result) => {  //UNA VEZ SE ACEPTE EL POPUP DE CAMBIOS REALIZADOS SE RECARGARÁ LA PÁGINA
+                    if (result.isConfirmed) {
+                        //location.reload();
+                    }
+                });
+
+            } else if (result.isDenied) { //SI EL USUARIO SELECCIONA BORRAR, LE VOLVEMOS A PREGUNTAR SI ESTÁ SEGURO
+                swal.fire({
+                    title: "¿Seguro que quieres borrar el registro?",
+                    showCancelButton: true,
+                    CancelButtonText: "No",
+                    confirmButtonColor: "#d50000",
+                    icon: "error",
+                    iconHtml: "🗑",
+                    }) .then((result) => {
+                        if (result.isConfirmed) {
+
+                            const datosM = {indice: id};
+                            fetch('table.html', {
+                                method: 'PUT',
+                                body: JSON.stringify(datosM), // data can be `string` or {object}!
+                                headers:{
+                                    'Content-Type': 'application/json'
+                                }
+                            }).then(res => res.json())
+                            .then(response => console.log('Success:', JSON.stringify(response)))
+                            .catch(error => console.error('Error:', error));
+
+                            //location.reload();
+                        }
+                    })
+
+                }
+        })
+    }
+
+
+</script>
+
+
+{% endblock javascripts %}

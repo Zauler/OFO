@@ -44,6 +44,7 @@ class Proveedores(db.Model):
     Direccion = db.Column(db.String(60))
     Telefono = db.Column(db.Numeric)
     Tipo_Proveedor = db.Column(db.String(20), nullable=False)
+    Condiciones_confirming = db.Column(db.String(20), nullable=False)
     registros = db.relationship('Registros', back_populates='proveedor')
 
 class Bancos(db.Model):

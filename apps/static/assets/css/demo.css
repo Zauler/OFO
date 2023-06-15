@@ -826,3 +826,395 @@
 .documentation .dropdown .dropdown-menu.show {
     transform: translate3d(0, 39px, 0) !important;
 }
+
+.table-wrap {
+    height: 80px;
+    overflow-y: auto;
+}
+
+table tr th {
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.table thead > tr > th {
+    position:sticky;
+    top: 0 ;
+    background-color: #1b5ca5;
+    color: #ffffff;
+    z-index: 2;
+}
+
+.sorting {
+background-color: #D4D4D4;
+}
+
+.asc:after {
+content: ' ↑';
+}
+
+.desc:after {
+content: " ↓";
+}
+
+.izq {
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    transition: transform .4s; /* Animation */
+    transform-origin: 0 0;
+}
+
+.izq:hover{
+    -webkit-transform: scale(1.7);
+    -moz-transform: scale(1.7);
+    -o-transform: scale(1.7);
+    -ms-transform: scale(1.7);
+    transform: scale(1.7);
+    transition: transform .4s; /* Animation */
+    transition-delay: 2s;
+    transform-origin: 0 0;
+    z-index: 2;
+}
+
+.der {
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    transition: transform .4s; /* Animation */
+    transform-origin: 100% 0%;
+}
+
+.der:hover{
+    -webkit-transform: scale(1.7);
+    -moz-transform: scale(1.7);
+    -o-transform: scale(1.7);
+    -ms-transform: scale(1.7);
+    transform: scale(1.7);
+    transition: transform .4s; /* Animation */
+    transition-delay: 2s;
+    transform-origin: 100% 0%;
+    z-index: 2;
+}
+
+.card {
+    box-shadow: -1px 3px 5px -3px black;
+}
+
+.progress {
+    height: 20px;
+    width: 100%;
+    border: 1px solid #d8d8d8;
+    border-radius: 5px;
+    background-color: #feffff;
+    margin-top:30px;
+    margin-bottom: 15px;
+}
+ 
+.progress-bar {
+    height: 100%;
+    background: #b2b3b2;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+}
+ 
+.progress-bar-text {
+    align-items: right;
+    font-weight: bold;
+    color: #2c2d2d;
+}
+
+
+/* Selectores */
+.Selectors {
+    width: 100px;
+    padding: 5x;
+    display: flex;
+    justify-content: space-between;
+}
+
+.Selectors .Selector {
+    background-color: rgb(24, 153, 50);
+    height: 10px;
+    width: 10px;
+    display: block;
+    border-radius: 5px;
+}
+
+.row{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* Condicionales para botón inferior */
+#Slider1:checked ~ .Selectors .Selector:nth-of-type(1) {background-color: #999999;}
+#Slider2:checked ~ .Selectors .Selector:nth-of-type(2) {background-color: #999999;}
+#Slider3:checked ~ .Selectors .Selector:nth-of-type(3) {background-color: #999999;}
+#Slider4:checked ~ .Selectors .Selector:nth-of-type(4) {background-color: #999999;}
+#Slider5:checked ~ .Selectors .Selector:nth-of-type(5) {background-color: #999999;}
+
+
+/*------------------------------------------------------------------------------------------------*/
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700,900);
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+
+.clash-card {
+  background: white;
+  width: 13%;
+  display: inline-block;
+  margin: auto;
+  border-radius: 5px;
+  position: relative;
+  text-align: center;
+  box-shadow: -1px 3px 5px -3px black;
+  z-index: 1;
+  transition: .2s; /* Animation */
+}
+
+.clash-card:hover {
+    transition: .2s; /* Animation */
+    box-shadow: -1px 8px 15px -6px black;
+    z-index: 1;
+}
+
+.clash-card-ancho {
+    background: white;
+    width: 17%;
+    display: inline-block;
+    margin: auto;
+    border-radius: 5px;
+    position: relative;
+    text-align: center;
+    box-shadow: -1px 3px 5px -3px black;
+    z-index: 1;
+    transition: .2s; /* Animation */
+}
+
+.clash-card-ancho:hover {
+    transition: .2s; /* Animation */
+    box-shadow: -1px 8px 15px -6px black;
+    z-index: 1;
+}
+
+.clash-card__image {
+  position: relative;
+  height: 80px;
+  margin-bottom: 25px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.clash-card__image:hover {
+    cursor: pointer;
+}
+
+.clash-card__image--bbva {
+  background: #ebebeb;
+  transition: .2s; /* Animation */
+}
+
+.clash-card__image--bbva:hover {
+    background: #da7b74;
+    transition: .2s; /* Animation */
+}
+
+.clash-card__image--caixa {
+    background: #ebebeb;
+    transition: .2s;
+    background-image: url("/static/images/caixa-logo.svg");
+    background-size:60%;
+    background-repeat: no-repeat;
+    background-position-y: -30px;
+    background-position-x:center;  
+}
+
+.clash-card__image--caixa:hover {
+    background: #3d97d3; 
+    transition: .2s;
+    background-image: url("/static/images/caixa-logo-blanco.svg");
+    background-size:60%;
+    background-repeat: no-repeat;
+    background-position-y: -30px;
+    background-position-x:center;  
+}
+
+.clash-card__image--ibercaja {
+    background: #ebebeb;
+    transition: .2s;
+    background-image: url("/static/images/Ibercaja-logo.svg");
+    background-size:70%;
+    background-repeat: no-repeat;
+    background-position-y: 20px;
+    background-position-x:center;
+}
+
+.clash-card__image--ibercaja:hover {
+    background: #662f01;
+    transition: .2s;
+    background-image: url("/static/images/Ibercaja-logo-blanco.svg");
+    background-size:70%;
+    background-repeat: no-repeat;
+    background-position-y: 20px;
+    background-position-x:center;
+}
+
+.clash-card__image--sabadell {
+    background: #ebebeb;
+    transition: .2s;
+}
+
+.clash-card__image--sabadell:hover {
+    background: #be9717;
+    transition: .2s;
+}
+
+.clash-card__image--cajamar {
+    background: #ebebeb;
+    background-image: url("/static/images/cajamar-logo.png");
+    background-size:70%;
+    background-repeat: no-repeat;
+    background-position-y: 0px;
+    background-position-x:center;
+    transition: .2s;
+}
+
+.clash-card__image--cajamar:hover {
+    background: #008b9e;
+    background-image: url("/static/images/cajamar-logo-blanco.png");
+    background-size:70%;
+    background-position-y: 0px;
+    background-position-x:center;
+    background-repeat: no-repeat;   
+    transition: .2s;
+}
+
+.clash-card__image--cajarural {
+    background: #ebebeb;
+    background-image: url("/static/images/cajarural-logo.png");
+    background-size:90%;
+    background-repeat: no-repeat;
+    background-position-y: 20px;
+    background-position-x:center;
+    transition: .2s;
+}
+
+.clash-card__image--cajarural:hover {
+    background: #007a53;
+    background-image: url("/static/images/cajarural-logo-blanco.png");
+    background-size:90%;
+    background-position-y: 20px;
+    background-position-x:center;
+    background-repeat: no-repeat;
+    transition: .2s;   
+}
+
+.clash-card__image--santander {
+    background: #ebebeb;
+    background-image: url("/static/images/santander-logo.svg");
+    background-size:60%;
+    background-repeat: no-repeat;
+    background-position-y: 20px;
+    background-position-x:center;
+    transition: .2s;
+}
+
+.clash-card__image--santander:hover {
+    background: #ea1d25;
+    background-image: url("/static/images/santander-logo-blanco.svg");
+    background-size:60%;
+    background-position-y: 20px;
+    background-position-x:center;
+    background-repeat: no-repeat;
+    transition: .2s;   
+}
+
+
+/*.clash-card__image--barbarian:hover {
+    background: #71cced;
+    transition: .4s; /* Animation
+}*/
+
+.clash-card__level {
+  text-transform: uppercase;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.clash-card__level--barbarian {
+  color:#71cced;
+}
+
+.clash-card__unit-name {
+  font-size: 13px;
+  color: rgb(71, 70, 70);
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.clash-card__unit-description {
+  font-size: 17px;
+  padding: 5px;
+  margin-bottom: 5px;  
+}
+
+.clash-card__unit-stats--barbarian {
+  background: #71cced;
+}
+  
+.one-third {
+    border-right: 1px solid #BD7C2F;
+}
+
+
+.clash-card__unit-stats {
+  
+  color: white;
+  font-weight: 700;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  
+}
+
+.clearfix:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+
+.slick-prev {
+  left: 100px;
+  z-index: 999;
+}
+
+.slick-next {
+  right: 100px;
+  z-index: 999;
+}
+
+.btn-download {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 25px;
+    height: 25px;
+    background-image: url('/static/images/maximizar.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
