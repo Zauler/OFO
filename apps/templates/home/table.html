@@ -617,37 +617,35 @@
 
     //FUNCIONES DE BUSQUEDA PARA APLICAR A LOS FILTROS DE LA TABLA
     $(document).ready(function(){
-        $("#filtroProyecto").on("keyup", function() {
-            var value = $(this).val().toLowerCase();
-            $("#tabla_registros tbody tr").filter(function() {
-                $(this).toggle($(this).find('td:eq(0)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
-            });
+    
+    function applyFilters() {
+        var filtroProyecto = $("#filtroProyecto").val().toLowerCase();
+        var filtroProveedor = $("#filtroProveedor").val().toLowerCase();
+        var filtroTipo = $("#filtroTipo").val().toLowerCase();
+        var filtroPago = $("#filtroPago").val().toLowerCase();
+        var filtroBanco = $("#filtroBanco").val().toLowerCase();
+
+        $("#tabla_registros tbody tr").each(function() {
+            var columnaProyecto = $(this).find('td:eq(0)').text().replace(/\s+/g, ' ').toLowerCase();
+            var columnaProveedor = $(this).find('td:eq(1)').text().replace(/\s+/g, ' ').toLowerCase();
+            var columnaTipo = $(this).find('td:eq(3)').text().replace(/\s+/g, ' ').toLowerCase();
+            var columnaPago = $(this).find('td:eq(5)').text().replace(/\s+/g, ' ').toLowerCase();
+            var columnaBanco = $(this).find('td:eq(8)').text().replace(/\s+/g, ' ').toLowerCase();
+
+            var mostrar = true;
+
+            if (filtroProyecto && columnaProyecto.indexOf(filtroProyecto) === -1) mostrar = false;
+            if (filtroProveedor && columnaProveedor.indexOf(filtroProveedor) === -1) mostrar = false;
+            if (filtroTipo && columnaTipo.indexOf(filtroTipo) === -1) mostrar = false;
+            if (filtroPago && columnaPago.indexOf(filtroPago) === -1) mostrar = false;
+            if (filtroBanco && columnaBanco.indexOf(filtroBanco) === -1) mostrar = false;
+
+            $(this).toggle(mostrar);
         });
-        $("#filtroProveedor").on("keyup", function() {
-            var value = $(this).val().toLowerCase();
-            $("#tabla_registros tbody tr").filter(function() {
-                $(this).toggle($(this).find('td:eq(1)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
-            });
-        });
-        $("#filtroTipo").on("keyup", function() {
-            var value = $(this).val().toLowerCase();
-            $("#tabla_registros tbody tr").filter(function() {
-                $(this).toggle($(this).find('td:eq(3)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
-            });
-        });
-        $("#filtroPago").on("keyup", function() {
-            var value = $(this).val().toLowerCase();
-            $("#tabla_registros tbody tr").filter(function() {
-                $(this).toggle($(this).find('td:eq(5)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
-            });
-        });
-        $("#filtroBanco").on("keyup", function() {
-            var value = $(this).val().toLowerCase();
-            $("#tabla_registros tbody tr").filter(function() {
-                $(this).toggle($(this).find('td:eq(8)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
-            });
-        });   
-    });
+    }
+    
+    $("#filtroProyecto, #filtroProveedor, #filtroTipo, #filtroPago, #filtroBanco").on("keyup", applyFilters);
+});
     
     
     

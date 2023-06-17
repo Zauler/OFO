@@ -11,11 +11,12 @@ from apps.home.models import *
 from sqlalchemy import join
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
-from flask import render_template, request
+from flask import render_template, redirect, url_for, request
 from flask_login import login_required
 from jinja2 import TemplateNotFound
 from datetime import datetime
 from apps.home.consultasDB import *
+from apps.home.validation import *
 
 
 
@@ -321,6 +322,43 @@ def table():
                 condicionesProve=lista_condiciones_proveedores,
                 listaProyectos = listaProyectos,
                 listaContact=listaContactos, listaProve = listaProveedores)
+
+
+@app.route('/registrar_r', methods=['POST'])
+
+def registrar():
+    form = RegistrosForm(request.form)
+
+    if form.validate_on_submit():
+        nuevo_registro = Registros(
+            id_Proyecto = form.id_Proyecto.data,
+            id_Proveedor = form.id_Proveedor.data,
+            id_Cliente = form.id_Cliente.data,
+            Concepto = form.Concepto.data,
+            Tipo = form.Tipo.data,
+            Importe = form.Importe.data,
+            Tipo_Pago = form.Tipo_Pago.data,
+            Fecha_Factura = form.Fecha_Factura.data,
+            Fecha_Vencimiento = form.Fecha_Vencimiento.data,
+            id_Banco = form.id_Banco.data,
+            Fact_Emit_Recib = form.Fact_Emit_Recib.data,
+            Pago_Emit_Recib = form.Pago_Emit_Recib.data
+        )
+
+        try:
+            db.session.add(nuevo_registro)
+            db.session.commit()
+            return redirect(url_for('home_blueprint.table'))  # redirige al usuario a la página principal después de registrar
+        
+        except SQLAlchemyError as e:
+            
+            db.session.rollback()
+            return f'Error en la base de datos: {str(e)}'  # si ocurre un error en la base de datos, devuelve este error
+        
+    else:
+        return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
+
+
 
 
 # Helper - Extract current page name from request
