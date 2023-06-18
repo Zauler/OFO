@@ -50,28 +50,28 @@ class ConsultasDB():
 
 
     def consultaClientes():
-        queryClientes = db.session.query(Clientes.Nombre).select_from(Clientes)
+        queryClientes = db.session.query(Clientes.id_Cliente, Clientes.Nombre).select_from(Clientes)
 
         dfClientes = pd.read_sql(queryClientes.statement, db.session.bind)
         return dfClientes
 
 
     def consultaProveedores():
-        queryProve = db.session.query(Proveedores.Nombre, Proveedores.Condiciones_confirming).select_from(Proveedores)
+        queryProve = db.session.query(Proveedores.id_Proveedor, Proveedores.Nombre, Proveedores.Condiciones_confirming).select_from(Proveedores)
 
         dfProve = pd.read_sql(queryProve.statement, db.session.bind)
         return dfProve
 
 
     def consultaBancos():
-        queryBancos = db.session.query(Bancos.Banco).select_from(Bancos)
+        queryBancos = db.session.query(Bancos.id_Banco, Bancos.Banco).select_from(Bancos)
 
         dfBancos = pd.read_sql(queryBancos.statement, db.session.bind)
         return dfBancos
 
 
     def consultaProyectos():
-        queryProyectos = db.session.query(Proyectos.Nombre).select_from(Proyectos)
+        queryProyectos = db.session.query(Proyectos.id_Proyecto, Proyectos.Nombre).select_from(Proyectos)
 
         dfProyectos = pd.read_sql(queryProyectos.statement, db.session.bind)
         return dfProyectos

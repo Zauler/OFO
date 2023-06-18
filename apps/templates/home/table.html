@@ -13,7 +13,7 @@
             <p style="color: slategrey; text-align: center;">AÑADIR REGISTRO</p>
             </div>
             <div class="row" style="flex-direction: column;">
-                <form action="" method="post" id="form_registro">
+                <form action="registrar_r" method="post" id="form_registro">
                     <!-- PRIMERA FILA DE CONTROLES -->
                     <div class="form-row">
 
@@ -21,9 +21,9 @@
                             <label for="inputproyecto" style="color: slategrey; font-size:14px;">Proyecto</label>
                             <select id="proyecto" name="proyecto" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
                                 <option>Elegir...</option>
-                                    {%- for i in listaProyectos%}
-                                    <option value="{{ i }}" >{{ i }}</option>
-                                    {%- endfor %}
+                                {%- for proyecto in listaProyectos %}
+                                <option value="{{ proyecto.id_Proyecto }}" >{{ proyecto.Nombre }}</option>
+                                {%- endfor %}
                                 </select>
                         </div>
 
@@ -46,8 +46,8 @@
                             <select id="proveedor" name="proveedor" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;"
                             onchange = "cambioProveedor()">
                                 <option>Elegir...</option>
-                                {%- for i in proveedores %}
-                                <option value="{{ i }}" >{{ i }}</option>
+                                {%- for proveedor in proveedores %}
+                                <option value="{{ proveedor.id_Proveedor }}" >{{ proveedor.Nombre }}</option>
                                 {%- endfor %}
                             </select>
                         </div>
@@ -94,8 +94,8 @@
                             <label for="inputentidad" style="color: slategrey; font-size:14px;">Entidad Bancaria</label>
                             <select id="entidad" name="entidad" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
                                 <option>Elegir...</option>
-                                    {%- for i in bancos %}
-                                    <option value="{{ i }}" >{{ i }}</option>
+                                    {%- for banco in bancos %}
+                                    <option value="{{ banco.id_Banco }}" >{{ banco.Banco }}</option>
                                     {%- endfor %}
                                 </select>
                         </div>
@@ -318,10 +318,12 @@
     // Leemos los datos provenientes del archipo ".py"
     const data = '{{ condicionesProve | tojson | safe }}';  // Creamos una variable data con la lista de python de condiciones proveedor
     const dataContactos = '{{ listaContact | tojson | safe }}';  // Creamos una variable data con la lista de python de los contactos
-    const dataProve = '{{ listaProve | tojson | safe }}';  // Creamos una variable data con la lista de python de los proveedores
+    
     const condicionesProve = JSON.parse(data);   // Parseamos los datos anteriores para convertirlo en un array de javascript
     const contactos = JSON.parse(dataContactos);   // Parseamos los datos anteriores para convertirlo en un array de javascript
     const listProveedores = JSON.parse(dataProve);   // Parseamos los datos anteriores para convertirlo en un array de javascript
+    const proveedores = JSON.parse('{{ proveedores | tojson | safe }}'); // Creamos y parseamos la variable para javascript
+
 
     proyecto_select = document.getElementById('proyecto');
     proveedor_select=document.getElementById('proveedor');
@@ -465,20 +467,37 @@
     
 
 
-    function cambioTipo(){// Se ejecutará cuando cambiemos de tipo compra a venta
-        if (modalidad_select.value == 'Compra' || modalidad_select.value == 'Elegir...'){
-            $('#fechaVencimientoDate').value = "";
-            $('#fechaVencimientoDate').hide();
-            $('#fechaVencimiento').show();
-            document.getElementById('etiqProv').innerHTML = 'Proveedor';
-            llenarSelect(listProveedores);
-        } else {
-            $('#fechaVencimientoDate').show();
-            $('#fechaVencimiento').hide();
-            document.getElementById('etiqProv').innerHTML = 'Cliente';
-            llenarSelect(contactos);
-        }
+    function cambioTipo() {
+    const tipo = document.getElementById('tipo').value;
+    const select = document.getElementById('proveedor');
+    let data;
+    
+    if (tipo === 'Compra' || tipo === 'Elegir...') {
+        $('#fechaVencimientoDate').value = "";
+        $('#fechaVencimientoDate').hide();
+        $('#fechaVencimiento').show();
+        document.getElementById('etiqProv').innerHTML = 'Proveedor';
+        data = proveedores;
+    } else if (tipo === 'Venta') {
+        $('#fechaVencimientoDate').show();
+        $('#fechaVencimiento').hide();
+        document.getElementById('etiqProv').innerHTML = 'Cliente';
+        data = contactos;
+    } else {
+        select.innerHTML = "";
+        return;
     }
+
+    select.innerHTML = ""; // Limpia el select
+    data.forEach(function(item) {
+        var option = document.createElement("option");
+        option.value = item.id; // Asume que cada objeto tiene una propiedad 'id'
+        option.text = item.Nombre; // Asume que cada objeto tiene una propiedad 'Nombre'
+        select.appendChild(option);
+    });
+}
+
+console.log(proveedores);
 
 
     proveedor_select.onchange = function cambioProveedor(){

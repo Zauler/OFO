@@ -153,17 +153,18 @@ def table():
 
     # Convertimos el dataframe en una lista para pasarlo al template donde lo recogerá javascript
     lista_condiciones_proveedores = (dfProveedores['Condiciones_confirming'].values).tolist()
-    listaContactos = (dfClientes['Nombre'].values).tolist()
-    listaProveedores = (dfProveedores['Nombre'].values).tolist()
-    listaProyectos = (dfProyectos['Nombre'].values).tolist()
-
-
+    listaContactos = dfClientes[['id_Cliente','Nombre']].to_dict(orient='records')
+    listaProyectos = dfProyectos[['id_Proyecto','Nombre']].to_dict(orient='records')
+    proveedores = dfProveedores[['id_Proveedor','Nombre']].to_dict(orient='records')
+    bancos = dfBancos[['id_Banco','Banco']].to_dict(orient='records')
+    
     return render_template("home/table.html", segment='table', tables=[df.to_html(header=True, classes='table table-hover table-striped table-bordered',
                 table_id="tabla_registros", index=True)],
-                proveedores = dfProveedores['Nombre'].values, bancos = dfBancos['Banco'],
+                proveedores = proveedores, 
+                bancos = bancos,
                 condicionesProve=lista_condiciones_proveedores,
                 listaProyectos = listaProyectos,
-                listaContact=listaContactos, listaProve = listaProveedores)
+                listaContact=listaContactos)
 
 
 # @app.route('/registrar_r', methods=['POST'])
