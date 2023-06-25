@@ -160,11 +160,9 @@ class ConsultasDB():
 
             if registro_a_modificar is not None:
                 for campo, nuevo_valor in datosActualizar.items():
-                    #setattr(registro_a_modificar, campo, nuevo_valor) #Esta función cambia el atributo de la clase.
-                    print(campo,nuevo_valor)
-
-                #db.session.commit()
-                print("Resistro modificado: ", id)
+                    setattr(registro_a_modificar, campo, nuevo_valor) #Esta función cambia el atributo de la clase.
+                db.session.commit()
+                print("Registro modificado: ", id)
             else:
                 print("Registro no encontrado")
         

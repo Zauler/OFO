@@ -20,6 +20,7 @@ from apps.home.validation import *
 
 
 
+
 @blueprint.route('/index')
 @login_required
 def index():
@@ -83,7 +84,7 @@ def table():
             cliente = proveedor
             proveedor = ""
         
-        lista_datos = [proyecto,proveedor,cliente,concepto,modalidad,importe,tipoPago,fecha_fact,fecha_venc,banco,gestor,'False',False]  # Los 2 últimos "False" corresponden a los checkbox
+        lista_datos = [proyecto,proveedor,cliente,concepto,modalidad,importe,tipoPago,fecha_fact,fecha_venc,banco,gestor,False,False]  # Los 2 últimos "False" corresponden a los checkbox
 
         # with open('datos/pedidos.csv', 'a', newline='', encoding='utf-8') as file:
         #     writer = csv.writer(file)
@@ -95,45 +96,50 @@ def table():
         respuesta = request.get_json()
 
         if len(respuesta) == 3: # SI LA RESPUESTA QUE RECIBIMOS SOLO TIENE 3 PARÁMETROS
-            indice = (respuesta['indice'])
+            indice = (respuesta['indice'] + 1) # para que coincida con el indice de la base de datos
             estado = (respuesta['estado'])
             tipo = (respuesta['tipo'])
 
             #MODIFICAR VALOR DE UN CHECBOX
             if tipo == "cobrado":   # Si es un checkbox de cobrado
-                dfTemporal = pd.read_csv('datos/pedidos.csv')
-                dfTemporal.iloc[indice,11] = estado
-                dfTemporal.to_csv('datos/pedidos.csv',index=False)
+                datos = { "Fact_Emit_Recib": estado}
             elif tipo == "pagoEmitido":   # Si es un checkbox de cobrado
-                dfTemporal = pd.read_csv('datos/pedidos.csv')
-                dfTemporal.iloc[indice,12] = estado
-                dfTemporal.to_csv('datos/pedidos.csv',index=False)
+                datos = { "Pago_Emit_Recib": estado}
+
+            # Actualizamos el registro del pedido seleccionado
+            ConsultasDB.modificarRegistro(indice,datos)
                 
 
         elif len(respuesta) == 11:  # MODIFICAR UN REGISTRO
             indiceM = (respuesta[0]) + 1 # para que coincida con el indice de la base de datos
-            proyectoM = (respuesta[1])
-            tipoM = (respuesta[2])
-            proveedorM = (respuesta[3])
+            #proyectoM = (respuesta[1])
+            #tipoM = (respuesta[2])
+            #proveedorM = (respuesta[3])
             conceptoM = (respuesta[4])
             importeM = float((respuesta[5]))
             fechaF = (respuesta[6])
             tipoPagoM = (respuesta[7])
             fechaV = (respuesta[8])
             entidadM = (respuesta[9])
-            gestorM = (respuesta[10])
+            #gestorM = (respuesta[10])
 
-            # Comprobamos si es compra o venta para rellenar el cliente o el proveedor
-            if tipoM == "Compra":
-                proveedorM = proveedorM
-                clienteM = ""
-            else:
-                clienteM = proveedorM
-                proveedorM = ""
+            # Convertimos los datos de string a date para que lo admita la BD
+            fechaF = datetime.strptime(fechaF, '%Y-%m-%d')
+            fechaV = datetime.strptime(fechaV, '%Y-%m-%d')
+
+            # # Comprobamos si es compra o venta para rellenar el cliente o el proveedor
+            # if tipoM == "Compra":
+            #     proveedorM = proveedorM
+            #     clienteM = ""
+            # else:
+            #     clienteM = proveedorM
+            #     proveedorM = ""
 
             # Actualizamos el registro del pedido seleccionado
-            datos = {"id_Proyecto": proyectoM, "id_Proveedor": proveedorM, "id_Cliente": clienteM, "Concepto": conceptoM, "Tipo": tipoM,
-                    "Importe": importeM, "Tipo_Pago": tipoPagoM, "Fecha_Factura": fechaF, "Fecha_Vencimiento": fechaV, "id_Banco": entidadM, "gestor": gestorM}
+            # datos = {"id_Proyecto": proyectoM, "id_Proveedor": proveedorM, "id_Cliente": clienteM, "Concepto": conceptoM, "Tipo": tipoM,
+            #         "Importe": importeM, "Tipo_Pago": tipoPagoM, "Fecha_Factura": fechaF, "Fecha_Vencimiento": fechaV, "id_Banco": entidadM, "gestor": gestorM}
+            
+            datos = {"Concepto": conceptoM,"Importe": importeM, "Tipo_Pago": tipoPagoM, "id_Banco": entidadM, "Fecha_Factura": fechaF, "Fecha_Vencimiento": fechaV}
             
             ConsultasDB.modificarRegistro(indiceM,datos)
 
