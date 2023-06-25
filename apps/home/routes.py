@@ -54,95 +54,94 @@ def route_template(template):
 @login_required
 def table():
     
-    # # METODO POST
-    # if request.method == 'POST':
-    #     proyecto = request.form['proyecto']
-    #     proveedor = request.form['proveedor']
-    #     concepto = request.form['concepto']
-    #     importe = request.form['importe']
-    #     modalidad = request.form['tipo']
-    #     tipoPago = request.form['tipoPago']
-    #     fecha_fact = request.form['fechaFactura']
-    #     banco = request.form['entidad']
+    # METODO POST
+    if request.method == 'POST':
+        proyecto = request.form['proyecto']
+        proveedor = request.form['proveedor']
+        cliente = ""
+        concepto = request.form['concepto']
+        importe = request.form['importe']
+        modalidad = request.form['tipo']
+        tipoPago = request.form['tipoPago']
+        fecha_fact = request.form['fechaFactura']
+        banco = request.form['entidad']
+        gestor = request.form['gestor']
 
-    #     if modalidad == "Compra":
-    #         fecha_venc = request.form['fechaVencimiento']
-    #     else:
-    #         fecha_venc = request.form['fechaVencimientoDate']
-    #         ano,mes,dia = fecha_venc.split("-")
-    #         fecha_venc = (f"{dia}/{mes}/{ano}")
+    # Le cambiamos el formato a la fecha de factura para aparezca como YYYY-MM-DD
+        ano,mes,dia = fecha_fact.split("-")
+        fecha_fact = (f"{ano}/{mes}/{dia}")
 
-
-    #     # Le cambiamos el formato a la fecha de factura para aparezca como DD-MM-YYYY
-    #     ano,mes,dia = fecha_fact.split("-")
-    #     fecha_fact = (f"{dia}/{mes}/{ano}")
+        if modalidad == "Compra":
+            fecha_venc = request.form['fechaVencimiento']
+            ano,mes,dia = fecha_venc.split("-")
+            fecha_venc = (f"{ano}/{mes}/{dia}")
+            cliente = ""
+        else:
+            fecha_venc = request.form['fechaVencimientoDate']
+            ano,mes,dia = fecha_venc.split("-")
+            fecha_venc = (f"{ano}/{mes}/{dia}")
+            cliente = proveedor
+            proveedor = ""
         
-    #     lista_datos = [proyecto,proveedor,concepto,modalidad,importe,tipoPago,fecha_fact,fecha_venc,banco,'False','False','False',False]  # Los 4 últimos "False" corresponden a los checkbox
+        lista_datos = [proyecto,proveedor,cliente,concepto,modalidad,importe,tipoPago,fecha_fact,fecha_venc,banco,gestor,'False',False]  # Los 2 últimos "False" corresponden a los checkbox
 
-    #     with open('datos/pedidos.csv', 'a', newline='', encoding='utf-8') as file:
-    #         writer = csv.writer(file)
-    #         writer.writerow(lista_datos)
+        # with open('datos/pedidos.csv', 'a', newline='', encoding='utf-8') as file:
+        #     writer = csv.writer(file)
+        #     writer.writerow(lista_datos)
 
 
-    # # METODO PUT
-    # if request.method == 'PUT':
-    #     respuesta = request.get_json()
+    # METODO PUT
+    if request.method == 'PUT':
+        respuesta = request.get_json()
 
-    #     if len(respuesta) == 3: # SI LA RESPUESTA QUE RECIBIMOS SOLO TIENE 3 PARÁMETROS
-    #         indice = (respuesta['indice'])
-    #         estado = (respuesta['estado'])
-    #         tipo = (respuesta['tipo'])
+        if len(respuesta) == 3: # SI LA RESPUESTA QUE RECIBIMOS SOLO TIENE 3 PARÁMETROS
+            indice = (respuesta['indice'])
+            estado = (respuesta['estado'])
+            tipo = (respuesta['tipo'])
 
-    #         #MODIFICAR VALOR DE UN CHECBOX
-    #         if tipo == "anticipo":  # Si es un checkbox de anticipo
-    #             dfTemporal = pd.read_csv('datos/pedidos.csv')
-    #             dfTemporal.iloc[indice,9] = estado
-    #             dfTemporal.to_csv('datos/pedidos.csv',index=False)
-    #         elif tipo == "recompra":   # Si es un checkbox de cobrado
-    #             dfTemporal = pd.read_csv('datos/pedidos.csv')
-    #             dfTemporal.iloc[indice,10] = estado
-    #             dfTemporal.to_csv('datos/pedidos.csv',index=False)
-    #         elif tipo == "cobrado":   # Si es un checkbox de cobrado
-    #             dfTemporal = pd.read_csv('datos/pedidos.csv')
-    #             dfTemporal.iloc[indice,11] = estado
-    #             dfTemporal.to_csv('datos/pedidos.csv',index=False)
-    #         elif tipo == "pagoEmitido":   # Si es un checkbox de cobrado
-    #             dfTemporal = pd.read_csv('datos/pedidos.csv')
-    #             dfTemporal.iloc[indice,12] = estado
-    #             dfTemporal.to_csv('datos/pedidos.csv',index=False)
+            #MODIFICAR VALOR DE UN CHECBOX
+            if tipo == "cobrado":   # Si es un checkbox de cobrado
+                dfTemporal = pd.read_csv('datos/pedidos.csv')
+                dfTemporal.iloc[indice,11] = estado
+                dfTemporal.to_csv('datos/pedidos.csv',index=False)
+            elif tipo == "pagoEmitido":   # Si es un checkbox de cobrado
+                dfTemporal = pd.read_csv('datos/pedidos.csv')
+                dfTemporal.iloc[indice,12] = estado
+                dfTemporal.to_csv('datos/pedidos.csv',index=False)
                 
 
-    #     elif len(respuesta) == 10:  # MODIFICAR UN REGISTRO
-    #         indiceM = (respuesta[0])
-    #         proyectoM = (respuesta[1])
-    #         tipoM = (respuesta[2])
-    #         proveedorM = (respuesta[3])
-    #         conceptoM = (respuesta[4])
-    #         importeM = float((respuesta[5]))
-    #         fechaF = (respuesta[6])
-    #         tipoPagoM = (respuesta[7])
-    #         fechaV = (respuesta[8])
-    #         entidadM = (respuesta[9])
+        elif len(respuesta) == 11:  # MODIFICAR UN REGISTRO
+            indiceM = (respuesta[0]) + 1 # para que coincida con el indice de la base de datos
+            proyectoM = (respuesta[1])
+            tipoM = (respuesta[2])
+            proveedorM = (respuesta[3])
+            conceptoM = (respuesta[4])
+            importeM = float((respuesta[5]))
+            fechaF = (respuesta[6])
+            tipoPagoM = (respuesta[7])
+            fechaV = (respuesta[8])
+            entidadM = (respuesta[9])
+            gestorM = (respuesta[10])
 
-    #         # Actualizamos el registro del pedido seleccionado
-    #         dfTemporal = pd.read_csv('datos/pedidos.csv')
-    #         dfTemporal.iloc[indiceM,0] = proyectoM
-    #         dfTemporal.iloc[indiceM,1] = proveedorM
-    #         dfTemporal.iloc[indiceM,2] = conceptoM
-    #         dfTemporal.iloc[indiceM,3] = tipoM
-    #         dfTemporal.iloc[indiceM,4] = importeM
-    #         dfTemporal.iloc[indiceM,5] = tipoPagoM
-    #         dfTemporal.iloc[indiceM,6] = fechaF
-    #         dfTemporal.iloc[indiceM,7] = fechaV
-    #         dfTemporal.iloc[indiceM,8] = entidadM
-    #         dfTemporal.to_csv('datos/pedidos.csv',index=False)
+            # Comprobamos si es compra o venta para rellenar el cliente o el proveedor
+            if tipoM == "Compra":
+                proveedorM = proveedorM
+                clienteM = ""
+            else:
+                clienteM = proveedorM
+                proveedorM = ""
+
+            # Actualizamos el registro del pedido seleccionado
+            datos = {"id_Proyecto": proyectoM, "id_Proveedor": proveedorM, "id_Cliente": clienteM, "Concepto": conceptoM, "Tipo": tipoM,
+                    "Importe": importeM, "Tipo_Pago": tipoPagoM, "Fecha_Factura": fechaF, "Fecha_Vencimiento": fechaV, "id_Banco": entidadM, "gestor": gestorM}
+            
+            ConsultasDB.modificarRegistro(indiceM,datos)
 
 
-    #     elif len(respuesta) == 1:   # ELIMINAR UN REGISTRO
-    #         indiceM = int(respuesta['indice'])
-    #         dfTemporal = pd.read_csv('datos/pedidos.csv')
-    #         dfTemporal.drop([indiceM], axis=0, inplace=True)
-    #         dfTemporal.to_csv('datos/pedidos.csv',index=False)
+        elif len(respuesta) == 1:   # ELIMINAR UN REGISTRO
+            indiceM = int(respuesta['indice']) + 1  # para que coincida con el indice de la base de datos
+            ConsultasDB.eliminarRegistro(indiceM)
+
 
     # METODO GET            
     df = ConsultasDB.consultaRegistros().drop('id_Registro',axis=1)
@@ -150,13 +149,17 @@ def table():
     dfBancos = ConsultasDB.consultaBancos()
     dfClientes = ConsultasDB.consultaClientes()
     dfProyectos = ConsultasDB.consultaProyectos()
+    dfGestores = ConsultasDB.consultaGestores()
+    dfGestores["NombreGestor"] = dfGestores["Nombre"] + " " + dfGestores["Apellidos"]
+
 
     # Convertimos el dataframe en una lista para pasarlo al template donde lo recogerá javascript
     lista_condiciones_proveedores = (dfProveedores['Condiciones_confirming'].values).tolist()
-    listaContactos = dfClientes[['id_Cliente','Nombre']].to_dict(orient='records')
-    listaProyectos = dfProyectos[['id_Proyecto','Nombre']].to_dict(orient='records')
-    proveedores = dfProveedores[['id_Proveedor','Nombre']].to_dict(orient='records')
-    bancos = dfBancos[['id_Banco','Banco']].to_dict(orient='records')
+    clientes = dfClientes[['Nombre']].to_dict(orient='dict')
+    listaProyectos = dfProyectos['Nombre'].to_dict()
+    proveedores = dfProveedores[['Nombre']].to_dict(orient='dict')
+    bancos = dfBancos['Banco'].to_dict()
+    gestores = dfGestores['NombreGestor'].to_dict()
     
     return render_template("home/table.html", segment='table', tables=[df.to_html(header=True, classes='table table-hover table-striped table-bordered',
                 table_id="tabla_registros", index=True)],
@@ -164,7 +167,7 @@ def table():
                 bancos = bancos,
                 condicionesProve=lista_condiciones_proveedores,
                 listaProyectos = listaProyectos,
-                listaContact=listaContactos)
+                listaContact=clientes, gestores = gestores)
 
 
 # @app.route('/registrar_r', methods=['POST'])

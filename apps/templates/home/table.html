@@ -21,9 +21,7 @@
                             <label for="inputproyecto" style="color: slategrey; font-size:14px;">Proyecto</label>
                             <select id="proyecto" name="proyecto" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
                                 <option>Elegir...</option>
-                                {%- for proyecto in listaProyectos %}
-                                <option value="{{ proyecto.id_Proyecto }}" >{{ proyecto.Nombre }}</option>
-                                {%- endfor %}
+
                                 </select>
                         </div>
 
@@ -94,9 +92,13 @@
                             <label for="inputentidad" style="color: slategrey; font-size:14px;">Entidad Bancaria</label>
                             <select id="entidad" name="entidad" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
                                 <option>Elegir...</option>
-                                    {%- for banco in bancos %}
-                                    <option value="{{ banco.id_Banco }}" >{{ banco.Banco }}</option>
-                                    {%- endfor %}
+                                </select>
+                        </div>
+
+                        <div class="form-group col-md">
+                            <label for="inputgestor" style="color: slategrey; font-size:14px;">Gestor</label>
+                            <select id="gestor" name="gestor" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
+                                <option>Elegir...</option>
                                 </select>
                         </div>
                     </div>
@@ -186,7 +188,14 @@
         document.getElementById('importe').addEventListener('change', compruebaImporte);
         document.getElementById('fechaFactura').addEventListener('change', cambioFecha);
         document.getElementById('tipo').addEventListener('change', cambioTipo);
-        document.getElementById('descargaXLS').addEventListener('click', descargaXLS);
+        //document.getElementById('descargaXLS').addEventListener('click', descargaXLS);
+
+        //Cargamos los datos iniciales de los input select
+        llenarSelect(Object.keys(proyectos),Object.values(proyectos),'proyecto');
+        llenarSelect(Object.keys(proveedores.Nombre),Object.values(proveedores.Nombre),'proveedor');
+        llenarSelect(Object.keys(listaBancos),Object.values(listaBancos),'entidad');
+        llenarSelect(Object.keys(gestores),Object.values(gestores),'gestor');
+        
         
         $('#fechaVencimientoDate').hide(); //Ocultamos al inicio el input date de fecha de vencimiento
 
@@ -318,23 +327,24 @@
     // Leemos los datos provenientes del archipo ".py"
     const data = '{{ condicionesProve | tojson | safe }}';  // Creamos una variable data con la lista de python de condiciones proveedor
     const dataContactos = '{{ listaContact | tojson | safe }}';  // Creamos una variable data con la lista de python de los contactos
-    
     const condicionesProve = JSON.parse(data);   // Parseamos los datos anteriores para convertirlo en un array de javascript
     const contactos = JSON.parse(dataContactos);   // Parseamos los datos anteriores para convertirlo en un array de javascript
-    const listProveedores = JSON.parse(dataProve);   // Parseamos los datos anteriores para convertirlo en un array de javascript
     const proveedores = JSON.parse('{{ proveedores | tojson | safe }}'); // Creamos y parseamos la variable para javascript
+    const proyectos = JSON.parse('{{ listaProyectos | tojson | safe }}'); // Creamos y parseamos la variable para javascript
+    const listaBancos = JSON.parse('{{ bancos | tojson | safe }}'); // Creamos y parseamos la variable para javascript
+    const gestores = JSON.parse('{{ gestores | tojson | safe }}'); // Creamos y parseamos la variable para javascript
 
 
-    proyecto_select = document.getElementById('proyecto');
+    //proyecto_select = document.getElementById('proyecto');
     proveedor_select=document.getElementById('proveedor');
-    concepto_text=document.getElementById('concepto');
-    importe_text = document.getElementById('importe');
-    modalidad_select = document.getElementById('tipo'); //Venta o Compra
-    tipoPago_select = document.getElementById('tipoPago');  //Confirming o transferencia
-    fechaFactura_text = document.getElementById('fechaFactura');
-    fechaVencimiento_text = document.getElementById('fechaVencimiento');//Si es una compra utilizaremos este input text readonly
-    fechaVencimiento_Date = document.getElementById('fechaVencimientoDate');//Si es una venta utilizaremos este input date editable
-    banco_select = document.getElementById('entidad');
+    //concepto_text=document.getElementById('concepto');
+    //importe_text = document.getElementById('importe');
+    //modalidad_select = document.getElementById('tipo'); //Venta o Compra
+    //tipoPago_select = document.getElementById('tipoPago');  //Confirming o transferencia
+    //fechaFactura_text = document.getElementById('fechaFactura');
+    //fechaVencimiento_text = document.getElementById('fechaVencimiento');//Si es una compra utilizaremos este input text readonly
+    //fechaVencimiento_Date = document.getElementById('fechaVencimientoDate');//Si es una venta utilizaremos este input date editable
+    //banco_select = document.getElementById('entidad');
     //etiqTipo = document.getElementById('etiqTipo');
 
     function filtroFechas (ini,fin,indice){// ocultará o mostrará una fila de la tabla en función de la fecha. Indice = columna de tabla
@@ -468,34 +478,29 @@
 
 
     function cambioTipo() {
-    const tipo = document.getElementById('tipo').value;
-    const select = document.getElementById('proveedor');
-    let data;
+        const tipo = document.getElementById('tipo').value;
+        const select = document.getElementById('proveedor');
+        let data;
     
-    if (tipo === 'Compra' || tipo === 'Elegir...') {
-        $('#fechaVencimientoDate').value = "";
-        $('#fechaVencimientoDate').hide();
-        $('#fechaVencimiento').show();
-        document.getElementById('etiqProv').innerHTML = 'Proveedor';
-        data = proveedores;
-    } else if (tipo === 'Venta') {
-        $('#fechaVencimientoDate').show();
-        $('#fechaVencimiento').hide();
-        document.getElementById('etiqProv').innerHTML = 'Cliente';
-        data = contactos;
-    } else {
-        select.innerHTML = "";
-        return;
+        if (tipo === 'Compra' || tipo === 'Elegir...') {
+            $('#fechaVencimientoDate').value = "";
+            $('#fechaVencimientoDate').hide();
+            $('#fechaVencimiento').show();
+            document.getElementById('etiqProv').innerHTML = 'Proveedor';
+            data = proveedores.Nombre;
+            indices = Object.keys(data);
+            nombre_Provedores = Object.values(data);
+            llenarSelect(indices,nombre_Provedores, 'proveedor');
+        } else if (tipo === 'Venta') {
+            $('#fechaVencimientoDate').show();
+            $('#fechaVencimiento').hide();
+            document.getElementById('etiqProv').innerHTML = 'Cliente';
+            data = contactos.Nombre;
+            indices = Object.keys(data);
+            nombre_Clientes = Object.values(data);
+            llenarSelect(indices,nombre_Clientes, 'proveedor');
+        }
     }
-
-    select.innerHTML = ""; // Limpia el select
-    data.forEach(function(item) {
-        var option = document.createElement("option");
-        option.value = item.id; // Asume que cada objeto tiene una propiedad 'id'
-        option.text = item.Nombre; // Asume que cada objeto tiene una propiedad 'Nombre'
-        select.appendChild(option);
-    });
-}
 
 console.log(proveedores);
 
@@ -619,14 +624,13 @@ console.log(proveedores);
         } 
     }
 
-    function llenarSelect(lista){ //Llenamos el select con la información de los proveedores o de los clientes
-        var len = lista.length;
-        $("#proveedor").empty();
-        $("#proveedor").append("<option value='0'>Elegir...</option>");
+    function llenarSelect(id_lista, nombre, objeto){ //Llenamos el select con la información del objeto select que le pasemos por parámetro
+        var len = id_lista.length;
+        $("#" + objeto).empty();
+        $("#" + objeto).append("<option value='0'>Elegir...</option>");
         for( var i = 0; i<len; i++){
-            var id = i+1;
-            var name = lista[i];
-            $("#proveedor").append("<option value='"+name+"'>"+name+"</option>");
+            var name = nombre[i];
+            $("#" + objeto).append("<option value='" + (parseInt(id_lista[i])+1) + "'>" + name + "</option>");
         }
     }
 
@@ -771,7 +775,7 @@ console.log(proveedores);
                     var cell = row.getElementsByTagName("th")[0];
                     var id = cell.innerHTML;
                     cargarDatosAlert(id,row);
-                    //alert("respuesta: " + id);
+                    //alert("respuesta: " + "id " + id + "row " + row);
                 };
             };
             //currentRow.onclick = createClickHandler(currentRow);
@@ -826,7 +830,7 @@ console.log(proveedores);
 
 
     function descargaXLS(){
-        window.open("table.html/download", target="_blank")
+        window.open("table.html/download", target="_blank");
     }
 
 
@@ -841,18 +845,20 @@ console.log(proveedores);
         var fechaFact = elemento.getElementsByTagName("td")[6].innerHTML;
         var fechaVenc = elemento.getElementsByTagName("td")[7].innerHTML;
         var banco = elemento.getElementsByTagName("td")[8].innerHTML;
+        var gestor = elemento.getElementsByTagName("td")[11].innerHTML;
 
-        //CONFIGURAMOS LA FECHA DE FACTURACION. SI LOS NUMEROS SON INFERIORES A 10 LE AÑADIMOS UN CERO
-        var [dia1, mes1, ano1] = fechaFact.split('/');
-        if (dia1.length==1){dia1="0"+dia1;};
-        if (mes1.length==1){mes1="0"+mes1;};
-        fechaFact = ano1 + "-" + mes1 + "-" + dia1;
 
-        //CONFIGURAMOS LA FECHA DE VENCIMIENTO. SI LOS NUMEROS SON INFERIORES A 10 LE AÑADIMOS UN CERO
-        var [dia2, mes2, ano2] = fechaVenc.split('/');
-        if (dia2.length==1){dia2="0"+dia2;};
-        if (mes2.length==1){mes2="0"+mes2;};
-        fechaVenc = ano2 + "-" + mes2 + "-" + dia2;
+        // //CONFIGURAMOS LA FECHA DE FACTURACION. SI LOS NUMEROS SON INFERIORES A 10 LE AÑADIMOS UN CERO
+        // var [dia1, mes1, ano1] = fechaFact.split('/');
+        // if (dia1.length==1){dia1="0"+dia1;};
+        // if (mes1.length==1){mes1="0"+mes1;};
+        // fechaFact = ano1 + "-" + mes1 + "-" + dia1;
+
+        // //CONFIGURAMOS LA FECHA DE VENCIMIENTO. SI LOS NUMEROS SON INFERIORES A 10 LE AÑADIMOS UN CERO
+        // var [dia2, mes2, ano2] = fechaVenc.split('/');
+        // if (dia2.length==1){dia2="0"+dia2;};
+        // if (mes2.length==1){mes2="0"+mes2;};
+        // fechaVenc = ano2 + "-" + mes2 + "-" + dia2;
 
 
         //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DE Compra o Venta
@@ -887,144 +893,132 @@ console.log(proveedores);
                 </select>`
         }
 
-
         //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DE LA ENTIDAD
         if (banco == "BBVA"){
             cadenaHTMLbanco = `
                 <select id="entidadM" name="entidadM" class="col-md-10 form-control"
                     style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option selected>BBVA</option>
-                        <option>CAJAMAR</option>
-                        <option>CAJARURAL</option>
-                        <option>CAIXA 400</option>
-                        <option>CAIXA 100</option>
-                        <option>CAIXA-BK</option>
-                        <option>IBERCAJA</option>
-                        <option>SABADELL</option>
-                        <option>SANTANDER</option>
+                        <option value=1>CAIXA</option>
+                        <option value=2>SANTANDER</option>
+                        <option value=3 selected>BBVA</option>
+                        <option value=4>CAJAMAR</option>
+                        <option value=5>IBERCAJA</option>
+                        <option value=6>SABADELL</option>
+                        <option value=7>CAJARURAL</option>
                 </select>`
         } else if (banco == "CAJAMAR"){
             cadenaHTMLbanco = `
                 <select id="entidadM" name="entidadM" class="col-md-10 form-control"
                     style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option >BBVA</option>
-                        <option selected>CAJAMAR</option>
-                        <option>CAJARURAL</option>
-                        <option>CAIXA 400</option>
-                        <option>CAIXA 100</option>
-                        <option>CAIXA-BK</option>
-                        <option>IBERCAJA</option>
-                        <option>SABADELL</option>
-                        <option>SANTANDER</option>
+                        <option value=1>CAIXA</option>
+                        <option value=2>SANTANDER</option>
+                        <option value=3>BBVA</option>
+                        <option value=4 selected>CAJAMAR</option>
+                        <option value=5>IBERCAJA</option>
+                        <option value=6>SABADELL</option>
+                        <option value=7>CAJARURAL</option>
                 </select>`
         } else if (banco == "CAJARURAL"){
             cadenaHTMLbanco = `
                 <select id="entidadM" name="entidadM" class="col-md-10 form-control"
                     style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option >BBVA</option>
-                        <option >CAJAMAR</option>
-                        <option selected>CAJARURAL</option>
-                        <option>CAIXA 400</option>
-                        <option>CAIXA 100</option>
-                        <option>CAIXA-BK</option>
-                        <option>IBERCAJA</option>
-                        <option>SABADELL</option>
-                        <option>SANTANDER</option>
+                        <option value=1>CAIXA</option>
+                        <option value=2>SANTANDER</option>
+                        <option value=3>BBVA</option>
+                        <option value=4>CAJAMAR</option>
+                        <option value=5>IBERCAJA</option>
+                        <option value=6>SABADELL</option>
+                        <option value=7 selected>CAJARURAL</option>
                 </select>`
-        } else if (banco == "CAIXA 400"){
+        } else if (banco == "CAIXA"){
             cadenaHTMLbanco = `
                 <select id="entidadM" name="entidadM" class="col-md-10 form-control"
                     style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option >BBVA</option>
-                        <option >CAJAMAR</option>
-                        <option >CAJARURAL</option>
-                        <option selected>CAIXA 400</option>
-                        <option>CAIXA 100</option>
-                        <option>CAIXA-BK</option>
-                        <option>IBERCAJA</option>
-                        <option>SABADELL</option>
-                        <option>SANTANDER</option>
-                </select>`
-        } else if (banco == "CAIXA 100"){
-            cadenaHTMLbanco = `
-                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
-                    style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option >BBVA</option>
-                        <option >CAJAMAR</option>
-                        <option >CAJARURAL</option>
-                        <option >CAIXA 400</option>
-                        <option selected>CAIXA 100</option>
-                        <option >CAIXA-BK</option>
-                        <option>IBERCAJA</option>
-                        <option>SABADELL</option>
-                        <option>SANTANDER</option>
-                </select>`
-        } else if (banco == "CAIXA-BK"){
-            cadenaHTMLbanco = `
-                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
-                    style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option >BBVA</option>
-                        <option >CAJAMAR</option>
-                        <option >CAJARURAL</option>
-                        <option >CAIXA 400</option>
-                        <option>CAIXA 100</option>
-                        <option selected>CAIXA-BK</option>
-                        <option>IBERCAJA</option>
-                        <option>SABADELL</option>
-                        <option>SANTANDER</option>
+                        <option value=1 selected>CAIXA</option>
+                        <option value=2>SANTANDER</option>
+                        <option value=3>BBVA</option>
+                        <option value=4>CAJAMAR</option>
+                        <option value=5>IBERCAJA</option>
+                        <option value=6>SABADELL</option>
+                        <option value=7>CAJARURAL</option>
                 </select>`
         } else if (banco == "IBERCAJA"){
             cadenaHTMLbanco = `
                 <select id="entidadM" name="entidadM" class="col-md-10 form-control"
                     style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option >BBVA</option>
-                        <option >CAJAMAR</option>
-                        <option >CAJARURAL</option>
-                        <option >CAIXA 400</option>
-                        <option>CAIXA 100</option>
-                        <option >CAIXA-BK</option>
-                        <option selected>IBERCAJA</option>
-                        <option>SABADELL</option>
-                        <option>SANTANDER</option>
+                        <option value=1>CAIXA</option>
+                        <option value=2>SANTANDER</option>
+                        <option value=3>BBVA</option>
+                        <option value=4>CAJAMAR</option>
+                        <option value=5 selected>IBERCAJA</option>
+                        <option value=6>SABADELL</option>
+                        <option value=7>CAJARURAL</option>
                 </select>`
         } else if (banco == "SABADELL"){
             cadenaHTMLbanco = `
                 <select id="entidadM" name="entidadM" class="col-md-10 form-control"
                     style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option >BBVA</option>
-                        <option >CAJAMAR</option>
-                        <option >CAJARURAL</option>
-                        <option >CAIXA 400</option>
-                        <option>CAIXA 100</option>
-                        <option >CAIXA-BK</option>
-                        <option>IBERCAJA</option>
-                        <option selected>SABADELL</option>
-                        <option>SANTANDER</option>
+                        <option value=1>CAIXA</option>
+                        <option value=2>SANTANDER</option>
+                        <option value=3>BBVA</option>
+                        <option value=4>CAJAMAR</option>
+                        <option value=5>IBERCAJA</option>
+                        <option value=6 selected>SABADELL</option>
+                        <option value=7>CAJARURAL</option>
                 </select>`
         } else if (banco == "SANTANDER"){
             cadenaHTMLbanco = `
                 <select id="entidadM" name="entidadM" class="col-md-10 form-control"
                     style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option >BBVA</option>
-                        <option >CAJAMAR</option>
-                        <option >CAJARURAL</option>
-                        <option >CAIXA 400</option>
-                        <option>CAIXA 100</option>
-                        <option >CAIXA-BK</option>
-                        <option>IBERCAJA</option>
-                        <option >SABADELL</option>
-                        <option selected>SANTANDER</option>
+                        <option value=1>CAIXA</option>
+                        <option value=2 selected>SANTANDER</option>
+                        <option value=3>BBVA</option>
+                        <option value=4>CAJAMAR</option>
+                        <option value=5>IBERCAJA</option>
+                        <option value=6>SABADELL</option>
+                        <option value=7>CAJARURAL</option>
                 </select>`
-        } 
+        }
 
 
-        //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DE LA ENTIDAD BANCARIA
-        cadenaHTMLentidad = `
-            <select id="entidadM" name="entidadM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
-                {%- for i in bancos %}
-                    <option value="{{ i }}" {% if i == "`+banco+`" %} selected {% endif %}>{{ i }}</option>
-                {%- endfor %}
-            </select>`
+          //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DEL GESTOR
+          if (gestor == "Javier Castillo"){
+            cadenaHTMLGestor = `
+                <select id="gestorM" name="gestorM" class="col-md-10 form-control"
+                    style="font-size:14px; max-width: 100%;background-color: white;" >
+                        <option value=1selected>Javier Castillo</option>
+                        <option value=2>Federico Garcia</option>
+                        <option value=3>Carmen Garrido</option>
+                        <option value=4>Monica Perez</option>
+                </select>`
+        } else if (gestor == "Federico Garcia"){
+            cadenaHTMLGestor = `
+                <select id="gestorM" name="gestorM" class="col-md-10 form-control"
+                        style="font-size:14px; max-width: 100%;background-color: white;" >
+                            <option value=1>Javier Castillo</option>
+                            <option value=2 selected>Federico Garcia</option>
+                            <option value=3>Carmen Garrido</option>
+                            <option value=4>Monica Perez</option>
+                    </select>`
+        } else if (gestor == "Carmen Garrido"){
+            cadenaHTMLGestor = `
+                <select id="gestorM" name="gestorM" class="col-md-10 form-control"
+                            style="font-size:14px; max-width: 100%;background-color: white;" >
+                                <option value=1>Javier Castillo</option>
+                                <option value=2>Federico Garcia</option>
+                                <option value=3 selected>Carmen Garrido</option>
+                                <option value=4>Monica Perez</option>
+                        </select>`
+        } else if (gestor == "Monica Perez"){
+            cadenaHTMLGestor = `
+                <select id="gestorM" name="gestorM" class="col-md-10 form-control"
+                                style="font-size:14px; max-width: 100%;background-color: white;" >
+                                    <option value=1>Javier Castillo</option>
+                                    <option value=2>Federico Garcia</option>
+                                    <option value=3>Carmen Garrido</option>
+                                    <option value=4 selected>Monica Perez</option>
+                            </select>`
+        }
 
 
         //CONFIGURAMOS EL ALERT
@@ -1090,6 +1084,11 @@ console.log(proveedores);
                             <label for="inputentidad" style="color: slategrey; font-size:14px;">Entidad Bancaria</label>`+
                             cadenaHTMLbanco+`
                         </div>
+                        <div class="form-group col-md">
+                            <label for="inputgestor" style="color: slategrey; font-size:14px;">Gestor</label>`+
+                            cadenaHTMLGestor+`
+                        </div>
+
                     </div>
                 `,
                             
@@ -1103,7 +1102,7 @@ console.log(proveedores);
                 var [ano1,mes1,dia1] = fechaV.split("-");
                 fechaV = dia1 + "/" + mes1 + "/" + ano1;
 
-                var indice = parseInt(id) //Para que corresponda con el indice del csv "Compras.csv"
+                var indice = parseInt(id)
 
                 return [
                     indice,
@@ -1112,10 +1111,11 @@ console.log(proveedores);
                     document.getElementById('proveedorM').value,
                     document.getElementById('conceptoM').value,
                     document.getElementById('importeM').value,
-                    fechaF,
+                    document.getElementById('fechaFacturaM').value,
                     document.getElementById('tipoPagoM').value,
-                    fechaV,
-                    document.getElementById('entidadM').value
+                    document.getElementById('fechaVencimientoDateM').value,
+                    document.getElementById('entidadM').value,
+                    document.getElementById('gestorM').value
                 ];
                 
             }
