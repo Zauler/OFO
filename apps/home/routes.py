@@ -17,6 +17,7 @@ from jinja2 import TemplateNotFound
 from datetime import datetime
 from apps.home.consultasDB import *
 from apps.home.validation import *
+from datetime import datetime
 
 
 
@@ -166,6 +167,7 @@ def table():
     proveedores = dfProveedores[['Nombre']].to_dict(orient='dict')
     bancos = dfBancos['Banco'].to_dict()
     gestores = dfGestores['NombreGestor'].to_dict()
+    form = RegistrosForm()
     
     return render_template("home/table.html", segment='table', tables=[df.to_html(header=True, classes='table table-hover table-striped table-bordered',
                 table_id="tabla_registros", index=True)],
@@ -173,42 +175,54 @@ def table():
                 bancos = bancos,
                 condicionesProve=lista_condiciones_proveedores,
                 listaProyectos = listaProyectos,
-                listaContact=clientes, gestores = gestores)
+                listaContact=clientes, gestores = gestores, form = form)
 
 
-# @app.route('/registrar_r', methods=['POST'])
+@blueprint.route('/registrar_r', methods=['POST'])
+@login_required
+def registrar_registros():
 
-# def registrar():
-#     form = RegistrosForm(request.form)
+    form = RegistrosForm(request.form)
+    print("FORMULARIO HTML")
+    print(request.form)
+    print("FORMULARIO VALIDACIÓN")
+    print(form.data)
 
-#     if form.validate_on_submit():
-#         nuevo_registro = Registros(
-#             id_Proyecto = form.id_Proyecto.data,
-#             id_Proveedor = form.id_Proveedor.data,
-#             id_Cliente = form.id_Cliente.data,
-#             Concepto = form.Concepto.data,
-#             Tipo = form.Tipo.data,
-#             Importe = form.Importe.data,
-#             Tipo_Pago = form.Tipo_Pago.data,
-#             Fecha_Factura = form.Fecha_Factura.data,
-#             Fecha_Vencimiento = form.Fecha_Vencimiento.data,
-#             id_Banco = form.id_Banco.data,
-#             Fact_Emit_Recib = form.Fact_Emit_Recib.data,
-#             Pago_Emit_Recib = form.Pago_Emit_Recib.data
-#         )
+    if request.form["tipo"] =="Compra":
+        fechavencimiento_str = request.form["fechaVencimiento"]
+        fechavencimiento = datetime.strptime(fechavencimiento_str, "%d/%m/%Y")
+        fechavencimiento = fechavencimiento.strftime('%Y-%m-%d')
+        fechavencimiento = datetime.strptime(fechavencimiento, '%Y-%m-%d').date()
+        form.fechaVencimientoDate.data = fechavencimiento
 
-#         try:
-#             db.session.add(nuevo_registro)
-#             db.session.commit()
-#             return redirect(url_for('home_blueprint.table'))  # redirige al usuario a la página principal después de registrar
+    if form.validate_on_submit():
+        nuevo_registro = Registros(
+            id_Proyecto = form.proyecto.data,
+            id_Proveedor = form.proveedor.data,
+            Concepto = form.concepto.data,
+            Tipo = form.tipo.data,
+            Importe = form.importe.data,
+            Tipo_Pago = form.tipoPago.data,
+            Fecha_Factura = form.fechaFactura.data,
+            Fecha_Vencimiento = form.fechaVencimientoDate.data,
+            id_Banco = form.entidad.data,
+            Fact_Emit_Recib = False,
+            Pago_Emit_Recib = False,
+        )
+
+        try:
+            db.session.add(nuevo_registro)
+            db.session.commit()
+            return redirect(url_for('home_blueprint.table'))  # redirige al usuario a la página principal después de registrar
         
-#         except SQLAlchemyError as e:
+        except SQLAlchemyError as e:
             
-#             db.session.rollback()
-#             return f'Error en la base de datos: {str(e)}'  # si ocurre un error en la base de datos, devuelve este error
+            db.session.rollback()
+            return f'Error en la base de datos: {str(e)}'  # si ocurre un error en la base de datos, devuelve este error
         
-#     else:
-#         return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
+    else:
+        print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
+        return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
 
 
 

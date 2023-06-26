@@ -26,6 +26,9 @@ except KeyError:
     exit('Error: Invalid <config_mode>. Expected values [Debug, Production] ')
 
 app = create_app(app_config)
+
+app.secret_key = "12345678"
+
 Migrate(app, db)
 
 if not DEBUG:

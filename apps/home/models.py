@@ -65,7 +65,7 @@ class Registros(db.Model):
     Concepto = db.Column(db.String(60), nullable=False)
     Tipo = db.Column(db.String(10), nullable=False)
     Importe = db.Column(db.Float, nullable=False)
-    Tipo_Pago = db.Column(db.String(10), nullable=False)
+    Tipo_Pago = db.Column(db.String(20), nullable=False)
     Fecha_Factura = db.Column(db.Date, nullable=False)
     Fecha_Vencimiento = db.Column(db.Date, nullable=False)
     id_Banco = db.Column(db.Integer, db.ForeignKey('Bancos.id_Banco'), nullable=False)

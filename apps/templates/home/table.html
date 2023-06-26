@@ -13,7 +13,9 @@
             <p style="color: slategrey; text-align: center;">AÑADIR REGISTRO</p>
             </div>
             <div class="row" style="flex-direction: column;">
-                <form action="registrar_r" method="post" id="form_registro">
+                <form action="/registrar_r" method="post" id="form_registro">
+                    <!-- Campo oculto para el token CSRF -->
+                    <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
                     <!-- PRIMERA FILA DE CONTROLES -->
                     <div class="form-row">
 
@@ -95,12 +97,12 @@
                                 </select>
                         </div>
 
-                        <div class="form-group col-md">
+                        <!-- <div class="form-group col-md">
                             <label for="inputgestor" style="color: slategrey; font-size:14px;">Gestor</label>
                             <select id="gestor" name="gestor" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
                                 <option>Elegir...</option>
                                 </select>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="form-row" style="justify-content: center;">
                         <input type="submit" id="send-signup" name="signup" value="Registrar" class="btn btn-primary" style="margin: 2px;"/>
@@ -339,16 +341,16 @@
     const gestores = JSON.parse('{{ gestores | tojson | safe }}'); // Creamos y parseamos la variable para javascript
 
 
-    //proyecto_select = document.getElementById('proyecto');
+    proyecto_select = document.getElementById('proyecto');
     proveedor_select=document.getElementById('proveedor');
-    //concepto_text=document.getElementById('concepto');
-    //importe_text = document.getElementById('importe');
-    //modalidad_select = document.getElementById('tipo'); //Venta o Compra
-    //tipoPago_select = document.getElementById('tipoPago');  //Confirming o transferencia
-    //fechaFactura_text = document.getElementById('fechaFactura');
-    //fechaVencimiento_text = document.getElementById('fechaVencimiento');//Si es una compra utilizaremos este input text readonly
-    //fechaVencimiento_Date = document.getElementById('fechaVencimientoDate');//Si es una venta utilizaremos este input date editable
-    //banco_select = document.getElementById('entidad');
+    concepto_text=document.getElementById('concepto');
+    importe_text = document.getElementById('importe');
+    modalidad_select = document.getElementById('tipo'); //Venta o Compra
+    tipoPago_select = document.getElementById('tipoPago');  //Confirming o transferencia
+    fechaFactura_text = document.getElementById('fechaFactura');
+    fechaVencimiento_text = document.getElementById('fechaVencimiento');//Si es una compra utilizaremos este input text readonly
+    fechaVencimiento_Date = document.getElementById('fechaVencimientoDate');//Si es una venta utilizaremos este input date editable
+    banco_select = document.getElementById('entidad');
     //etiqTipo = document.getElementById('etiqTipo');
 
     function filtroFechas (ini,fin,indice){// ocultará o mostrará una fila de la tabla en función de la fecha. Indice = columna de tabla
@@ -1179,6 +1181,5 @@ console.log(proveedores);
 
 
 </script>
-
 
 {% endblock javascripts %}
