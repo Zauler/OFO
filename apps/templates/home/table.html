@@ -899,133 +899,34 @@ console.log(proveedores);
                 </select>`
         }
 
-        //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DE LA ENTIDAD
-        if (banco == "BBVA"){
-            cadenaHTMLbanco = `
-                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
-                    style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option value=1>CAIXA</option>
-                        <option value=2>SANTANDER</option>
-                        <option value=3 selected>BBVA</option>
-                        <option value=4>CAJAMAR</option>
-                        <option value=5>IBERCAJA</option>
-                        <option value=6>SABADELL</option>
-                        <option value=7>CAJARURAL</option>
-                </select>`
-        } else if (banco == "CAJAMAR"){
-            cadenaHTMLbanco = `
-                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
-                    style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option value=1>CAIXA</option>
-                        <option value=2>SANTANDER</option>
-                        <option value=3>BBVA</option>
-                        <option value=4 selected>CAJAMAR</option>
-                        <option value=5>IBERCAJA</option>
-                        <option value=6>SABADELL</option>
-                        <option value=7>CAJARURAL</option>
-                </select>`
-        } else if (banco == "CAJARURAL"){
-            cadenaHTMLbanco = `
-                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
-                    style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option value=1>CAIXA</option>
-                        <option value=2>SANTANDER</option>
-                        <option value=3>BBVA</option>
-                        <option value=4>CAJAMAR</option>
-                        <option value=5>IBERCAJA</option>
-                        <option value=6>SABADELL</option>
-                        <option value=7 selected>CAJARURAL</option>
-                </select>`
-        } else if (banco == "CAIXA"){
-            cadenaHTMLbanco = `
-                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
-                    style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option value=1 selected>CAIXA</option>
-                        <option value=2>SANTANDER</option>
-                        <option value=3>BBVA</option>
-                        <option value=4>CAJAMAR</option>
-                        <option value=5>IBERCAJA</option>
-                        <option value=6>SABADELL</option>
-                        <option value=7>CAJARURAL</option>
-                </select>`
-        } else if (banco == "IBERCAJA"){
-            cadenaHTMLbanco = `
-                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
-                    style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option value=1>CAIXA</option>
-                        <option value=2>SANTANDER</option>
-                        <option value=3>BBVA</option>
-                        <option value=4>CAJAMAR</option>
-                        <option value=5 selected>IBERCAJA</option>
-                        <option value=6>SABADELL</option>
-                        <option value=7>CAJARURAL</option>
-                </select>`
-        } else if (banco == "SABADELL"){
-            cadenaHTMLbanco = `
-                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
-                    style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option value=1>CAIXA</option>
-                        <option value=2>SANTANDER</option>
-                        <option value=3>BBVA</option>
-                        <option value=4>CAJAMAR</option>
-                        <option value=5>IBERCAJA</option>
-                        <option value=6 selected>SABADELL</option>
-                        <option value=7>CAJARURAL</option>
-                </select>`
-        } else if (banco == "SANTANDER"){
-            cadenaHTMLbanco = `
-                <select id="entidadM" name="entidadM" class="col-md-10 form-control"
-                    style="font-size:14px; max-width: 100%;background-color: white;" >
-                        <option value=1>CAIXA</option>
-                        <option value=2 selected>SANTANDER</option>
-                        <option value=3>BBVA</option>
-                        <option value=4>CAJAMAR</option>
-                        <option value=5>IBERCAJA</option>
-                        <option value=6>SABADELL</option>
-                        <option value=7>CAJARURAL</option>
-                </select>`
-        }
+                // Crear el select de bancos
+                let cadenaHTMLbanco = '<select id="entidadM" name="entidadM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;background-color: white;">';
+                for (const bancoId in listaBancos) {
+                    let nombreBanco = listaBancos[bancoId]; // Aquí obtenemos el nombre del banco usando la clave
+                    if (nombreBanco == banco) {
+                        cadenaHTMLbanco += `<option value=${bancoId} selected>${nombreBanco}</option>`;
+                    } else {
+                        cadenaHTMLbanco += `<option value=${bancoId}>${nombreBanco}</option>`;
+                    }
+                }
+                cadenaHTMLbanco += '</select>';
 
 
           //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DEL GESTOR
-          if (gestor == "Javier Castillo"){
-            cadenaHTMLGestor = `
-                <select id="gestorM" name="gestorM" class="col-md-10 form-control"
-                    style="font-size:14px; max-width: 100%;background-color: white;" disabled>
-                        <option value=1selected>Javier Castillo</option>
-                        <option value=2>Federico Garcia</option>
-                        <option value=3>Carmen Garrido</option>
-                        <option value=4>Monica Perez</option>
-                </select>`
-        } else if (gestor == "Federico Garcia"){
-            cadenaHTMLGestor = `
-                <select id="gestorM" name="gestorM" class="col-md-10 form-control"
-                        style="font-size:14px; max-width: 100%;background-color: white;" disabled>
-                            <option value=1>Javier Castillo</option>
-                            <option value=2 selected>Federico Garcia</option>
-                            <option value=3>Carmen Garrido</option>
-                            <option value=4>Monica Perez</option>
-                    </select>`
-        } else if (gestor == "Carmen Garrido"){
-            cadenaHTMLGestor = `
-                <select id="gestorM" name="gestorM" class="col-md-10 form-control"
-                            style="font-size:14px; max-width: 100%;background-color: white;" disabled>
-                                <option value=1>Javier Castillo</option>
-                                <option value=2>Federico Garcia</option>
-                                <option value=3 selected>Carmen Garrido</option>
-                                <option value=4>Monica Perez</option>
-                        </select>`
-        } else if (gestor == "Monica Perez"){
-            cadenaHTMLGestor = `
-                <select id="gestorM" name="gestorM" class="col-md-10 form-control"
-                                style="font-size:14px; max-width: 100%;background-color: white;" disabled>
-                                    <option value=1>Javier Castillo</option>
-                                    <option value=2>Federico Garcia</option>
-                                    <option value=3>Carmen Garrido</option>
-                                    <option value=4 selected>Monica Perez</option>
-                            </select>`
-        }
 
+          let cadenaHTMLGestor = '<select id="gestorM" name="gestorM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;background-color: white;" disabled>';
+          for (const gestorId in gestores) {
+                let nombreGestor = gestores[gestorId];
+                if (nombreGestor == gestor ) {
+                    cadenaHTMLGestor += `<option value=${gestorId} selected>${nombreGestor}</option>`;
+                } else {
+                        cadenaHTMLGestor += `<option value=${gestorId}>${nombreGestor}</option>`;
+                    }
+                }
+                cadenaHTMLGestor += '</select>';
+
+
+                
 
         //CONFIGURAMOS EL ALERT
         Swal.fire({

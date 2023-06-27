@@ -165,10 +165,9 @@ def table():
     clientes = dfClientes[['Nombre']].to_dict(orient='dict')
     listaProyectos = dfProyectos['Nombre'].to_dict()
     proveedores = dfProveedores[['Nombre']].to_dict(orient='dict')
-    bancos = dfBancos['Banco'].to_dict()
+    bancos = dfBancos.set_index('id_Banco')['Banco'].to_dict()
     gestores = dfGestores['NombreGestor'].to_dict()
     form = RegistrosForm()
-    
     return render_template("home/table.html", segment='table', tables=[df.to_html(header=True, classes='table table-hover table-striped table-bordered',
                 table_id="tabla_registros", index=True)],
                 proveedores = proveedores, 
