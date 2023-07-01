@@ -46,8 +46,8 @@
                             <select id="proveedor" name="proveedor" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;"
                             onchange = "cambioProveedor()">
                                 <option>Elegir...</option>
-                                {%- for proveedor in proveedores %}
-                                <option value="{{ proveedor.id_Proveedor }}" >{{ proveedor.Nombre }}</option>
+                                {%- for id, nombre in proveedores.items() %}
+                                <option value="{{ id }}" >{{ nombre }}</option>
                                 {%- endfor %}
                             </select>
                         </div>
@@ -194,7 +194,7 @@
 
         //Cargamos los datos iniciales de los input select
         llenarSelect(Object.keys(proyectos),Object.values(proyectos),'proyecto');
-        llenarSelect(Object.keys(proveedores.Nombre),Object.values(proveedores.Nombre),'proveedor');
+        llenarSelect(Object.keys(proveedores),Object.values(proveedores),'proveedor');
         llenarSelect(Object.keys(listaBancos),Object.values(listaBancos),'entidad');
         llenarSelect(Object.keys(gestores),Object.values(gestores),'gestor');
         
@@ -493,18 +493,15 @@
             $('#fechaVencimientoDate').hide();
             $('#fechaVencimiento').show();
             document.getElementById('etiqProv').innerHTML = 'Proveedor';
-            data = proveedores.Nombre;
-            indices = Object.keys(data);
-            nombre_Provedores = Object.values(data);
-            llenarSelect(indices,nombre_Provedores, 'proveedor');
+            data = proveedores;
+            llenarSelect(Object.keys(data), Object.values(data), 'proveedor');
+
         } else if (tipo === 'Venta') {
             $('#fechaVencimientoDate').show();
             $('#fechaVencimiento').hide();
             document.getElementById('etiqProv').innerHTML = 'Cliente';
-            data = contactos.Nombre;
-            indices = Object.keys(data);
-            nombre_Clientes = Object.values(data);
-            llenarSelect(indices,nombre_Clientes, 'proveedor');
+            data = contactos;
+            llenarSelect(Object.keys(data), Object.values(data), 'proveedor');
         }
     }
 
@@ -867,20 +864,78 @@ console.log(proveedores);
         // fechaVenc = ano2 + "-" + mes2 + "-" + dia2;
 
 
+
+        //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DEL PROYECTO
+
+          let cadenaHTMLProyecto = '<select id="proyectoM" name="proyectoM" class="col-md-20 form-control" style="font-size:14px; max-width: 100%;">';
+              for (const proyectoId in proyectos) {
+                    let nombreProyecto = proyectos[proyectoId];
+                    if (nombreProyecto == proyecto ) {
+                        cadenaHTMLProyecto += `<option value=${proyectoId} selected>${nombreProyecto}</option>`;
+                    } else {
+                        cadenaHTMLProyecto += `<option value=${proyectoId}>${nombreProyecto}</option>`;
+                        }
+                    }
+                    cadenaHTMLProyecto += '</select>';
+
+
+
+
         //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DE Compra o Venta
         if (tipo == "Compra"){
             cadenaHTML = `
-                <select id="tipoM" name="tipoM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;" disabled>
+                <select id="tipoM" name="tipoM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
                     <option selected>Compra</option>
                     <option>Venta</option>
                 </select>`
         } else {
             cadenaHTML = `
-                <select id="tipoM" name="tipoM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;" disabled>
+                <select id="tipoM" name="tipoM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
                     <option>Compra</option>
                     <option selected>Venta</option>
                 </select>`
         }
+
+
+
+        // Dentro de la función que maneja el cambio de selección de "Compra" o "Venta"
+
+        let cadenaHTMLProveedorCliente = '<select id="proveedorM" name="proveedorM" class="col-md-20 form-control" style="font-size:14px; max-width: 100%;">';
+        if (tipo == "Compra") {
+            for (const proveedorId in proveedores) {
+                let nombreProveedor = proveedores[proveedorId];
+                if (nombreProveedor == proveedor) {
+                    cadenaHTMLProveedorCliente += `<option value=${proveedorId} selected>${nombreProveedor}</option>`;
+                } else {
+                    cadenaHTMLProveedorCliente += `<option value=${proveedorId}>${nombreProveedor}</option>`;
+                }
+            }
+        } else { // si es "Venta"
+            for (const clienteId in contactos) {
+                let nombreCliente = contactos[clienteId];
+                if (nombreCliente == proveedor) {
+                    cadenaHTMLProveedorCliente += `<option value=${clienteId} selected>${nombreCliente}</option>`;
+                } else {
+                    cadenaHTMLProveedorCliente += `<option value=${clienteId}>${nombreCliente}</option>`;
+                }
+            }
+        }
+        cadenaHTMLProveedorCliente += '</select>';
+
+
+        //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DEL CLIENTE O PROVEEDOR
+
+        let cadenaHTMLCliente = '<select id="proyectoM" name="proyectoM" class="col-md-20 form-control" style="font-size:14px; max-width: 100%;">';
+              for (const proyectoId in proyectos) {
+                    let nombreProyecto = proyectos[proyectoId];
+                    if (nombreProyecto == proyecto ) {
+                        cadenaHTMLCliente += `<option value=${proyectoId} selected>${nombreProyecto}</option>`;
+                    } else {
+                        cadenaHTMLCliente += `<option value=${proyectoId}>${nombreProyecto}</option>`;
+                        }
+                    }
+                    cadenaHTMLCliente += '</select>';
+
 
         //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DE TIPO DE PAGO
         if (tipoPago == "CONFIRMING"){
@@ -931,7 +986,7 @@ console.log(proveedores);
         //CONFIGURAMOS EL ALERT
         Swal.fire({
             title: 'Modificar Registro',
-            width: '50%',
+            width: '60%',
             showCancelButton: true,
             showDenyButton: true,
             denyButtonText: `Eliminar`,
@@ -942,22 +997,23 @@ console.log(proveedores);
             html:
                 `
                     <!-- PRIMERA FILA DE CONTROLES -->
+
                     <div class="form-row" style="width:100%">
-                            <div class="form-group col">
-                                <label for="inputproyecto" style="color: slategrey; font-size:14px;">Proyecto</label>
-                                <input type="text" id="proyectoM" name="proyectoM" placeholder="Título Proyecto"
-                                class="form-control form-control-sm" value="`+proyecto+`" pattern="[^,]*"
-                                title="No se permiten comas en este campo" disabled/>
-                           </div>
+                        <div class="form-group col-md-3">
+                            <label for="inputproyecto" style="color: slategrey; font-size:14px;">Proyecto</label>` + 
+                            cadenaHTMLProyecto + `
+                           
+
+                        </div>   
                             <div class="form-group col">
                                <label for="inputtipo" style="color: slategrey; font-size:14px;">Tipo</label>`+
                                cadenaHTML+`
                            </div>
+
                            <div class="form-group col">
-                            <label for="inputproveedor" id="etiqProv" style="color: slategrey; font-size:14px;">Proveedor</label>
-                            <input type="text" id="proveedorM" name="proveedorM"
-                                class="form-control form-control-sm" value="`+proveedor+`" pattern="[^,]*"
-                                title="No se permiten comas en este campo" disabled/>
+                            <label for="inputproveedor" id="etiqProv" style="color: slategrey; font-size:14px;">Proveedor</label>`+
+                            cadenaHTMLProveedorCliente +`
+
                         </div>
                         <div class="form-group col-md-4">
                             <label for="inputconcepto" style="color: slategrey; font-size:14px;">Concepto</label>

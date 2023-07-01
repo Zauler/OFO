@@ -113,9 +113,9 @@ def table():
 
         elif len(respuesta) == 11:  # MODIFICAR UN REGISTRO
             indiceM = (respuesta[0]) + 1 # para que coincida con el indice de la base de datos
-            #proyectoM = (respuesta[1])
-            #tipoM = (respuesta[2])
-            #proveedorM = (respuesta[3])
+            proyectoM = (respuesta[1])
+            tipoM = (respuesta[2])
+            proveedorM = (respuesta[3])
             conceptoM = (respuesta[4])
             importeM = float((respuesta[5]))
             fechaF = (respuesta[6])
@@ -128,19 +128,19 @@ def table():
             fechaF = datetime.strptime(fechaF, '%Y-%m-%d')
             fechaV = datetime.strptime(fechaV, '%Y-%m-%d')
 
-            # # Comprobamos si es compra o venta para rellenar el cliente o el proveedor
-            # if tipoM == "Compra":
-            #     proveedorM = proveedorM
-            #     clienteM = ""
-            # else:
-            #     clienteM = proveedorM
-            #     proveedorM = ""
+            # Comprobamos si es compra o venta para rellenar el cliente o el proveedor
+            if tipoM == "Compra":
+                proveedorM = proveedorM
+                clienteM = None
+            else:
+                clienteM = proveedorM
+                proveedorM = None
 
             # Actualizamos el registro del pedido seleccionado
             # datos = {"id_Proyecto": proyectoM, "id_Proveedor": proveedorM, "id_Cliente": clienteM, "Concepto": conceptoM, "Tipo": tipoM,
             #         "Importe": importeM, "Tipo_Pago": tipoPagoM, "Fecha_Factura": fechaF, "Fecha_Vencimiento": fechaV, "id_Banco": entidadM, "gestor": gestorM}
             
-            datos = {"Concepto": conceptoM,"Importe": importeM, "Tipo_Pago": tipoPagoM, "id_Banco": entidadM, "Fecha_Factura": fechaF, "Fecha_Vencimiento": fechaV}
+            datos = {"id_Proyecto":proyectoM, "id_Proveedor":proveedorM, "id_Cliente":clienteM, "Concepto": conceptoM,"Importe": importeM, "Tipo_Pago": tipoPagoM, "id_Banco": entidadM, "Fecha_Factura": fechaF, "Fecha_Vencimiento": fechaV}
             
             ConsultasDB.modificarRegistro(indiceM,datos)
 
@@ -162,11 +162,11 @@ def table():
 
     # Convertimos el dataframe en una lista para pasarlo al template donde lo recogerá javascript
     lista_condiciones_proveedores = (dfProveedores['Condiciones_confirming'].values).tolist()
-    clientes = dfClientes[['Nombre']].to_dict(orient='dict')
-    listaProyectos = dfProyectos['Nombre'].to_dict()
-    proveedores = dfProveedores[['Nombre']].to_dict(orient='dict')
+    clientes = dfClientes.set_index('id_Cliente')['Nombre'].to_dict()
+    listaProyectos = dfProyectos.set_index('id_Proyecto')['Nombre'].to_dict()
+    proveedores = dfProveedores.set_index('id_Proveedor')['Nombre'].to_dict()
     bancos = dfBancos.set_index('id_Banco')['Banco'].to_dict()
-    gestores = dfGestores['NombreGestor'].to_dict()
+    gestores = dfGestores.set_index('id_Gestor')['NombreGestor'].to_dict()
     form = RegistrosForm()
     return render_template("home/table.html", segment='table', tables=[df.to_html(header=True, classes='table table-hover table-striped table-bordered',
                 table_id="tabla_registros", index=True)],
