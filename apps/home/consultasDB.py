@@ -58,7 +58,7 @@ class ConsultasDB():
         df = df.drop(columnasDrop,axis=1)
 
         return df
-
+    
 
     def consultaClientes():
         queryClientes = db.session.query(Clientes.id_Cliente, Clientes.Nombre).select_from(Clientes)
@@ -75,7 +75,7 @@ class ConsultasDB():
 
 
     def consultaBancos():
-        queryBancos = db.session.query(Bancos.id_Banco, Bancos.Banco).select_from(Bancos)
+        queryBancos = db.session.query(Bancos.id_Banco, Bancos.Banco, Bancos.Cash, Bancos.Linea_max_confirming).select_from(Bancos)
 
         dfBancos = pd.read_sql(queryBancos.statement, db.session.bind)
         return dfBancos
@@ -87,55 +87,12 @@ class ConsultasDB():
         dfProyectos = pd.read_sql(queryProyectos.statement, db.session.bind)
         return dfProyectos
     
+
     def consultaGestores():
         queryGestores = db.session.query(Gestores.id_Gestor, Gestores.Nombre, Gestores.Apellidos).select_from(Gestores)
 
         dfGestores = pd.read_sql(queryGestores.statement, db.session.bind)
         return dfGestores
-    
-
-
-    # sesion = Session()
-
-    # query = sesion.query(Registros).all
-
-    # gestor = Gestores.query.filter_by(Nombre="Federico").first()
-    #registros = Registros.query.get(5)
-    #print(f"Concepto de Registro: {registros.Concepto}")
-    # banco_asignado = registros.banco
-    # print(f"Banco del Registro: {banco_asignado.Banco}")
-
-
-    # motor = Config.SQLALCHEMY_DATABASE_URI
-    # print(type(motor))
-
-   # registros = Registros.query.select_from(Registros)
-   # for registro in registros:
-   #     if registro.proveedor != None:
-   #         print(f"{registro.id_Registro} - {registro.proyecto.Nombre} - {registro.proveedor.Nombre}")
-
-    # print("N REGISTROS: ", registros.count())
-    # print(type(registros))
-
-    #print(f"El gestor es: {gestor.Nombre}")
-    #print(registros.Concepto)
-    #print(dir(gestor.query))
-
-    # proyecto = Proyectos.query.get(1)
-    # print(f"Proyecto: {proyecto.Nombre}")
-    # gestor_asignado = proyecto.gestor
-    # print(f"Gestor del Proyecto: {gestor_asignado.Nombre}")
-
-
-
-    #---------------CONSULTAR REGISTROS----------------
-    #query = db.session.query(Proyectos.id_Proyecto, Gestores.Nombre).join(Gestores)
-    #df = pd.read_sql(query.statement, db.session.bind)
-    #print(df.head(2))
-
-    #query = db.session.query(Registros.id_Registro, Clientes.Nombre ,Clientes.Telefono ).join(Clientes)
-    #df = pd.read_sql(query.statement, db.session.bind)
-    #print(df.head(20))
 
 
     #-----------------ELIMINTAR REGISTROS------------------

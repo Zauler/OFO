@@ -1020,6 +1020,17 @@ content: " ↓";
     cursor: pointer;
 }
 
+.clash-card__image label {
+    opacity:0;
+    transition: .2s;   
+}
+
+.clash-card__image:hover label {
+    opacity:100;
+    transform: translateY(20%);
+    transition: .2s;   
+}
+
 .clash-card__image--bbva {
   background: #ebebeb;
   transition: .2s; /* Animation */
@@ -1027,72 +1038,100 @@ content: " ↓";
 
 .clash-card__image--bbva:hover {
     background: #da7b74;
+    transform: translateY(-20%);
     transition: .2s; /* Animation */
 }
 
 .clash-card__image--caixa {
     background: #ebebeb;
     transition: .2s;
-    background-image: url("/static/images/caixa-logo.svg");
-    background-size:60%;
+    background-image: url("/static/assets/img/caixa-logo.svg");
+    background-size:80%;
     background-repeat: no-repeat;
-    background-position-y: -30px;
+    background-position-y: center;
     background-position-x:center;  
 }
 
 .clash-card__image--caixa:hover {
-    background: #3d97d3; 
+    background: #3d97d3;
+    transform: translateY(-20%); 
     transition: .2s;
-    background-image: url("/static/images/caixa-logo-blanco.svg");
-    background-size:60%;
+    background-image: url("/static/assets/img/caixa-logo-blanco.svg");
+    background-size:80%;
     background-repeat: no-repeat;
-    background-position-y: -30px;
+    background-position-y: 60%;
     background-position-x:center;  
 }
 
 .clash-card__image--ibercaja {
     background: #ebebeb;
     transition: .2s;
-    background-image: url("/static/images/Ibercaja-logo.svg");
+    background-image: url("/static/assets/img/Ibercaja-logo.svg");
     background-size:70%;
     background-repeat: no-repeat;
-    background-position-y: 20px;
+    background-position-y: center;
     background-position-x:center;
 }
 
 .clash-card__image--ibercaja:hover {
     background: #662f01;
+    transform: translateY(-20%);
     transition: .2s;
-    background-image: url("/static/images/Ibercaja-logo-blanco.svg");
+    background-image: url("/static/assets/img/Ibercaja-logo-blanco.svg");
     background-size:70%;
     background-repeat: no-repeat;
-    background-position-y: 20px;
+    background-position-y: 15px;
     background-position-x:center;
 }
 
 .clash-card__image--sabadell {
     background: #ebebeb;
+    /* background-image: url("/static/assets/img/sabadell-logo.svg");
+    background-size:50%;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x:center; */
     transition: .2s;
 }
 
 .clash-card__image--sabadell:hover {
+    /* background-image: url("/static/assets/img/sabadell-logo.svg"); */
     background: #be9717;
+    transform: translateY(-20%);
+    /* background-size:50%;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x:center; */
     transition: .2s;
 }
 
+.clash-card__image--sabadell label {
+    opacity:0;
+    transform: translateY(-20%);
+    transition: .2s;   
+}
+
+.clash-card__image--sabadell:hover label {
+    opacity:100;
+    transform: translateY(0%);
+    transition: .2s;   
+}
+
+
 .clash-card__image--cajamar {
     background: #ebebeb;
-    background-image: url("/static/images/cajamar-logo.png");
+    background-image: url("/static/assets/img/cajamar-logo.png");
     background-size:70%;
     background-repeat: no-repeat;
-    background-position-y: 0px;
+    background-position-y: center;
     background-position-x:center;
     transition: .2s;
 }
 
 .clash-card__image--cajamar:hover {
     background: #008b9e;
-    background-image: url("/static/images/cajamar-logo-blanco.png");
+    transform: translateY(-20%);
+    background-image: url("/static/assets/img/cajamar-logo-blanco.png");
     background-size:70%;
     background-position-y: 0px;
     background-position-x:center;
@@ -1102,17 +1141,18 @@ content: " ↓";
 
 .clash-card__image--cajarural {
     background: #ebebeb;
-    background-image: url("/static/images/cajarural-logo.png");
+    background-image: url("/static/assets/img/cajarural-logo.png");
     background-size:90%;
     background-repeat: no-repeat;
-    background-position-y: 20px;
+    background-position-y: center;
     background-position-x:center;
     transition: .2s;
 }
 
 .clash-card__image--cajarural:hover {
     background: #007a53;
-    background-image: url("/static/images/cajarural-logo-blanco.png");
+    transform: translateY(-20%);
+    background-image: url("/static/assets/img/cajarural-logo-blanco.png");
     background-size:90%;
     background-position-y: 20px;
     background-position-x:center;
@@ -1122,19 +1162,20 @@ content: " ↓";
 
 .clash-card__image--santander {
     background: #ebebeb;
-    background-image: url("/static/images/santander-logo.svg");
+    background-image: url("/static/assets/img/santander-logo.svg");
     background-size:60%;
     background-repeat: no-repeat;
-    background-position-y: 20px;
+    background-position-y: center;
     background-position-x:center;
     transition: .2s;
 }
 
 .clash-card__image--santander:hover {
     background: #ea1d25;
-    background-image: url("/static/images/santander-logo-blanco.svg");
+    transform: translateY(-20%);
+    background-image: url("/static/assets/img/santander-logo-blanco.svg");
     background-size:60%;
-    background-position-y: 20px;
+    background-position-y: 15px;
     background-position-x:center;
     background-repeat: no-repeat;
     transition: .2s;   
@@ -1213,7 +1254,7 @@ content: " ↓";
     right: 5px;
     width: 25px;
     height: 25px;
-    background-image: url('/static/images/maximizar.png');
+    background-image: url('/static/assets/img/maximizar.png');
     background-size: cover;
     background-repeat: no-repeat;
     cursor: pointer;
