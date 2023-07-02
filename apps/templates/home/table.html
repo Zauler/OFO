@@ -288,11 +288,12 @@
         var lista_checkbox_Cobrado =  document.querySelectorAll("input[name=checkCobrado]");
         var lista_checkbox_pagos =  document.querySelectorAll("input[name=checkVencimiento]");
 
+
         // Añadimos la funcionalidad a los checkbox FACT. EMITIDA cuando se modifique su estado
         lista_checkbox_Cobrado.forEach(function(elemento) {
             elemento.addEventListener('change', function() {
                 var padre = (elemento.parentNode).parentNode;
-                var id = padre.getElementsByTagName("th")[0].innerHTML;
+                var id = padre.getElementsByTagName("td")[0].innerHTML;
                 id = parseInt(id);
                 const datos = {indice: id, estado: this.checked, tipo: "cobrado"};
 
@@ -312,7 +313,7 @@
         lista_checkbox_pagos.forEach(function(elemento) {
             elemento.addEventListener('change', function() {
                 var padre = (elemento.parentNode).parentNode;
-                var id = padre.getElementsByTagName("th")[0].innerHTML;
+                var id = padre.getElementsByTagName("td")[0].innerHTML;
                 id = parseInt(id);
                 const datos = {indice: id, estado: this.checked, tipo: "pagoEmitido"};
 
@@ -704,21 +705,21 @@ console.log(proveedores);
             var fila = table.rows[i];
             var cell = fila.getElementsByTagName("td")[10];
             var valor = cell.innerHTML;
-            if (valor == "False"){
-                cell.innerHTML = '<input type="checkbox" name="checkVencimiento">';
+            if (valor == "True" ) {
+                cell.innerHTML = '<input type="checkbox" name="checkCobrado" checked>';
             } else {
-                cell.innerHTML = '<input type="checkbox" name="checkVencimiento" checked>';
+                cell.innerHTML = '<input type="checkbox" name="checkCobrado">';
             }
         }
-        
+
         for (i = 1; i < rows.length; i++) { //Pago emitido/recibido
             var fila = table.rows[i];
             var cell = fila.getElementsByTagName("td")[11];
             var valor = cell.innerHTML;
-            if (valor == "False"){
-                cell.innerHTML = '<input type="checkbox" name="checkVencimiento">';
-            } else {
+            if (valor == "True" ){
                 cell.innerHTML = '<input type="checkbox" name="checkVencimiento" checked>';
+            } else {
+                cell.innerHTML = '<input type="checkbox" name="checkVencimiento" >';
             }
         }
     }

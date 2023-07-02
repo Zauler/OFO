@@ -145,13 +145,15 @@ def table():
             indice = (respuesta['indice'] ) # para que coincida con el indice de la base de datos
             estado = (respuesta['estado'])
             tipo = (respuesta['tipo'])
+            print(indice,estado,tipo)
 
             #MODIFICAR VALOR DE UN CHECBOX
             if tipo == "cobrado":   # Si es un checkbox de cobrado
                 datos = { "Fact_Emit_Recib": estado}
             elif tipo == "pagoEmitido":   # Si es un checkbox de cobrado
                 datos = { "Pago_Emit_Recib": estado}
-
+            print(datos)
+            print(type(datos.values()))
             # Actualizamos el registro del pedido seleccionado
             ConsultasDB.modificarRegistro(indice,datos)
                 
