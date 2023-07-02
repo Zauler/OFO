@@ -510,6 +510,7 @@ console.log(proveedores);
 
     proveedor_select.onchange = function cambioProveedor(){
         proveed = proveedor_select.value;
+
         if (proveed == 'Elegir...'){    // Si no se ha elegido nada todavía lo ponemos todo a "cero"
             fechaFactura_text.value = "";
             fechaVencimiento_text.value = "";
@@ -520,6 +521,7 @@ console.log(proveedores);
             document.getElementById("fechaVencimientoDate").value = '';
             $('#fechaVencimientoDate').hide();
             $('#fechaVencimiento').show();
+
         } else {                        // Si elegimos una opción, habilitaremos el campo fecha de certificación
             fechaVencimiento_text.value = '';
             //modalidad_select.value = "Elegir...";
@@ -633,7 +635,7 @@ console.log(proveedores);
         $("#" + objeto).append("<option value='0'>Elegir...</option>");
         for( var i = 0; i<len; i++){
             var name = nombre[i];
-            $("#" + objeto).append("<option value='" + (parseInt(id_lista[i])+1) + "'>" + name + "</option>");
+            $("#" + objeto).append("<option value='" + (parseInt(id_lista[i])) + "'>" + name + "</option>");
         }
     }
 
@@ -673,115 +675,23 @@ console.log(proveedores);
     $("#filtroProyecto, #filtroProveedor, #filtroTipo, #filtroPago, #filtroBanco").on("keyup", applyFilters);
 });
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // $(document).ready(function(){
-    //         $("#filtroProyecto").on("keyup", function() {
-    //             var value = $(this).val().toLowerCase();
-    //             $("#tabla_registros tr").filter(function() {
-    //             $(this).toggle($(this).find('td:eq(0)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
-    //             });
-    //         });
-    //         $("#filtroProveedor").on("keyup", function() {
-    //             var value = $(this).val().toLowerCase();
-    //             $("#tabla_registros tr").filter(function() {
-    //             $(this).toggle($(this).find('td:eq(1)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
-    //             });
-    //         });
-    //         $("#filtroTipo").on("keyup", function() {
-    //             var value = $(this).val().toLowerCase();
-    //             $("#tabla_registros tr").filter(function() {
-    //             $(this).toggle($(this).find('td:eq(3)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
-    //             });
-    //         });
-    //         $("#filtroPago").on("keyup", function() {
-    //             var value = $(this).val().toLowerCase();
-    //             $("#tabla_registros tr").filter(function() {
-    //             $(this).toggle($(this).find('td:eq(5)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
-    //             });
-    //         });
-    //         $("#filtroBanco").on("keyup", function() {
-    //             var value = $(this).val().toLowerCase();
-    //             $("#tabla_registros tr").filter(function() {
-    //             $(this).toggle($(this).find('td:eq(8)').text().replace(/\s+/g, ' ').toLowerCase().indexOf(value) > -1)
-    //             });
-    //         });   
-    // });
 
-
-    // $("th").click(function () { // FUNCION PARA ORDENAR POR UNA COLUMNA
-        // var table = $(this).parents("table").eq(0);
-        // var rows = table
-    //     .find("tr:gt(0)")
-    //     .toArray()
-    //     .sort(comparer($(this).index()));
-    //     this.asc = !this.asc;
-    //     if (!this.asc) {
-    //         rows = rows.reverse();
-    //     }
-    //     for (var i = 0; i < rows.length; i++) {
-    //         table.append(rows[i]);
-    //     }
-    //     setIcon($(this), this.asc);
-    // });
-
-    // function comparer(index) {
-    // return function (a, b) {
-    //     var valA = getCellValue(a, index),
-    //     valB = getCellValue(b, index);
-    //     return $.isNumeric(valA) && $.isNumeric(valB)
-    //     ? valA - valB
-    //     : valA.localeCompare(valB);
-    // };
-    // }
-
-    // function getCellValue(row, index) {
-    // return $(row).children("td").eq(index).html();
-    // }
-
-    // function setIcon(element, asc) {
-    // $("th").each(function (index) {
-    //     $(this).removeClass("sorting");
-    //     $(this).removeClass("asc");
-    //     $(this).removeClass("desc");
-    // });
-    // element.addClass("sorting");
-    // if (asc) element.addClass("asc");
-    // else element.addClass("desc");
-    // }
 
 
     function addRowHandlers() {
         var table = document.getElementById("tabla_registros");
         var rows = table.getElementsByTagName("tr");
+
         for (i = 0; i < rows.length; i++) {
             var currentRow = table.rows[i];
             var createClickHandler = function(row) {
                 return function() {
-                    var cell = row.getElementsByTagName("th")[0];
+                    var cell = row.getElementsByTagName("td")[0];
                     var id = cell.innerHTML;
                     cargarDatosAlert(id,row);
-                    //alert("respuesta: " + "id " + id + "row " + row);
                 };
             };
-            //currentRow.onclick = createClickHandler(currentRow);
+
             currentRow.ondblclick = createClickHandler(currentRow);
         }
     }
@@ -789,17 +699,6 @@ console.log(proveedores);
     function addCheckbox() {    //AÑADE CHECKBOX A LAS COLUMNAS FACT. EMITIDA Y PAGO EMITIDO
         var table = document.getElementById("tabla_registros");
         var rows = table.getElementsByTagName("tr");
-        
-        for (i = 1; i < rows.length; i++) { //Factura emitida/recibida
-            var fila = table.rows[i];
-            var cell = fila.getElementsByTagName("td")[9];
-            var valor = cell.innerHTML;
-            if (valor == "False"){
-                cell.innerHTML = '<input type="checkbox" name="checkCobrado">';
-            } else {
-                cell.innerHTML = '<input type="checkbox" name="checkCobrado" checked>';
-            }
-        }
 
         for (i = 1; i < rows.length; i++) { //Pago emitido/recibido
             var fila = table.rows[i];
@@ -811,23 +710,31 @@ console.log(proveedores);
                 cell.innerHTML = '<input type="checkbox" name="checkVencimiento" checked>';
             }
         }
+        
+        for (i = 1; i < rows.length; i++) { //Pago emitido/recibido
+            var fila = table.rows[i];
+            var cell = fila.getElementsByTagName("td")[11];
+            var valor = cell.innerHTML;
+            if (valor == "False"){
+                cell.innerHTML = '<input type="checkbox" name="checkVencimiento">';
+            } else {
+                cell.innerHTML = '<input type="checkbox" name="checkVencimiento" checked>';
+            }
+        }
     }
 
     function cambiarValor(){
-        alert(this.name);
-        //alert('pulsado');
         var table = document.getElementById("tabla_registros");
         var rows = table.getElementsByTagName("tr");
+
         for (i = 0; i < rows.length; i++) {
             var currentRow = table.rows[i];
             var createClickHandler = function(row) {
             return function() {
                 var cell = row.getElementsByTagName("td")[1];
                 var id = cell.innerHTML;
-                alert("pulsado: " + id);
             };
             };
-            //currentRow.onclick = createClickHandler(currentRow);
         }
     }
 
@@ -839,36 +746,21 @@ console.log(proveedores);
 
     function cargarDatosAlert(id,elemento){//CARGARÁ LOS DATOS DE LA FILA SELECCIONADA DENTRO DEL POPUP O ALERT
 
-        var proyecto = elemento.getElementsByTagName("td")[0].innerHTML;
-        var proveedor = elemento.getElementsByTagName("td")[1].innerHTML;
-        var concepto = elemento.getElementsByTagName("td")[2].innerHTML;
-        var tipo = elemento.getElementsByTagName("td")[3].innerHTML;
-        var importe = elemento.getElementsByTagName("td")[4].innerHTML;
-        var tipoPago = elemento.getElementsByTagName("td")[5].innerHTML;
-        var fechaFact = elemento.getElementsByTagName("td")[6].innerHTML;
-        var fechaVenc = elemento.getElementsByTagName("td")[7].innerHTML;
-        var banco = elemento.getElementsByTagName("td")[8].innerHTML;
-        var gestor = elemento.getElementsByTagName("td")[11].innerHTML;
-
-
-        // //CONFIGURAMOS LA FECHA DE FACTURACION. SI LOS NUMEROS SON INFERIORES A 10 LE AÑADIMOS UN CERO
-        // var [dia1, mes1, ano1] = fechaFact.split('/');
-        // if (dia1.length==1){dia1="0"+dia1;};
-        // if (mes1.length==1){mes1="0"+mes1;};
-        // fechaFact = ano1 + "-" + mes1 + "-" + dia1;
-
-        // //CONFIGURAMOS LA FECHA DE VENCIMIENTO. SI LOS NUMEROS SON INFERIORES A 10 LE AÑADIMOS UN CERO
-        // var [dia2, mes2, ano2] = fechaVenc.split('/');
-        // if (dia2.length==1){dia2="0"+dia2;};
-        // if (mes2.length==1){mes2="0"+mes2;};
-        // fechaVenc = ano2 + "-" + mes2 + "-" + dia2;
-
+        var proyecto = elemento.getElementsByTagName("td")[1].innerHTML;
+        var proveedor = elemento.getElementsByTagName("td")[2].innerHTML;
+        var concepto = elemento.getElementsByTagName("td")[3].innerHTML;
+        var tipo = elemento.getElementsByTagName("td")[4].innerHTML;
+        var importe = elemento.getElementsByTagName("td")[5].innerHTML;
+        var tipoPago = elemento.getElementsByTagName("td")[6].innerHTML;
+        var fechaFact = elemento.getElementsByTagName("td")[7].innerHTML;
+        var fechaVenc = elemento.getElementsByTagName("td")[8].innerHTML;
+        var banco = elemento.getElementsByTagName("td")[9].innerHTML;
+        var gestor = elemento.getElementsByTagName("td")[12].innerHTML;
 
 
         //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DEL PROYECTO
-
-          let cadenaHTMLProyecto = '<select id="proyectoM" name="proyectoM" class="col-md-20 form-control" style="font-size:14px; max-width: 100%;">';
-              for (const proyectoId in proyectos) {
+            let cadenaHTMLProyecto = '<select id="proyectoM" name="proyectoM" class="col-md-20 form-control" style="font-size:14px; max-width: 100%;">';
+                for (const proyectoId in proyectos) {
                     let nombreProyecto = proyectos[proyectoId];
                     if (nombreProyecto == proyecto ) {
                         cadenaHTMLProyecto += `<option value=${proyectoId} selected>${nombreProyecto}</option>`;
@@ -877,8 +769,6 @@ console.log(proveedores);
                         }
                     }
                     cadenaHTMLProyecto += '</select>';
-
-
 
 
         //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DE Compra o Venta

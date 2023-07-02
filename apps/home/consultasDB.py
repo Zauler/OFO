@@ -19,6 +19,8 @@ class ConsultasDB():
                                         Proyectos.id_Gestor == Gestores.id_Gestor)
 
         dfClientes = pd.read_sql(queryClientes.statement, db.session.bind)
+        dfClientes['Fact_Emit_Recib'] = dfClientes['Fact_Emit_Recib'].astype(bool)
+        dfClientes['Pago_Emit_Recib'] = dfClientes['Pago_Emit_Recib'].astype(bool)
         return dfClientes
 
 
@@ -34,6 +36,8 @@ class ConsultasDB():
                                 Proyectos.id_Gestor == Gestores.id_Gestor)
         
         dfProveedores = pd.read_sql(queryProveedores.statement, db.session.bind)
+        dfProveedores['Fact_Emit_Recib'] = dfProveedores['Fact_Emit_Recib'].astype(bool)
+        dfProveedores['Pago_Emit_Recib'] = dfProveedores['Pago_Emit_Recib'].astype(bool)
         return dfProveedores
 
 

@@ -56,40 +56,40 @@ def route_template(template):
 @login_required
 def table():
     
-    # METODO POST
-    if request.method == 'POST':
-        proyecto = request.form['proyecto']
-        proveedor = request.form['proveedor']
-        cliente = ""
-        concepto = request.form['concepto']
-        importe = request.form['importe']
-        modalidad = request.form['tipo']
-        tipoPago = request.form['tipoPago']
-        fecha_fact = request.form['fechaFactura']
-        banco = request.form['entidad']
-        gestor = request.form['gestor']
+    # # METODO POST
+    # if request.method == 'POST':
+    #     proyecto = request.form['proyecto']
+    #     proveedor = request.form['proveedor']
+    #     cliente = ""
+    #     concepto = request.form['concepto']
+    #     importe = request.form['importe']
+    #     modalidad = request.form['tipo']
+    #     tipoPago = request.form['tipoPago']
+    #     fecha_fact = request.form['fechaFactura']
+    #     banco = request.form['entidad']
+    #     gestor = request.form['gestor']
 
-    # Le cambiamos el formato a la fecha de factura para aparezca como YYYY-MM-DD
-        ano,mes,dia = fecha_fact.split("-")
-        fecha_fact = (f"{ano}/{mes}/{dia}")
+    # # Le cambiamos el formato a la fecha de factura para aparezca como YYYY-MM-DD
+    #     ano,mes,dia = fecha_fact.split("-")
+    #     fecha_fact = (f"{ano}/{mes}/{dia}")
 
-        if modalidad == "Compra":
-            fecha_venc = request.form['fechaVencimiento']
-            ano,mes,dia = fecha_venc.split("-")
-            fecha_venc = (f"{ano}/{mes}/{dia}")
-            cliente = ""
-        else:
-            fecha_venc = request.form['fechaVencimientoDate']
-            ano,mes,dia = fecha_venc.split("-")
-            fecha_venc = (f"{ano}/{mes}/{dia}")
-            cliente = proveedor
-            proveedor = ""
+    #     if modalidad == "Compra":
+    #         fecha_venc = request.form['fechaVencimiento']
+    #         ano,mes,dia = fecha_venc.split("-")
+    #         fecha_venc = (f"{ano}/{mes}/{dia}")
+    #         cliente = ""
+    #     else:
+    #         fecha_venc = request.form['fechaVencimientoDate']
+    #         ano,mes,dia = fecha_venc.split("-")
+    #         fecha_venc = (f"{ano}/{mes}/{dia}")
+    #         cliente = proveedor
+    #         proveedor = ""
         
-        lista_datos = [proyecto,proveedor,cliente,concepto,modalidad,importe,tipoPago,fecha_fact,fecha_venc,banco,gestor,False,False]  # Los 2 últimos "False" corresponden a los checkbox
+    #     lista_datos = [proyecto,proveedor,cliente,concepto,modalidad,importe,tipoPago,fecha_fact,fecha_venc,banco,gestor,False,False]  # Los 2 últimos "False" corresponden a los checkbox
 
-        # with open('datos/pedidos.csv', 'a', newline='', encoding='utf-8') as file:
-        #     writer = csv.writer(file)
-        #     writer.writerow(lista_datos)
+    #     # with open('datos/pedidos.csv', 'a', newline='', encoding='utf-8') as file:
+    #     #     writer = csv.writer(file)
+    #     #     writer.writerow(lista_datos)
 
 
     # METODO PUT
@@ -97,7 +97,7 @@ def table():
         respuesta = request.get_json()
 
         if len(respuesta) == 3: # SI LA RESPUESTA QUE RECIBIMOS SOLO TIENE 3 PARÁMETROS
-            indice = (respuesta['indice'] + 1) # para que coincida con el indice de la base de datos
+            indice = (respuesta['indice'] ) # para que coincida con el indice de la base de datos
             estado = (respuesta['estado'])
             tipo = (respuesta['tipo'])
 
@@ -112,7 +112,7 @@ def table():
                 
 
         elif len(respuesta) == 11:  # MODIFICAR UN REGISTRO
-            indiceM = (respuesta[0]) + 1 # para que coincida con el indice de la base de datos
+            indiceM = (respuesta[0])  # para que coincida con el indice de la base de datos
             proyectoM = (respuesta[1])
             tipoM = (respuesta[2])
             proveedorM = (respuesta[3])
@@ -141,17 +141,19 @@ def table():
             #         "Importe": importeM, "Tipo_Pago": tipoPagoM, "Fecha_Factura": fechaF, "Fecha_Vencimiento": fechaV, "id_Banco": entidadM, "gestor": gestorM}
             
             datos = {"id_Proyecto":proyectoM, "id_Proveedor":proveedorM, "id_Cliente":clienteM, "Concepto": conceptoM,"Importe": importeM, "Tipo_Pago": tipoPagoM, "id_Banco": entidadM, "Fecha_Factura": fechaF, "Fecha_Vencimiento": fechaV}
-            
+            print("El índice es: ", indiceM)
+            print(datos)
             ConsultasDB.modificarRegistro(indiceM,datos)
 
 
         elif len(respuesta) == 1:   # ELIMINAR UN REGISTRO
-            indiceM = int(respuesta['indice']) + 1  # para que coincida con el indice de la base de datos
+            indiceM = int(respuesta['indice'])  # para que coincida con el indice de la base de datos
             ConsultasDB.eliminarRegistro(indiceM)
 
 
     # METODO GET            
-    df = ConsultasDB.consultaRegistros().drop('id_Registro',axis=1)
+    df = ConsultasDB.consultaRegistros()
+    df.set_index('id_Registro')
     dfProveedores = ConsultasDB.consultaProveedores()
     dfBancos = ConsultasDB.consultaBancos()
     dfClientes = ConsultasDB.consultaClientes()
@@ -169,7 +171,7 @@ def table():
     gestores = dfGestores.set_index('id_Gestor')['NombreGestor'].to_dict()
     form = RegistrosForm()
     return render_template("home/table.html", segment='table', tables=[df.to_html(header=True, classes='table table-hover table-striped table-bordered',
-                table_id="tabla_registros", index=True)],
+                table_id="tabla_registros", index=False)],
                 proveedores = proveedores, 
                 bancos = bancos,
                 condicionesProve=lista_condiciones_proveedores,
@@ -193,11 +195,18 @@ def registrar_registros():
         fechavencimiento = fechavencimiento.strftime('%Y-%m-%d')
         fechavencimiento = datetime.strptime(fechavencimiento, '%Y-%m-%d').date()
         form.fechaVencimientoDate.data = fechavencimiento
+        form.cliente.data = None
+
+    if request.form["tipo"] == "Venta":
+        form.cliente.data = form.proveedor.data
+        form.proveedor.data = None 
+
 
     if form.validate_on_submit():
         nuevo_registro = Registros(
             id_Proyecto = form.proyecto.data,
             id_Proveedor = form.proveedor.data,
+            id_Cliente = form.cliente.data,
             Concepto = form.concepto.data,
             Tipo = form.tipo.data,
             Importe = form.importe.data,
