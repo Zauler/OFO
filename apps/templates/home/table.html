@@ -775,13 +775,13 @@ console.log(proveedores);
         //VAMOS A CREAR UN SELECT CON EL VALOR ELEGIDO DE Compra o Venta
         if (tipo == "Compra"){
             cadenaHTML = `
-                <select id="tipoM" name="tipoM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
+                <select id="tipoM" name="tipoM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;" disabled>
                     <option selected>Compra</option>
                     <option>Venta</option>
                 </select>`
         } else {
             cadenaHTML = `
-                <select id="tipoM" name="tipoM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
+                <select id="tipoM" name="tipoM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;" disabled>
                     <option>Compra</option>
                     <option selected>Venta</option>
                 </select>`
