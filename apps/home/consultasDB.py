@@ -54,7 +54,7 @@ class ConsultasDB():
         df = df.drop(columnasDrop,axis=1)
 
         return df
-
+    
 
     def consultaClientes():
         queryClientes = db.session.query(Clientes.id_Cliente, Clientes.Nombre).select_from(Clientes)
@@ -71,7 +71,7 @@ class ConsultasDB():
 
 
     def consultaBancos():
-        queryBancos = db.session.query(Bancos.id_Banco, Bancos.Banco).select_from(Bancos)
+        queryBancos = db.session.query(Bancos.id_Banco, Bancos.Banco, Bancos.Cash, Bancos.Linea_max_confirming).select_from(Bancos)
 
         dfBancos = pd.read_sql(queryBancos.statement, db.session.bind)
         return dfBancos
@@ -83,6 +83,7 @@ class ConsultasDB():
         dfProyectos = pd.read_sql(queryProyectos.statement, db.session.bind)
         return dfProyectos
     
+
     def consultaGestores():
         queryGestores = db.session.query(Gestores.id_Gestor, Gestores.Nombre, Gestores.Apellidos).select_from(Gestores)
 

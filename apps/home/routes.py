@@ -3,7 +3,10 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 import pandas as pd
+import time
+import pygal
 
+from pygal.style import Style
 from apps import db
 from apps.config import *
 from apps.home import blueprint
@@ -17,15 +20,57 @@ from jinja2 import TemplateNotFound
 from datetime import datetime
 from apps.home.consultasDB import *
 from apps.home.validation import *
+from apps.home.funciones import *
+from apps.home.funciones2 import *
 
 
+def graficoFlujoDisponible():
+    custom_style = Style(colors=('#008b9e','#c7483f'))
+
+    dfFlujo = creaDFTesoAgregadaDisponible()
+    dfFlujoPrevi = creaDFTesoAgregadaPrevista()
+    chart = pygal.Line(height=300, legend_at_bottom=True, x_label_rotation=90,dots_size=0.4,fill=True, show_minor_x_labels=False,
+                        x_labels_major_count=20, style=custom_style)
+    chart.x_labels = map(lambda d: d.strftime('%Y-%m-%d'), dfFlujo['Fecha Vencimiento'])
+    chart.add('Previsible',dfFlujoPrevi['Importe'].tolist())
+    chart.add('Disponible',dfFlujo['Importe'].tolist())
+    chart.render_to_file(f'apps/static/assets/img/bar_chart_flujo_disponible.svg')
+    img_url = f'static/assets/img/bar_chart_flujo_disponible.svg?cache=' + str(time.time())   # Lo usamos para que no exista problemas con las cookies
+
+    return img_url
+
+def grafico(meses,listMeses):
+    df = pd.DataFrame(calculaConfirming(meses))
+    df.columns = listMeses
+    custom_style = Style(colors=('#c7483f', '#008b9e', '#179bd7', '#be9717','#662f01','#007a53','#ea1d25'))
+
+    chart = pygal.Bar(height=300, legend_at_bottom=True, style=custom_style)
+    #chart.title = 'FLUJO DE CAJA: CONFIRMING'
+    chart.x_labels = df.columns.values
+    for i in range(len(df)):
+        chart.add(df.iloc[i].name, df.iloc[i].values, rounded_bars=4)
+
+
+    chart.render_to_file(f'apps/static/assets/img/bar_chart_bar_chart_Confirming.svg')
+    img_url = f'static/assets/img/bar_chart_Confirming.svg?cache=' + str(time.time())   # Lo usamos para que no exista problemas con las cookies
+
+    return img_url
 
 
 @blueprint.route('/index')
 @login_required
 def index():
+    meses = 5   # Son los meses a analizar en las gráficas
+    dictConfir = calculaConfirming(meses)
+    dictTeso, dictTesoDis, listMeses = calculaTesoreria(meses)
+    dfBancos = ConsultasDB.consultaBancos()
+    dfLineaConfirming = dfBancos['Linea_max_confirming'] # Es el crédito actual de las líneas de confirming que tenemos concedido
+    dfLineaConfirming = dfLineaConfirming.to_json()
+    image_url_conf = grafico(meses,listMeses)
+    image_url_flujo_Disponible = graficoFlujoDisponible()
 
-    return render_template('home/index.html', segment='index')
+    return render_template('home/index.html', segment='index', image_url_flujo = image_url_flujo_Disponible, listConfirming = dfLineaConfirming, dictTeso = dictTeso,
+                           dictTesoDis = dictTesoDis, dictConfir = dictConfir, listMeses = listMeses, image_url_config = image_url_conf)
 
 
 @blueprint.route('/<template>')
@@ -151,6 +196,7 @@ def table():
 
     # METODO GET            
     df = ConsultasDB.consultaRegistros().drop('id_Registro',axis=1)
+    print(df.head)
     dfProveedores = ConsultasDB.consultaProveedores()
     dfBancos = ConsultasDB.consultaBancos()
     dfClientes = ConsultasDB.consultaClientes()
@@ -166,6 +212,9 @@ def table():
     proveedores = dfProveedores[['Nombre']].to_dict(orient='dict')
     bancos = dfBancos['Banco'].to_dict()
     gestores = dfGestores['NombreGestor'].to_dict()
+
+
+    print(creaDFTesoAgregadaDisponible())
     
     return render_template("home/table.html", segment='table', tables=[df.to_html(header=True, classes='table table-hover table-striped table-bordered',
                 table_id="tabla_registros", index=True)],

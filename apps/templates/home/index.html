@@ -9,209 +9,211 @@
 
     <div class="content">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card ">
+
+            <!-- GRAFICOS DE CONFIRMING Y TESORERÍA -->
+            <div class="row" style="height:max-content">    
+                <div class="col-md-6" style="height:300px;">
+                    <div class="card izq" id="card_confirming">
                         <div class="card-header ">
-                            <h4 class="card-title">Email Statistics</h4>
-                            <p class="card-category">Last Campaign Performance</p>
+                            <h4 class="card-title" style="font-size: small; color:gray;">CONFIRMING: Línea disponible</h4>
+                            <p class="card-category" style="font-size: small;">Control de Flujos por meses</p>
+                            <button class="btn-download" onclick="window.open('static/assets/img/bar_chart_bar_chart_Confirming.svg',
+                            '_blank')"></button>
                         </div>
                         <div class="card-body ">
-                            <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
-                            <div class="legend">
-                                <i class="fa fa-circle text-info"></i> Open
-                                <i class="fa fa-circle text-danger"></i> Bounce
-                                <i class="fa fa-circle text-warning"></i> Unsubscribe
-                            </div>
-                            <hr>
-                            <div class="stats">
-                                <i class="fa fa-clock-o"></i> Campaign sent 2 days ago
+                            <div>
+                                <object type="image/svg+xml" data="static/assets/img/bar_chart_bar_chart_Confirming.svg">
+                                 Your browser does not support SVG
+                                </object>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8">
-                    <div class="card ">
+                <div class="col-md-6">     <!--div class="w-100 p-3"-->
+                    <div class="card der" id="card_transfer">
                         <div class="card-header ">
-                            <h4 class="card-title">Users Behavior</h4>
-                            <p class="card-category">24 Hours performance</p>
+                            <h4 class="card-title" style="font-size: small; color:gray;">TESORERÍA / CAJA</h4>
+                            <p class="card-category" style="font-size: small;">Control de Flujos por meses</p>
+                            <button class="btn-download" onclick="window.open('static/assets/img/bar_chart_flujo_disponible.svg',
+                            '_blank')"></button>
                         </div>
-                        <div class="card-body ">
-                            <div id="chartHours" class="ct-chart"></div>
-                        </div>
-                        <div class="card-footer ">
-                            <div class="legend">
-                                <i class="fa fa-circle text-info"></i> Open
-                                <i class="fa fa-circle text-danger"></i> Click
-                                <i class="fa fa-circle text-warning"></i> Click Second Time
-                            </div>
-                            <hr>
-                            <div class="stats">
-                                <i class="fa fa-history"></i> Updated 3 minutes ago
+                        <div class="card-body">
+                            <div>
+                                <object type="image/svg+xml" data="{{image_url_flujo}}">
+                                 Your browser does not support SVG
+                                </object>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card ">
-                        <div class="card-header ">
-                            <h4 class="card-title">2017 Sales</h4>
-                            <p class="card-category">All products including Taxes</p>
+            
+
+            <!-- FILA 1 DE CAJAS: BBVA, CAJAMAR, CAIXA, SABADELL..... -->
+            <div class="row">   
+                <div class="clash-card barbarian" style="margin-bottom: 20px;">
+                    <div class="clash-card__image clash-card__image--bbva" style="align-items: center; display: flex;
+                    justify-content: center; flex-wrap: wrap;" onclick="window.open('https://www.bbva.es/empresas/banca-online.html', '_blank')">
+                        <div class="row" style="display: flex; justify-content: center;">
+                            <img src="/static/assets/img/bbva-logo.svg" alt="bbva" style="width: 40%; padding-top: 20px;"/>
                         </div>
-                        <div class="card-body ">
-                            <div id="chartActivity" class="ct-chart"></div>
-                        </div>
-                        <div class="card-footer ">
-                            <div class="legend">
-                                <i class="fa fa-circle text-info"></i> Tesla Model S
-                                <i class="fa fa-circle text-danger"></i> BMW 5 Series
-                            </div>
-                            <hr>
-                            <div class="stats">
-                                <i class="fa fa-check"></i> Data information certified
-                            </div>
+                        <div class="row" style="display: flex; justify-content: center">
+                            <label id="lconfirmingBBVA" name="lconfirmingBBVA" style="font-weight:bolder; color: rgb(255, 255, 255);">0000 €</label>
+                        </div>  
+                    </div>
+                    <div class="clash-card__level clash-card__level--barbarian" id="mesActual-bbva"></div>
+                    <hr style="width: 30%">
+                    <div class="clash-card__unit-name">LINEA CONFIRMING DISP.</div>
+                    <div class="clash-card__unit-description" id="confirm_bbva"> </div>
+                    <hr style="width: 60%">
+                    <div class="clash-card__unit-name">TESORERIA</div>
+                    <div class="clash-card__unit-description" id="teso_bbva"></div>
+                    <hr style="width: 60%">
+                    <div class="disponible" style="background-color: rgb(252, 236, 211); margin: 5px; border-radius: 10px; padding-top: 10px;">
+                        <div class="clash-card__unit-name">CONFIRMING ANTICIPABLES</div>
+                        <div class="clash-card__unit-description" id="dispo_bbva">00.000,00 €</div>
+                    </div>
+                </div>
+                <div class="clash-card barbarian" style="margin-bottom: 20px;">
+                    <div class="clash-card__image clash-card__image--cajamar" style="align-items: center; display: flex;
+                    justify-content: center;flex-wrap: wrap;"
+                    onclick="window.open('https://www.cajamar.es/es/empresas/', '_blank')">
+                        <div class="row" style="display: flex; justify-content: center; padding-top: 40px;">
+                            <label id="lconfirmingCAJAMAR" name="lconfirmingCAJAMAR" style="font-weight:bolder; color: rgb(255, 255, 255);">0000 €</label>
+                        </div> 
+                    </div>
+                    <div class="clash-card__level clash-card__level--barbarian" id="mesActual-cajamar"></div>
+                    <hr style="width: 30%">
+                    <div class="clash-card__unit-name" >LINEA CONFIRMING DISP.</div>
+                    <div class="clash-card__unit-description text_animado" id="confirm_cajamar"></div>
+                    <hr style="width: 60%">
+                    <div class="clash-card__unit-name" >TESORERIA</div>
+                    <div class="clash-card__unit-description" id="teso_cajamar"></div>
+                    <hr style="width: 60%">
+                    <div class="disponible" style="background-color: rgb(252, 236, 211); margin: 5px; border-radius: 10px; padding-top: 10px;">
+                        <div class="clash-card__unit-name">CONFIRMING ANTICIPABLES</div>
+                        <div class="clash-card__unit-description" id="dispo_cajamar">00.000,00 €</div>
+                    </div>
+                </div>
+                <div class="clash-card barbarian" style="margin-bottom: 20px;">
+                    <div class="clash-card__image clash-card__image--caixa" style="align-items: center; display: flex;
+                    justify-content: center;flex-wrap: wrap;" onclick="window.open('https://www.caixabank.es/empresa/home/empresas_es.html', '_blank')">
+                        <div class="row" style="display: flex; justify-content: center; padding-top: 40px;">
+                            <label id="lconfirmingCAIXA" name="lconfirmingCAIXA" style="font-weight:bolder; color: rgb(255, 255, 255);">0000 €</label>
+                        </div> 
+                    </div>
+                    <div class="clash-card__level clash-card__level--barbarian" id="mesActual-caixa"></div>
+                    <hr style="width: 30%">
+                    <div class="clash-card__unit-name" style="padding: 0 5px 0 0;">LINEA CONFIRMING DISP.</div>
+                    <div class="clash-card__unit-description" id="confirm_caixa"></div>
+                    <hr style="width: 60%">
+                    <div class="clash-card__unit-name" style="padding: 0 5px 0 0;">TESORERIA</div>
+                    <div class="clash-card__unit-description" id="teso_caixa"></div>
+                    <hr style="width: 60%">
+                    <div class="disponible" style="background-color: rgb(252, 236, 211); margin: 5px; border-radius: 10px; padding-top: 10px;">
+                        <div class="column">
+                            <div class="clash-card__unit-name" style="padding: 0 5px 0 0;">CONFIRMING ANTICIPABLES</div>
+                            <div class="clash-card__unit-description" id="dispo_caixa">00.000,00 €</div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="card  card-tasks">
-                        <div class="card-header ">
-                            <h4 class="card-title">Tasks</h4>
-                            <p class="card-category">Backend development</p>
+                <div class="clash-card barbarian" style="margin-bottom: 20px;">
+                    <div class="clash-card__image clash-card__image--sabadell" style="align-items: center; display: flex;
+                    justify-content: center; flex-wrap: wrap;"
+                    onclick="window.open('https://www.bancsabadell.com/cs/Satellite/SabAtl/Empresas/1191332202619/es/', '_blank')">
+                        <div class="row" style="display: flex; justify-content: center;">
+                            <img src="/static/assets/img/sabadell-logo.svg" alt="sabadell" style="width: 50%; padding-top: 20px;"/>
                         </div>
-                        <div class="card-body ">
-                            <div class="table-full-width">
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="form-check">
-                                                    <label class="form-check-label">
-                                                        <input class="form-check-input" type="checkbox" value="">
-                                                        <span class="form-check-sign"></span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                            <td>Sign contract for "What are conference organizers afraid of?"</td>
-                                            <td class="td-actions text-right">
-                                                <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
-                                                <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="form-check">
-                                                    <label class="form-check-label">
-                                                        <input class="form-check-input" type="checkbox" value="" checked>
-                                                        <span class="form-check-sign"></span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                            <td>Lines From Great Russian Literature? Or E-mails From My Boss?</td>
-                                            <td class="td-actions text-right">
-                                                <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
-                                                <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="form-check">
-                                                    <label class="form-check-label">
-                                                        <input class="form-check-input" type="checkbox" value="" checked>
-                                                        <span class="form-check-sign"></span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                            <td>Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit
-                                            </td>
-                                            <td class="td-actions text-right">
-                                                <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
-                                                <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="form-check">
-                                                    <label class="form-check-label">
-                                                        <input class="form-check-input" type="checkbox" checked>
-                                                        <span class="form-check-sign"></span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                            <td>Create 4 Invisible User Experiences you Never Knew About</td>
-                                            <td class="td-actions text-right">
-                                                <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
-                                                <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="form-check">
-                                                    <label class="form-check-label">
-                                                        <input class="form-check-input" type="checkbox" value="">
-                                                        <span class="form-check-sign"></span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                            <td>Read "Following makes Medium better"</td>
-                                            <td class="td-actions text-right">
-                                                <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
-                                                <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="form-check">
-                                                    <label class="form-check-label">
-                                                        <input class="form-check-input" type="checkbox" value="" disabled>
-                                                        <span class="form-check-sign"></span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                            <td>Unfollow 5 enemies from twitter</td>
-                                            <td class="td-actions text-right">
-                                                <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
-                                                <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="card-footer ">
-                            <hr>
-                            <div class="stats">
-                                <i class="now-ui-icons loader_refresh spin"></i> Updated 3 minutes ago
-                            </div>
-                        </div>
+                        <div class="row" style="display: flex; justify-content: center; padding-top: 10px;">
+                            <label id="lconfirmingSABADELL" name="lconfirmingSABADELL" style="font-weight:bolder; color: rgb(255, 255, 255);">0000 €</label>
+                        </div> 
+                    </div>
+                    <div class="clash-card__level clash-card__level--barbarian" id="mesActual-sabadell"></div>
+                    <hr style="width: 30%">
+                    <div class="clash-card__unit-name" >LINEA CONFIRMING DISP.</div>
+                    <div class="clash-card__unit-description" id="confirm_sabadell"></div>
+                    <hr style="width: 60%">
+                    <div class="clash-card__unit-name" >TESORERIA</div>
+                    <div class="clash-card__unit-description" id="teso_sabadell"></div>
+                    <hr style="width: 60%">
+                    <div class="disponible" style="background-color: rgb(252, 236, 211); margin: 5px; border-radius: 10px; padding-top: 10px;">
+                        <div class="clash-card__unit-name" >CONFIRMING ANTICIPABLES</div>
+                        <div class="clash-card__unit-description" id="dispo_sabadell">00.000,00 €</div>
                     </div>
                 </div>
+                <div class="clash-card barbarian" style="margin-bottom: 20px;">
+                    <div class="clash-card__image clash-card__image--ibercaja" style="align-items: center; display: flex;
+                    justify-content: center;flex-wrap: wrap;" onclick="window.open('https://www.ibercaja.es/empresas/', '_blank')">
+                        <div class="row" style="display: flex; justify-content: center; padding-top: 40px;">
+                            <label id="lconfirmingIBERCAJA" name="lconfirmingIBERCAJA" style="font-weight:bolder; color: rgb(255, 255, 255);">0000 €</label>
+                        </div>
+                    </div>
+                    <div class="clash-card__level clash-card__level--barbarian" id="mesActual-ibercaja"></div>
+                    <hr style="width: 30%">
+                    <div class="clash-card__unit-name" >LINEA CONFIRMING DISP.</div>
+                    <div class="clash-card__unit-description" id="confirm_ibercaja"></div>
+                    <hr style="width: 60%">
+                    <div class="clash-card__unit-name" >TESORERIA</div>
+                    <div class="clash-card__unit-description" id="teso_ibercaja"></div>
+                    <hr style="width: 60%">
+                    <div class="disponible" style="background-color: rgb(252, 236, 211); margin: 5px; border-radius: 10px; padding-top: 10px;">
+                        <div class="clash-card__unit-name" >CONFIRMING ANTICIPABLES</div>
+                        <div class="clash-card__unit-description" id="dispo_ibercaja">00.000,00 €</div>
+                    </div>
+                </div>
+                <div class="clash-card barbarian" style="margin-bottom: 20px;">
+                    <div class="clash-card__image clash-card__image--cajarural" style="align-items: center; display: flex;
+                    justify-content: center;flex-wrap: wrap;"
+                    onclick="window.open('https://www.cajaruralgranada.es/es/empresas', '_blank')">
+                        <div class="row" style="display: flex; justify-content: center; padding-top: 40px;">
+                            <label id="lconfirmingCAJARURAL" name="lconfirmingCAJARURAL" style="font-weight:bolder; color: rgb(255, 255, 255);">0000 €</label>
+                        </div>
+                    </div>
+                    <div class="clash-card__level clash-card__level--barbarian" id="mesActual-cajarural"></div>
+                    <hr style="width: 30%">
+                    <div class="clash-card__unit-name" >LINEA CONFIRMING DISP.</div>
+                    <div class="clash-card__unit-description" id="confirm_cajarural"></div>
+                    <hr style="width: 60%">
+                    <div class="clash-card__unit-name" >TESORERIA</div>
+                    <div class="clash-card__unit-description" id="teso_cajarural"></div>
+                    <hr style="width: 60%">
+                    <div class="disponible" style="background-color: rgb(252, 236, 211); margin: 5px; border-radius: 10px; padding-top: 10px;">
+                        <div class="clash-card__unit-name" >CONFIRMING ANTICIPABLES</div>
+                        <div class="clash-card__unit-description" id="dispo_cajarural">00.000,00 €</div>
+                    </div>
+                </div>
+                <div class="clash-card barbarian" style="margin-bottom: 20px;">
+                    <div class="clash-card__image clash-card__image--santander" style="align-items: center; display: flex;
+                    justify-content: center;flex-wrap: wrap;" onclick="window.open('https://www.bancosantander.es/empresas/banca-online', '_blank')">
+                        <div class="row" style="display: flex; justify-content: center; padding-top: 40px;">
+                            <label id="lconfirmingSANTANDER" name="lconfirmingSANTANDER" style="font-weight:bolder; color: rgb(255, 255, 255);">0000 €</label>
+                        </div>
+                    </div>
+                    <div class="clash-card__level clash-card__level--barbarian" id="mesActual-santander"></div>
+                    <hr style="width: 30%">
+                    <div class="clash-card__unit-name" >LINEA CONFIRMING DISP.</div>
+                    <div class="clash-card__unit-description" id="confirm_santander"></div>
+                    <hr style="width: 60%">
+                    <div class="clash-card__unit-name" >TESORERIA</div>
+                    <div class="clash-card__unit-description" id="teso_santander"></div>
+                    <hr style="width: 60%">
+                    <div class="disponible" style="background-color: rgb(252, 236, 211); margin: 5px; border-radius: 10px; padding-top: 10px;">
+                        <div class="clash-card__unit-name" >CONFIRMING ANTICIPABLES</div>
+                        <div class="clash-card__unit-description" id="dispo_santander">00.000,00 €</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FILA 2 RADIOBUTTOM DE ELECCIÓN DE MESES -->
+            <div class="row" style="justify-content: center;">
+                <div class="radio_boton" style="justify-content: center;">
+                    <!-- Radio Seleccionar -->
+                    <input type="radio" name="Carrusel" id="Slider1" checked>
+                    <input type="radio" name="Carrusel" id="Slider2">
+                    <input type="radio" name="Carrusel" id="Slider3">
+                    <input type="radio" name="Carrusel" id="Slider4">
+                    <input type="radio" name="Carrusel" id="Slider5">
+                  </div>
             </div>
         </div>
     </div>
@@ -222,13 +224,259 @@
 {% block javascripts %}
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        // Javascript method's body can be found in assets/js/demos.js
-        demo.initDashboardPageCharts();
 
-        demo.showNotification();
+    $(document).ready(function(e) {
+        var animacionText = "clash-card__unit-description animated animate__fadeIn";
+        var animationInitTexto = "clash-card__unit-description";    // Clase inicial antes de animar el elemento
+        var animacionMes = "clash-card__level clash-card__level--barbarian animated animate__fadeIn";
+        var animationInitMes = "clash-card__level clash-card__level--barbarian";    // Clase inicial antes de animar el elemento
+
+        document.getElementById('Slider1').onclick = function () {
+            cargaDatos(0);
+            animarTodosTextos();
+        };
+
+        document.getElementById('Slider2').onclick = function () {
+            cargaDatos(1); 
+            animarTodosTextos();
+        };
+
+        document.getElementById('Slider3').onclick = function () {
+            cargaDatos(2); 
+            animarTodosTextos();
+        };
+
+        document.getElementById('Slider4').onclick = function () {
+            cargaDatos(3); 
+            animarTodosTextos();
+        };
+
+        document.getElementById('Slider5').onclick = function () {
+            cargaDatos(4); 
+            animarTodosTextos();
+        };
+
+        function animacionTexto(element, animation, animationInit){ //Anima un elemento único
+            element = document.getElementById(element);
+            element.setAttribute('class', animation);
+            // wait for animation to finish before removing classes
+            window.setTimeout( function(){
+                element.setAttribute('class', animationInit);
+            }, 800);
+        }; // end animateClick
+
+        function animarTodosTextos(){   //Animará todos los textos elegidos
+            animacionTexto("mesActual-bbva", animacionMes,animationInitMes);
+            animacionTexto("mesActual-caixa", animacionMes,animationInitMes);
+            animacionTexto("mesActual-sabadell", animacionMes,animationInitMes);
+            animacionTexto("mesActual-cajamar", animacionMes,animationInitMes);
+            animacionTexto("mesActual-ibercaja", animacionMes,animationInitMes);
+            animacionTexto("mesActual-cajarural", animacionMes,animationInitMes);
+            animacionTexto("mesActual-santander", animacionMes,animationInitMes);
+
+            animacionTexto("confirm_bbva", animacionText,animationInitTexto);
+            animacionTexto("teso_bbva", animacionText,animationInitTexto);
+            animacionTexto("dispo_bbva", animacionText,animationInitTexto);
+            
+            animacionTexto("confirm_caixa", animacionText,animationInitTexto);
+            animacionTexto("teso_caixa", animacionText,animationInitTexto);
+            animacionTexto("dispo_caixa", animacionText,animationInitTexto);
+
+            animacionTexto("confirm_sabadell", animacionText,animationInitTexto);
+            animacionTexto("teso_sabadell", animacionText,animationInitTexto);
+            animacionTexto("dispo_sabadell", animacionText,animationInitTexto);
+
+            animacionTexto("confirm_cajamar", animacionText,animationInitTexto);
+            animacionTexto("teso_cajamar", animacionText,animationInitTexto);
+            animacionTexto("dispo_cajamar", animacionText,animationInitTexto);
+
+            animacionTexto("confirm_ibercaja", animacionText,animationInitTexto);
+            animacionTexto("teso_ibercaja", animacionText,animationInitTexto);
+            animacionTexto("dispo_ibercaja", animacionText,animationInitTexto);
+
+            animacionTexto("confirm_cajarural", animacionText,animationInitTexto);
+            animacionTexto("teso_cajarural", animacionText,animationInitTexto);
+            animacionTexto("dispo_cajarural", animacionText,animationInitTexto);
+
+            animacionTexto("confirm_santander", animacionText,animationInitTexto);
+            animacionTexto("teso_santander", animacionText,animationInitTexto);
+            animacionTexto("dispo_santander", animacionText,animationInitTexto); 
+
+        }
 
     });
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("card_confirming").addEventListener('onclick', ampliarGrafico);
+        document.getElementById('card_transfer').addEventListener('onclick', ampliarGrafico);  
+    });
+
+    function cargaDatos(indice){
+        // Vamos a calcular los valores del mes actual tanto de confirming como de tesorería para todos los bancos
+        const listMeses = JSON.parse('{{ listMeses | tojson | safe }}')
+        var mesActual = listMeses[indice];   // Obtenemos el nombre del mes actual
+        const formatter = new Intl.NumberFormat('es-ES', {  // Esta constante la usaremos para formatear el valor a tipo moneda
+            style: 'currency',
+            minimumFractionDigits: 2,
+            currency:'EUR'
+        });
+        const formatterConfir = new Intl.NumberFormat('es-ES', {  // Esta constante la usaremos para formatear el valor a tipo moneda
+            style: 'currency',
+            minimumFractionDigits: 0,
+            currency:'EUR'
+        });
+
+
+        // LINEA MÁXIMA DE CONFIRMING
+        const dataLineaConfirm = {{ listConfirming | tojson | safe }};  // Creamos una variable data con la lista de valores de líneas de confirming
+        const dfLineaConfirm = JSON.parse(dataLineaConfirm);   // Parseamos los datos anteriores para convertirlo en un array de javascript
+
+        var valorLineaConfirmBBVA = dfLineaConfirm[2];
+        var valorLineaConfirmCAJAMAR = dfLineaConfirm[3];
+        var valorLineaConfirmCAJARURAL = dfLineaConfirm[6];
+        var valorLineaConfirmCAIXA = dfLineaConfirm[0];
+        var valorLineaConfirmIBERCAJA = dfLineaConfirm[4];
+        var valorLineaConfirmSABADELL = dfLineaConfirm[5];
+        var valorLineaConfirmSANTANDER = dfLineaConfirm[1];
+    
+        //Actualizamos las etiquetas de la línea máxima de confirming de cada entidad bancaria
+        var valorBBVA = formatterConfir.format(parseFloat(valorLineaConfirmBBVA));
+        document.getElementById('lconfirmingBBVA').innerHTML=valorBBVA;
+
+        var valorCAJAMAR = formatterConfir.format(parseFloat(valorLineaConfirmCAJAMAR));
+        document.getElementById('lconfirmingCAJAMAR').innerHTML=valorCAJAMAR;
+
+        var valorCAJARURAL = formatterConfir.format(parseFloat(valorLineaConfirmCAJARURAL));
+        document.getElementById('lconfirmingCAJARURAL').innerHTML=valorCAJARURAL;
+
+        var valorCAIXA = formatterConfir.format(parseFloat(valorLineaConfirmCAIXA));
+        document.getElementById('lconfirmingCAIXA').innerHTML=valorCAIXA;
+
+        var valorIBERCAJA = formatterConfir.format(parseFloat(valorLineaConfirmIBERCAJA));
+        document.getElementById('lconfirmingIBERCAJA').innerHTML=valorIBERCAJA;
+
+        var valorSABADELL = formatterConfir.format(parseFloat(valorLineaConfirmSABADELL));
+        document.getElementById('lconfirmingSABADELL').innerHTML=valorSABADELL;
+
+        var valorSANTANDER = formatterConfir.format(parseFloat(valorLineaConfirmSANTANDER));
+        document.getElementById('lconfirmingSANTANDER').innerHTML=valorSANTANDER;
+
+
+        // TESORERIA DEL MES
+        const dfTransfer = JSON.parse('{{ dictTeso | tojson | safe }}');   // Parseamos los datos anteriores para convertirlo en un array de javascript
+        var valorTransferBBVA = dfTransfer[indice]['BBVA'];
+        var valorTransferCaixa = dfTransfer[indice]['CAIXA'];
+        var valorTransferSabadell = dfTransfer[indice]['SABADELL'];
+        var valorTransferCajamar = dfTransfer[indice]['CAJAMAR'];
+        var valorTransferIbercaja = dfTransfer[indice]['IBERCAJA'];
+        var valorTransferCajarural = dfTransfer[indice]['CAJARURAL'];
+        var valorTransferSantander = dfTransfer[indice]['SANTANDER'];
+
+        valor = formatter.format(parseFloat(valorTransferBBVA));
+        document.getElementById('teso_bbva').innerHTML=valor;
+
+        valor = formatter.format(parseFloat(valorTransferCaixa));
+        document.getElementById('teso_caixa').innerHTML=valor;
+
+        valor = formatter.format(parseFloat(valorTransferSabadell));
+        document.getElementById('teso_sabadell').innerHTML=valor;
+
+        valor = formatter.format(parseFloat(valorTransferCajamar));
+        document.getElementById('teso_cajamar').innerHTML=valor;
+
+        valor = formatter.format(parseFloat(valorTransferIbercaja));
+        document.getElementById('teso_ibercaja').innerHTML=valor;
+
+        valor = formatter.format(parseFloat(valorTransferCajarural));
+        document.getElementById('teso_cajarural').innerHTML=valor;
+
+        valor = formatter.format(parseFloat(valorTransferSantander));
+        document.getElementById('teso_santander').innerHTML=valor;
+
+
+        // CONFIRMINGS DISPONIBLES
+        const dfDisponible = JSON.parse('{{ dictTesoDis | tojson | safe }}');   // Parseamos los datos anteriores para convertirlo en un array de javascript
+        var valorDisponibleBBVA = dfDisponible[indice]['BBVA'];
+        var valorDisponibleCaixa = dfDisponible[indice]['CAIXA'];
+        var valorDisponibleSabadell = dfDisponible[indice]['SABADELL'];
+        var valorDisponibleCajamar = dfDisponible[indice]['CAJAMAR'];
+        var valorDisponibleIbercaja = dfDisponible[indice]['IBERCAJA'];
+        var valorDisponibleajarural = dfDisponible[indice]['CAJARURAL'];
+        var valorDisponibleSantander = dfDisponible[indice]['SANTANDER'];
+
+
+        var valorDisp = formatter.format(parseFloat(valorDisponibleBBVA));
+        document.getElementById('dispo_bbva').innerHTML=valorDisp;
+
+        var valor = formatter.format(parseFloat(valorDisponibleCaixa));
+        document.getElementById('dispo_caixa').innerHTML=valor;
+
+        var valorDisp = formatter.format(parseFloat(valorDisponibleSabadell));
+        document.getElementById('dispo_sabadell').innerHTML=valorDisp;
+
+        var valorDisp = formatter.format(parseFloat(valorDisponibleCajamar));
+        document.getElementById('dispo_cajamar').innerHTML=valorDisp;
+
+        var valorDisp = formatter.format(parseFloat(valorDisponibleIbercaja));
+        document.getElementById('dispo_ibercaja').innerHTML=valorDisp;
+
+        var valorDisp = formatter.format(parseFloat(valorDisponibleajarural));
+        document.getElementById('dispo_cajarural').innerHTML=valorDisp;
+
+        var valorDisp = formatter.format(parseFloat(valorDisponibleSantander));
+        document.getElementById('dispo_santander').innerHTML=valorDisp;
+
+
+
+
+        // CONFIRMING
+        const dfConfig = JSON.parse('{{ dictConfir | tojson | safe }}');   // Parseamos los datos anteriores para convertirlo en un array de javascript
+        var valorConfirmBBVA = dfConfig[indice]['BBVA'];
+        var valorConfirmCaixa = dfConfig[indice]['CAIXA'];
+        var valorConfirmSabadell = dfConfig[indice]['SABADELL'];
+        var valorConfirmCajamar = dfConfig[indice]['CAJAMAR'];
+        var valorConfirmIbercaja = dfConfig[indice]['IBERCAJA'];
+        var valorConfirmCajarural = dfConfig[indice]['CAJARURAL'];
+        var valorConfirmSantander = dfConfig[indice]['SANTANDER'];
+
+        var valor = formatter.format(parseFloat(valorConfirmBBVA));
+        document.getElementById('confirm_bbva').innerHTML=valor;
+
+        valor = formatter.format(parseFloat(valorConfirmCaixa));
+        document.getElementById('confirm_caixa').innerHTML=valor;
+
+        valor = formatter.format(parseFloat(valorConfirmSabadell));
+        document.getElementById('confirm_sabadell').innerHTML=valor;
+
+        valor = formatter.format(parseFloat(valorConfirmCajamar));
+        document.getElementById('confirm_cajamar').innerHTML=valor;
+
+        valor = formatter.format(parseFloat(valorConfirmIbercaja));
+        document.getElementById('confirm_ibercaja').innerHTML=valor;
+
+        valor = formatter.format(parseFloat(valorConfirmCajarural));
+        document.getElementById('confirm_cajarural').innerHTML=valor;
+
+        valor = formatter.format(parseFloat(valorConfirmSantander));
+        document.getElementById('confirm_santander').innerHTML=valor;
+
+
+        // INDICAMOS EL MES ACTUAL
+        document.getElementById('mesActual-bbva').innerHTML=mesActual;
+        document.getElementById('mesActual-caixa').innerHTML=mesActual;
+        document.getElementById('mesActual-sabadell').innerHTML=mesActual;
+        document.getElementById('mesActual-cajamar').innerHTML=mesActual;
+        document.getElementById('mesActual-ibercaja').innerHTML=mesActual;
+        document.getElementById('mesActual-cajarural').innerHTML=mesActual;
+        document.getElementById('mesActual-santander').innerHTML=mesActual;
+
+    }
+    
+    window.onload = function(){
+        cargaDatos(0);
+    }
+
 </script>
 
 {% endblock javascripts %}
