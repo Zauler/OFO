@@ -53,7 +53,7 @@ class Bancos(db.Model):
     Num_Cuenta = db.Column(db.String(24), unique=True, nullable=False)
     Banco = db.Column(db.String(60), nullable=False)
     Cash = db.Column(db.Float)
-    Linea_max_confirming = db.Column(db.Float)
+    Linea_max_Confirming = db.Column(db.Float)
     registros = db.relationship('Registros', back_populates='banco')
 
 class Registros(db.Model):

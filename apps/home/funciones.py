@@ -143,7 +143,7 @@ def calculaConfirming(meses):
 
     # Línea de Confirming que tenemos concedida por la entidad bancaria
     for i in range(len(dfBancos['Banco'])):
-        dictLineaConfirming[dfBancos.iloc[i]['Banco']] = dfBancos.iloc[i]['Linea_max_confirming']
+        dictLineaConfirming[dfBancos.iloc[i]['Banco']] = dfBancos.iloc[i]['Linea_max_Confirming']
 
     dictConfir = {}
 

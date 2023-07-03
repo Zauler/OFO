@@ -65,7 +65,7 @@ def index():
     dictConfir = calculaConfirming(meses)
     dictTeso, dictTesoDis, listMeses = calculaTesoreria(meses)
     dfBancos = ConsultasDB.consultaBancos()
-    dfLineaConfirming = dfBancos['Linea_max_confirming'] # Es el crédito actual de las líneas de confirming que tenemos concedido
+    dfLineaConfirming = dfBancos['Linea_max_Confirming'] # Es el crédito actual de las líneas de confirming que tenemos concedido
     dfLineaConfirming = dfLineaConfirming.to_json()
     image_url_conf = grafico(meses,listMeses)
     image_url_flujo_Disponible = graficoFlujoDisponible()
@@ -279,6 +279,75 @@ def registrar_registros():
         print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
         return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
 
+
+@blueprint.route('/bancos.html', methods=('GET', 'POST', 'PUT'))
+@login_required
+def bancos():
+    
+    # METODO PUT
+    if request.method == 'PUT':
+        respuesta = request.get_json()
+                
+        if len(respuesta) == 5:  # MODIFICAR UN REGISTRO
+            indiceM = (respuesta[0])  # para que coincida con el indice de la base de datos
+            bancoM = (respuesta[1])
+            cuentaM = (respuesta[2])
+            cashM = (respuesta[3])
+            confirmingM = (respuesta[4])
+
+            datos = {"Num_cuenta":cuentaM, "Banco":bancoM, "Cash":cashM,"Linea_max_Confirming":confirmingM}
+
+            print(indiceM)
+            print(datos)
+            ConsultasDBBancos.modificarRegistro(indiceM,datos)
+
+
+        elif len(respuesta) == 1:   # ELIMINAR UN REGISTRO
+            indiceM = int(respuesta['indice'])  # para que coincida con el indice de la base de datos
+            ConsultasDBBancos.eliminarRegistro(indiceM)
+
+
+    # METODO GET            
+    dfBancos = ConsultasDBBancos.consultaBancosCompleta()
+    dfBancos.set_index('id_Banco')
+
+    form = BancosForm()
+    return render_template("home/bancos.html", segment='bancos', tables=[dfBancos.to_html(header=True, classes='table table-hover table-striped table-bordered',
+                table_id="tabla_bancos", index=False)], form = form)
+
+
+@blueprint.route('/registrar_b', methods=['POST'])
+@login_required
+def registrar_bancos():
+
+    form = BancosForm(request.form)
+    print("FORMULARIO HTML")
+    print(request.form)
+    print("FORMULARIO VALIDACIÓN")
+    print(form.data)
+
+
+    if form.validate_on_submit():
+        nuevo_registro = Bancos(
+            Num_Cuenta = form.Num_Cuenta.data,
+            Banco = form.Banco.data,
+            Cash = form.Cash.data,
+            Linea_max_Confirming = form.Linea_max_Confirming.data,
+        )
+
+        try:
+            db.session.add(nuevo_registro)
+            db.session.commit()
+            return redirect(url_for('home_blueprint.bancos'))  # redirige al usuario a la página principal después de registrar
+        
+        except SQLAlchemyError as e:
+            
+            db.session.rollback()
+            return f'Error en la base de datos: {str(e)}'  # si ocurre un error en la base de datos, devuelve este error
+        
+    else:
+        print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
+        return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
 
 
 

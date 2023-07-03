@@ -33,7 +33,7 @@ class BancosForm(FlaskForm):
     Num_Cuenta = StringField('Num_Cuenta', validators=[DataRequired(), Length(max=24)])
     Banco = StringField('Banco', validators=[DataRequired(), Length(max=60)])
     Cash = FloatField('Cash', validators=[Optional()])
-    Linea_max_confirming = FloatField('Linea_max_confirming', validators=[Optional()])
+    Linea_max_Confirming = FloatField('Linea_max_Confirming', validators=[Optional()])
 
 
 class RegistrosForm(FlaskForm):

@@ -1,0 +1,262 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row" style="flex-direction: column;">
+            <p style="color: slategrey; text-align: center;">AÑADIR REGISTRO</p>
+            </div>
+            <div class="row" style="flex-direction: column;">
+                <form action="/registrar_b" method="post" id="form_registro">
+                    <!-- Campo oculto para el token CSRF -->
+                    <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
+                    <!-- PRIMERA FILA DE CONTROLES -->
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="inputbanco" style="color: slategrey; font-size:14px;">Entidad</label>
+                            <input type="text" id="Banco" name="Banco" placeholder="Nombre Entidad"
+                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                        </div>
+                        <div class="form-group col">
+                            <label for="inputcuenta" style="color: slategrey; font-size:14px;">Número de cuenta</label>
+                            <input type="text" id="Num_Cuenta" name="Num_Cuenta" placeholder="Número de cuenta"
+                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                        </div>
+                        <div class="form-group col">
+                            <label for="inputCash" style="color: slategrey; font-size:14px;">Tesorería</label>
+                            <input type="number" id="Cash" name="Cash" step="0.01" placeholder="0000.00"
+                            class="form-control form-control-sm"/>
+                        </div>
+                        <div class="form-group col">
+                            <label for="inputConfirming" style="color: slategrey; font-size:14px;">Línea de Confirming</label>
+                            <input type="number" id="Linea_max_Confirming" name="Linea_max_Confirming" step="0.01" placeholder="0000.00"
+                            class="form-control form-control-sm"/>
+                        </div>
+                    </div>
+
+                    <div class="form-row" style="justify-content: center;">
+                        <input type="submit" id="send-signup" name="signup" value="Registrar" class="btn btn-primary" style="margin: 2px;"/>
+                        <input type="reset" value="Limpiar formulario" class="btn btn-primary" style="margin: 2px;">
+                    </div>
+                    
+                    <hr>
+                </form>
+            </div>
+
+            <!-- TABLA -->
+            <div class="row" style="flex-direction: column;">
+                <div class="table-wrap" style="height: 400px; background-color: rgba(201, 38, 38, 0);font-size: small">
+                    {% for table in tables %}
+                        {{ table|safe }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock content %}
+
+<!------------------------------------------- Specific Page JS goes HERE  ------------------------------------------------------>
+{% block javascripts %}
+
+    <!--<script type="text/javascript" src="{{url_for('static', filename='assets/js/miscript.js')}}"></script>-->
+
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+<script src="./static/assets/js/plugins/xlsx.full.min.js"></script>
+<script src="./static/assets/js/plugins/FileSaver.min.js"></script>
+<script src="./static/assets/js/plugins/tableexport.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.6/xlsx.core.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+<script type = "text/javascript">
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("form_registro").addEventListener('submit', validarFormulario);
+        addRowHandlers();        
+    }); 
+
+
+    function validarFormulario(evento) {//Comprobamos que los campos del formulario no están vacios
+        evento.preventDefault();
+        if (Cash.value == "" || Linea_max_Confirming.value=='' || Num_Cuenta.value=='' || Banco.value==''){ 
+            Swal.fire({
+                title: 'Falta algún campo por cumplimentar',
+                icon: 'error'
+            });
+            return;
+        } else {
+            this.submit();
+        }
+    }
+
+</script>
+
+<script type = "text/javascript">
+   
+    function addRowHandlers() {
+        var table = document.getElementById("tabla_bancos");
+        var rows = table.getElementsByTagName("tr");
+
+        for (i = 0; i < rows.length; i++) {
+            var currentRow = table.rows[i];
+            var createClickHandler = function(row) {
+                return function() {
+                    var cell = row.getElementsByTagName("td")[0];
+                    var id = cell.innerHTML;
+                    cargarDatosAlert(id,row);
+                };
+            };
+
+            currentRow.ondblclick = createClickHandler(currentRow);
+        }
+    }
+
+    
+    function cambiarValor(){
+        var table = document.getElementById("tabla_bancos");
+        var rows = table.getElementsByTagName("tr");
+
+        for (i = 0; i < rows.length; i++) {
+            var currentRow = table.rows[i];
+            var createClickHandler = function(row) {
+            return function() {
+                var cell = row.getElementsByTagName("td")[1];
+                var id = cell.innerHTML;
+            };
+            };
+        }
+    }
+
+
+    function cargarDatosAlert(id,elemento){//CARGARÁ LOS DATOS DE LA FILA SELECCIONADA DENTRO DEL POPUP O ALERT
+
+        var banco = elemento.getElementsByTagName("td")[1].innerHTML;
+        var cuenta = elemento.getElementsByTagName("td")[2].innerHTML;
+        var cash = elemento.getElementsByTagName("td")[3].innerHTML;
+        var confirming = elemento.getElementsByTagName("td")[4].innerHTML;
+
+                
+        //CONFIGURAMOS EL ALERT
+        Swal.fire({
+            title: 'Modificar Registro',
+            width: '60%',
+            showCancelButton: true,
+            showDenyButton: true,
+            denyButtonText: `Eliminar`,
+            CancelButtonText: 'Cancelar',
+            returnInputValueOnDeny: false,
+            confirmButtonColor: "#089925",
+
+            html:
+                `
+                    <!-- PRIMERA FILA DE CONTROLES -->
+
+                    <div class="form-row" style="width:100%">
+                        <div class="form-group col-md-3">
+                            <label for="inputbanco" style="color: slategrey; font-size:14px;">Entidad</label>
+                            <input type="text" id="bancoM" name="bancoM" placeholder="Nombre Entidad"
+                            class="form-control form-control-sm" value="`+banco+`"/>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="inputcuenta" style="color: slategrey; font-size:14px;">Número de Cuenta</label>
+                            <input type="text" id="cuentaM" name="cuentaM" placeholder="Número de Cuenta"
+                            class="form-control form-control-sm" value="`+cuenta+`"/>
+                        </div> 
+                        <div class="form-group col-md-3">
+                            <label for="inputcash" style="color: slategrey; font-size:14px;">Tesorería</label>
+                            <input type="number" id="cashM" name="cashM" step="0.01" placeholder="0000.00"
+                            class="form-control form-control-sm" value="`+parseFloat(cash)+`"/>
+                        </div> 
+                        <div class="form-group col-md-3">
+                            <label for="inputconfirming" style="color: slategrey; font-size:14px;">Línea de Confirming</label>
+                            <input type="number" id="confirmingM" name="confirmingM" step="0.01" placeholder="0000.00"
+                            class="form-control form-control-sm" value="`+parseFloat(confirming)+`"/>
+                        </div>  
+                    </div>
+                `,
+                            
+            preConfirm: () => { 
+                // VAMOS A CARGAR LOS DATOS QUE HAY EN LOS INPUT
+                var indice = parseInt(id);
+
+                return [
+                    indice,
+                    document.getElementById('bancoM').value,
+                    document.getElementById('cuentaM').value,
+                    parseFloat(document.getElementById('cashM').value),
+                    parseFloat(document.getElementById('confirmingM').value),
+                ];
+                
+            }
+
+            
+        }) .then((result) => {
+            if (result.isConfirmed) {
+
+                fetch('bancos.html', {
+                        method: 'PUT',
+                        body: JSON.stringify(result.value), // data can be `string` or {object}!
+                        headers:{
+                            'Content-Type': 'application/json'
+                        }
+                }).then(res => res.json())
+                .then(response => console.log('Success:', JSON.stringify(response)))
+                .catch(error => console.error('Error:', error));
+
+                Swal.fire({
+                    title: 'Cambios realizados correctamente', 
+                    icon: 'success'
+                }) .then((result) => {  //UNA VEZ SE ACEPTE EL POPUP DE CAMBIOS REALIZADOS SE RECARGARÁ LA PÁGINA
+                    if (result.isConfirmed) {
+                        location.reload();
+                    }
+                });
+
+            } else if (result.isDenied) { //SI EL USUARIO SELECCIONA BORRAR, LE VOLVEMOS A PREGUNTAR SI ESTÁ SEGURO
+                swal.fire({
+                    title: "¿Seguro que quieres borrar el registro?",
+                    showCancelButton: true,
+                    CancelButtonText: "No",
+                    confirmButtonColor: "#d50000",
+                    icon: "error",
+                    iconHtml: "🗑",
+                    }) .then((result) => {
+                        if (result.isConfirmed) {
+
+                            const datosM = {indice: id};
+                            fetch('bancos.html', {
+                                method: 'PUT',
+                                body: JSON.stringify(datosM), // data can be `string` or {object}!
+                                headers:{
+                                    'Content-Type': 'application/json'
+                                }
+                            }).then(res => res.json())
+                            .then(response => console.log('Success:', JSON.stringify(response)))
+                            .catch(error => console.error('Error:', error));
+
+                            location.reload();
+                        }
+                    })
+
+                }
+        })
+        }
+
+</script>
+
+{% endblock javascripts %}
