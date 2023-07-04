@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, FloatField, DateField, BooleanField
-from wtforms.validators import DataRequired, Length, Optional, NumberRange
+from wtforms.validators import DataRequired, Length, Optional, NumberRange , Regexp
 
 class GestoresForm(FlaskForm):
     Nombre = StringField('Nombre', validators=[DataRequired(), Length(max=60)])
@@ -26,8 +26,9 @@ class ProveedoresForm(FlaskForm):
     CIF = StringField('CIF', validators=[DataRequired(), Length(max=9)])
     Nombre = StringField('Nombre', validators=[DataRequired(), Length(max=60)])
     Direccion = StringField('Direccion', validators=[Length(max=60)])
-    Telefono = StringField('Telefono', validators=[Optional()])
+    Telefono = StringField('Telefono', validators=[Optional(), Regexp(r'^\d{9}$', message="El teléfono debe ser un número entero de 9 dígitos")])
     Tipo_Proveedor = StringField('Tipo_Proveedor', validators=[DataRequired(), Length(max=20)])
+    Condiciones_confirming = StringField('Condiciones_confirming', validators=[Optional(), Length(max=20)])
 
 class BancosForm(FlaskForm):
     Num_Cuenta = StringField('Num_Cuenta', validators=[DataRequired(), Length(max=24)])

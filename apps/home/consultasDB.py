@@ -139,6 +139,7 @@ class ConsultasDBBancos():
 
         dfBancos = pd.read_sql(queryBancos.statement, db.session.bind)
         return dfBancos
+    
 
     #-----------------ELIMINTAR REGISTROS DE BANCOS------------------
     def eliminarRegistro(id):
@@ -163,6 +164,102 @@ class ConsultasDBBancos():
 
         try:
             registro_a_modificar = db.session.query(Bancos).filter(Bancos.id_Banco == id).first()
+
+            if registro_a_modificar is not None:
+                for campo, nuevo_valor in datosActualizar.items():
+                    setattr(registro_a_modificar, campo, nuevo_valor) #Esta función cambia el atributo de la clase.
+                db.session.commit()
+                print("Registro modificado: ", id)
+            else:
+                print("Registro no encontrado")
+        
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print("Ocurrió un error al actualizar el registro: ",e)
+
+
+
+class ConsultasDBProveedores():
+     # --------------------CONSULTA --------------------
+    def consultaProveedoresCompleta():
+        queryProveedores = db.session.query(Proveedores.id_Proveedor, Proveedores.CIF, Proveedores.Nombre, Proveedores.Direccion, Proveedores.Telefono, Proveedores.Tipo_Proveedor, Proveedores.Condiciones_confirming).select_from(Proveedores)
+        dfProveedores = pd.read_sql(queryProveedores.statement, db.session.bind)
+        
+        return dfProveedores
+     
+
+
+    #-----------------ELIMINTAR REGISTROS------------------
+    def eliminarRegistro(id):
+        
+        try:
+            registro_a_eliminar = db.session.query(Proveedores).filter(Proveedores.id_Proveedor == id).first()
+
+            if registro_a_eliminar is not None:
+                db.session.delete(registro_a_eliminar)
+                db.session.commit()
+                print("Registro Eliminado: ", id) #Si queremos añadimos más info
+            else:
+                print("Registro no encontrado")
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print("Ocurrió un error al eliminar el registro: ",e)
+
+
+    #-----------------MODIFICAR REGISTROS--------------------------
+    def modificarRegistro(id,datosActualizar):
+
+        try:
+            registro_a_modificar = db.session.query(Proveedores).filter(Proveedores.id_Proveedor == id).first()
+
+            if registro_a_modificar is not None:
+                for campo, nuevo_valor in datosActualizar.items():
+                    setattr(registro_a_modificar, campo, nuevo_valor) #Esta función cambia el atributo de la clase.
+                db.session.commit()
+                print("Registro modificado: ", id)
+            else:
+                print("Registro no encontrado")
+        
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print("Ocurrió un error al actualizar el registro: ",e)
+
+
+
+
+class ConsultaDBClientes():
+
+    # --------------------CONSULTA --------------------
+    def consultaClientesCompleta():
+        queryClientes = db.session.query(Clientes.id_Cliente, Clientes.CIF, Clientes.Nombre, Clientes.Direccion, Clientes.Telefono, Clientes.Tipo_Cliente).select_from(Clientes)
+        dfClientes = pd.read_sql(queryClientes.statement, db.session.bind)
+
+        return dfClientes
+
+    #-----------------ELIMINTAR REGISTROS------------------
+    def eliminarRegistro(id):
+        
+        try:
+            registro_a_eliminar = db.session.query(Clientes).filter(Clientes.id_Cliente == id).first()
+
+            if registro_a_eliminar is not None:
+                db.session.delete(registro_a_eliminar)
+                db.session.commit()
+                print("Registro Eliminado: ", id) #Si queremos añadimos más info
+            else:
+                print("Registro no encontrado")
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print("Ocurrió un error al eliminar el registro: ",e)
+
+
+    #-----------------MODIFICAR REGISTROS--------------------------
+    def modificarRegistro(id,datosActualizar):
+
+        try:
+            registro_a_modificar = db.session.query(Clientes).filter(Clientes.id_Cliente == id).first()
 
             if registro_a_modificar is not None:
                 for campo, nuevo_valor in datosActualizar.items():

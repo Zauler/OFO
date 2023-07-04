@@ -350,6 +350,86 @@ def registrar_bancos():
         return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
 
 
+@blueprint.route('/proveedores.html', methods=('GET', 'POST', 'PUT'))
+@login_required
+def proveedores():
+    
+    # METODO PUT
+    if request.method == 'PUT':
+        respuesta = request.get_json()
+                
+        if len(respuesta) == 7:  # MODIFICAR UN REGISTRO
+            indiceM = (respuesta[0])  # para que coincida con el indice de la base de datos
+            CifM = (respuesta[1])
+            NombreM = (respuesta[2])
+            DireccionM = (respuesta[3])
+            TelefonoM = (respuesta[4])
+            Tipo_ProveedorM = (respuesta[5])
+            Condiciones_confirmingM = (respuesta[6])
+
+
+            datos = {"CIF":CifM, "Nombre":NombreM, "Direccion":DireccionM,"Telefono":TelefonoM, "Tipo_Proveedor":Tipo_ProveedorM ,"Condiciones_confirming":Condiciones_confirmingM }
+
+            print(indiceM)
+            print(datos)
+            ConsultasDBProveedores.modificarRegistro(indiceM,datos)
+
+
+        elif len(respuesta) == 1:   # ELIMINAR UN REGISTRO
+            indiceM = int(respuesta['indice'])  # para que coincida con el indice de la base de datos
+            ConsultasDBProveedores.eliminarRegistro(indiceM)
+
+
+    # METODO GET            
+    dfProveedores = ConsultasDBProveedores.consultaProveedoresCompleta()
+    dfProveedores.set_index('id_Proveedor')
+    dfProveedores['Telefono'] = dfProveedores['Telefono'].fillna(0).astype(int)
+    dfProveedores['Telefono'] = dfProveedores['Telefono'].astype(int) #Forzamos tipo para lectura en página
+    print(dfProveedores.dtypes)
+    form = ProveedoresForm()
+    return render_template("home/proveedores.html", segment='proveedores', tables=[dfProveedores.to_html(header=True, classes='table table-hover table-striped table-bordered',
+                table_id="tabla_proveedores", index=False)], form = form)
+
+
+@blueprint.route('/registrar_prove', methods=['POST'])
+@login_required
+def registrar_proveedores():
+
+    form = ProveedoresForm(request.form)
+    print("FORMULARIO HTML")
+    print(request.form)
+    print("FORMULARIO VALIDACIÓN")
+    print(form.data)
+
+
+    if form.validate_on_submit():
+        nuevo_registro = Proveedores(
+            CIF = form.CIF.data,
+            Nombre = form.Nombre.data,
+            Direccion = form.Direccion.data,
+            Telefono = form.Telefono.data,
+            Tipo_Proveedor = form.Tipo_Proveedor.data,
+            Condiciones_confirming = form.Condiciones_confirming.data
+        )
+
+        try:
+            db.session.add(nuevo_registro)
+            db.session.commit()
+            return redirect(url_for('home_blueprint.proveedores'))  # redirige al usuario a la página principal después de registrar
+        
+        except SQLAlchemyError as e:
+            
+            db.session.rollback()
+            return f'Error en la base de datos: {str(e)}'  # si ocurre un error en la base de datos, devuelve este error
+        
+    else:
+        print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
+        return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
+
+
+
+
+
 
 # Helper - Extract current page name from request
 def get_segment(request):

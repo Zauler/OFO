@@ -42,7 +42,7 @@ class Proveedores(db.Model):
     CIF = db.Column(db.String(9), unique=True, nullable=False)
     Nombre = db.Column(db.String(60), nullable=False)
     Direccion = db.Column(db.String(60))
-    Telefono = db.Column(db.Numeric)
+    Telefono = db.Column(db.Integer)
     Tipo_Proveedor = db.Column(db.String(20), nullable=False)
     Condiciones_confirming = db.Column(db.String(20), nullable=False)
     registros = db.relationship('Registros', back_populates='proveedor')
