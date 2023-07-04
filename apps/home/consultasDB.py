@@ -133,6 +133,7 @@ class ConsultasDB():
 
 
 
+
 class ConsultasDBBancos():
     def consultaBancosCompleta():
         queryBancos = db.session.query(Bancos.id_Banco, Bancos.Banco, Bancos.Num_Cuenta, Bancos.Cash, Bancos.Linea_max_Confirming).select_from(Bancos)
@@ -163,6 +164,65 @@ class ConsultasDBBancos():
 
         try:
             registro_a_modificar = db.session.query(Bancos).filter(Bancos.id_Banco == id).first()
+
+            if registro_a_modificar is not None:
+                for campo, nuevo_valor in datosActualizar.items():
+                    setattr(registro_a_modificar, campo, nuevo_valor) #Esta función cambia el atributo de la clase.
+                db.session.commit()
+                print("Registro modificado: ", id)
+            else:
+                print("Registro no encontrado")
+        
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print("Ocurrió un error al actualizar el registro: ",e)
+
+
+
+
+class ConsultasDBProyectos():
+    def consultaProyectosCompleta():
+        queryProyectos = db.session.query(Proyectos.id_Proyecto, Proyectos.Nombre, Proyectos.Direccion, Proyectos.Descripcion,
+                                          Clientes.Nombre, Gestores.Nombre, Gestores.Apellidos).select_from(Proyectos).join(Gestores,
+                                Proyectos.id_Gestor == Gestores.id_Gestor).join(Clientes,
+                                    Proyectos.id_Cliente == Clientes.id_Cliente)
+
+        dfProyectos = pd.read_sql(queryProyectos.statement, db.session.bind)
+
+        columnas=[
+            'id_Proyecto', 'Proyecto', 'Direccion', 'Descripcion', 'Cliente', 'GestorNombre', 'GestorApellidos']
+        
+        dfProyectos.columns = columnas
+
+        dfProyectos['Gestor'] = dfProyectos["GestorNombre"] + " " + dfProyectos["GestorApellidos"]
+        columnasDrop = ["GestorNombre","GestorApellidos"]
+        dfProyectos = dfProyectos.drop(columnasDrop,axis=1)
+
+        return dfProyectos
+
+    #-----------------ELIMINTAR REGISTROS DE BANCOS------------------
+    def eliminarRegistro(id):
+        
+        try:
+            registro_a_eliminar = db.session.query(Proyectos).filter(Proyectos.id_Proyecto == id).first()
+
+            if registro_a_eliminar is not None:
+                db.session.delete(registro_a_eliminar)
+                db.session.commit()
+                print("Registro Eliminado: ", id) #Si queremos añadimos más info
+            else:
+                print("Registro no encontrado")
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print("Ocurrió un error al eliminar el registro: ",e)
+
+
+    #-----------------MODIFICAR REGISTROS--------------------------
+    def modificarRegistro(id,datosActualizar):
+
+        try:
+            registro_a_modificar = db.session.query(Proyectos).filter(Proyectos.id_Proyecto == id).first()
 
             if registro_a_modificar is not None:
                 for campo, nuevo_valor in datosActualizar.items():
