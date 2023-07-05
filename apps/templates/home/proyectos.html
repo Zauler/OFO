@@ -1,0 +1,337 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row" style="flex-direction: column;">
+            <p style="color: slategrey; text-align: center;">AÑADIR REGISTRO</p>
+            </div>
+            <div class="row" style="flex-direction: column;">
+                <form action="/registrar_p" method="post" id="form_registro">
+                    <!-- Campo oculto para el token CSRF -->
+                    <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
+                    <!-- PRIMERA FILA DE CONTROLES -->
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="inputNombre" style="color: slategrey; font-size:14px;">Proyecto</label>
+                            <input type="text" id="Nombre" name="Nombre" placeholder="Nombre Proyecto"
+                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                        </div>
+                        <div class="form-group col">
+                            <label for="inputDireccion" style="color: slategrey; font-size:14px;">Dirección</label>
+                            <input type="text" id="Direccion" name="Direccion" placeholder="Direccion del Proyecto"
+                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                        </div>
+                        <div class="form-group col">
+                            <label for="inputDescripcion" style="color: slategrey; font-size:14px;">Descripción</label>
+                            <input type="text" id="Descripcion" name="Descripcion" placeholder="Descripcion del proyecto"
+                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                        </div>
+                        <div class="form-group col">
+                            <label for="inputcliente" id='etiqCliente' style="color: slategrey; font-size:14px;">Cliente</label>
+                            <select id="id_Cliente" name="id_Cliente" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
+                                <option>Elegir...</option>
+                                {%- for id, nombre in clientes.items() %}
+                                <option value="{{ id }}" >{{ nombre }}</option>
+                                {%- endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col">
+                            <label for="inputgestor" id='etiqGestor' style="color: slategrey; font-size:14px;">Gestor</label>
+                            <select id="id_Gestor" name="id_Gestor" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
+                                <option>Elegir...</option>
+                                {%- for id, nombre in gestores.items() %}
+                                <option value="{{ id }}" >{{ nombre }}</option>
+                                {%- endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="form-row" style="justify-content: center;">
+                        <input type="submit" id="send-signup" name="signup" value="Registrar" class="btn btn-primary" style="margin: 2px;"/>
+                        <input type="reset" value="Limpiar formulario" class="btn btn-primary" style="margin: 2px;">
+                    </div>
+                    
+                    <hr>
+                </form>
+            </div>
+
+            <!-- FILTROS DE BUSQUEDA -->
+            <div class="row" style="flex-direction: column;">
+                <div class="form-row" style="justify-content: center;">
+                    <div class="form-group col-3">
+                        <input class="form-control" id="filtroProyecto" type="text" placeholder="Proyecto...">
+                    </div>
+                    <div class="form-group col-3">
+                        <input class="form-control" id="filtroCliente" type="text" placeholder="Cliente...">
+                    </div>
+                    <div class="form-group col-3">
+                        <input class="form-control" id="filtroGestor" type="text" placeholder="Gestor...">
+                    </div>
+                </div>
+            </div>  
+
+            <!-- TABLA -->
+            <div class="row" style="flex-direction: column;">
+                <div class="table-wrap" style="height: 400px; background-color: rgba(201, 38, 38, 0);font-size: small">
+                    {% for table in tables %}
+                        {{ table|safe }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock content %}
+
+<!------------------------------------------- Specific Page JS goes HERE  ------------------------------------------------------>
+{% block javascripts %}
+
+    <!--<script type="text/javascript" src="{{url_for('static', filename='assets/js/miscript.js')}}"></script>-->
+
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.21.2/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+<script src="./static/assets/js/plugins/xlsx.full.min.js"></script>
+<script src="./static/assets/js/plugins/FileSaver.min.js"></script>
+<script src="./static/assets/js/plugins/tableexport.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.6/xlsx.core.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+<script type = "text/javascript">
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("form_registro").addEventListener('submit', validarFormulario);
+        addRowHandlers();        
+    }); 
+
+    const clientes = JSON.parse('{{ clientes | tojson | safe }}'); // Creamos y parseamos la variable para javascript
+    const gestores = JSON.parse('{{ gestores | tojson | safe }}'); // Creamos y parseamos la variable para javascript
+
+    function validarFormulario(evento) {//Comprobamos que los campos del formulario no están vacios
+        evento.preventDefault();
+        if (Nombre.value == "" || Direccion.value=='' || Descripcion.value=='' || id_Cliente.value==''|| id_Gestor.value==''){ 
+            Swal.fire({
+                title: 'Falta algún campo por cumplimentar',
+                icon: 'error'
+            });
+            return;
+        } else {
+            this.submit();
+        }
+    }
+
+</script>
+
+<script type = "text/javascript">
+   
+    function addRowHandlers() {
+        var table = document.getElementById("tabla_proyectos");
+        var rows = table.getElementsByTagName("tr");
+
+        for (i = 0; i < rows.length; i++) {
+            var currentRow = table.rows[i];
+            var createClickHandler = function(row) {
+                return function() {
+                    var cell = row.getElementsByTagName("td")[0];
+                    var id = cell.innerHTML;
+                    cargarDatosAlert(id,row);
+                };
+            };
+
+            currentRow.ondblclick = createClickHandler(currentRow);
+        }
+    }
+
+
+    function cargarDatosAlert(id,elemento){//CARGARÁ LOS DATOS DE LA FILA SELECCIONADA DENTRO DEL POPUP O ALERT
+
+        var proyecto = elemento.getElementsByTagName("td")[1].innerHTML;
+        var direccion = elemento.getElementsByTagName("td")[2].innerHTML;
+        var descripcion = elemento.getElementsByTagName("td")[3].innerHTML;
+        var cliente = elemento.getElementsByTagName("td")[4].innerHTML;
+        var gestor = elemento.getElementsByTagName("td")[5].innerHTML;
+
+        let cadenaHTMLGestor = '<select id="gestorM" name="gestorM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;background-color: white;">';
+          for (const gestorId in gestores) {
+                let nombreGestor = gestores[gestorId];
+                if (nombreGestor == gestor ) {
+                    cadenaHTMLGestor += `<option value=${gestorId} selected>${nombreGestor}</option>`;
+                } else {
+                        cadenaHTMLGestor += `<option value=${gestorId}>${nombreGestor}</option>`;
+                    }
+                }
+        cadenaHTMLGestor += '</select>';
+
+        let cadenaHTMLCliente = '<select id="clienteM" name="clienteM" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;background-color: white;">';
+            for (const clienteId in clientes) {
+                let nombreCliente = clientes[clienteId];
+                if (nombreCliente == cliente ) {
+                    cadenaHTMLCliente += `<option value=${clienteId} selected>${nombreCliente}</option>`;
+                } else {
+                    cadenaHTMLCliente += `<option value=${clienteId}>${nombreCliente}</option>`;
+                    }
+                }
+        cadenaHTMLCliente += '</select>';
+
+                
+        //CONFIGURAMOS EL ALERT
+        Swal.fire({
+            title: 'Modificar Registro',
+            width: '60%',
+            showCancelButton: true,
+            showDenyButton: true,
+            denyButtonText: `Eliminar`,
+            CancelButtonText: 'Cancelar',
+            returnInputValueOnDeny: false,
+            confirmButtonColor: "#089925",
+
+            html:
+                `
+                    <!-- PRIMERA FILA DE CONTROLES -->
+
+                    <div class="form-row" style="width:100%">
+                        <div class="form-group col-md">
+                            <label for="inputNombre" style="color: slategrey; font-size:14px;">Proyecto</label>
+                            <input type="text" id="NombreM" name="NombreM" placeholder="Nombre Proyecto"
+                            class="form-control form-control-sm" value="`+proyecto+`"/>
+                        </div>
+                        <div class="form-group col-md-3">
+                                <label for="inputckiente" id="etiqClie" style="color: slategrey; font-size:14px;">Cliente</label>`+
+                                cadenaHTMLCliente +`
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="inputgestor" style="color: slategrey; font-size:14px;">Gestor</label>`+
+                                cadenaHTMLGestor+`
+                            </div> 
+                    </div>
+                    <div class="form-row" style="width:100%">
+                        <div class="form-group col-md">
+                            <label for="inputDireccion" style="color: slategrey; font-size:14px;">Dirección</label>
+                            <input type="text" id="DireccionM" name="DireccionM" placeholder="Direccion del Proyecto"
+                            class="form-control form-control-sm" value="`+direccion+`"/>
+                        </div> 
+                        <div class="form-group col-md">
+                            <label for="inputDescripcion" style="color: slategrey; font-size:14px;">Descripción</label>
+                            <input type="text" id="DescripcionM" name="DescripcionM" placeholder="Descripcion del proyecto"
+                            class="form-control form-control-sm" value="`+descripcion+`"/>
+                        </div>
+                    </div>
+                `,
+                            
+            preConfirm: () => { 
+                // VAMOS A CARGAR LOS DATOS QUE HAY EN LOS INPUT
+                var indice = parseInt(id);
+
+                return [
+                    indice,
+                    document.getElementById('NombreM').value,
+                    document.getElementById('DireccionM').value,
+                    document.getElementById('DescripcionM').value,
+                    parseInt(document.getElementById('clienteM').value),
+                    parseInt(document.getElementById('gestorM').value)
+                ];
+                
+            }
+
+            
+        }) .then((result) => {
+            if (result.isConfirmed) {
+
+                fetch('proyectos.html', {
+                        method: 'PUT',
+                        body: JSON.stringify(result.value), // data can be `string` or {object}!
+                        headers:{
+                            'Content-Type': 'application/json'
+                        }
+                }).then(res => res.json())
+                .then(response => console.log('Success:', JSON.stringify(response)))
+                .catch(error => console.error('Error:', error));
+
+                Swal.fire({
+                    title: 'Cambios realizados correctamente', 
+                    icon: 'success'
+                }) .then((result) => {  //UNA VEZ SE ACEPTE EL POPUP DE CAMBIOS REALIZADOS SE RECARGARÁ LA PÁGINA
+                    if (result.isConfirmed) {
+                        location.reload();
+                    }
+                });
+
+            } else if (result.isDenied) { //SI EL USUARIO SELECCIONA BORRAR, LE VOLVEMOS A PREGUNTAR SI ESTÁ SEGURO
+                swal.fire({
+                    title: "¿Seguro que quieres borrar el registro?",
+                    showCancelButton: true,
+                    CancelButtonText: "No",
+                    confirmButtonColor: "#d50000",
+                    icon: "error",
+                    iconHtml: "🗑",
+                    }) .then((result) => {
+                        if (result.isConfirmed) {
+
+                            const datosM = {indice: id};
+                            fetch('proyectos.html', {
+                                method: 'PUT',
+                                body: JSON.stringify(datosM), // data can be `string` or {object}!
+                                headers:{
+                                    'Content-Type': 'application/json'
+                                }
+                            }).then(res => res.json())
+                            .then(response => console.log('Success:', JSON.stringify(response)))
+                            .catch(error => console.error('Error:', error));
+
+                            location.reload();
+                        }
+                    })
+
+                }
+        })
+    }
+
+</script>
+
+<script type = "text/javascript">
+
+    //FUNCIONES DE BUSQUEDA PARA APLICAR A LOS FILTROS DE LA TABLA
+    $(document).ready(function(){
+    
+    function applyFilters() {
+        var filtroProyecto = $("#filtroProyecto").val().toLowerCase();
+        var filtroCliente = $("#filtroCliente").val().toLowerCase();
+        var filtroGestor = $("#filtroGestor").val().toLowerCase();
+
+
+        $("#tabla_proyectos tbody tr").each(function() {
+            var columnaProyecto = $(this).find('td:eq(1)').text().replace(/\s+/g, ' ').toLowerCase();
+            var columnaCliente = $(this).find('td:eq(4)').text().replace(/\s+/g, ' ').toLowerCase();
+            var columnaTipo = $(this).find('td:eq(5)').text().replace(/\s+/g, ' ').toLowerCase();
+
+
+            var mostrar = true;
+
+            if (filtroProyecto && columnaProyecto.indexOf(filtroProyecto) === -1) mostrar = false;
+            if (filtroCliente && columnaCliente.indexOf(filtroCliente) === -1) mostrar = false;
+            if (filtroGestor && columnaTipo.indexOf(filtroGestor) === -1) mostrar = false;
+
+            $(this).toggle(mostrar);
+        });
+    }
+    
+    $("#filtroProyecto, #filtroCliente, #filtroGestor").on("keyup", applyFilters);
+});
+</script>
+
+{% endblock javascripts %}

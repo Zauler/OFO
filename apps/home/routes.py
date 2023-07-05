@@ -301,7 +301,6 @@ def bancos():
             print(datos)
             ConsultasDBBancos.modificarRegistro(indiceM,datos)
 
-
         elif len(respuesta) == 1:   # ELIMINAR UN REGISTRO
             indiceM = int(respuesta['indice'])  # para que coincida con el indice de la base de datos
             ConsultasDBBancos.eliminarRegistro(indiceM)
@@ -321,11 +320,6 @@ def bancos():
 def registrar_bancos():
 
     form = BancosForm(request.form)
-    print("FORMULARIO HTML")
-    print(request.form)
-    print("FORMULARIO VALIDACIÓN")
-    print(form.data)
-
 
     if form.validate_on_submit():
         nuevo_registro = Bancos(
@@ -428,7 +422,82 @@ def registrar_proveedores():
 
 
 
+@blueprint.route('/proyectos.html', methods=('GET', 'POST', 'PUT'))
+@login_required
+def proyectos():
+    
+    # METODO PUT
+    if request.method == 'PUT':
+        respuesta = request.get_json()
+                
+        if len(respuesta) == 6:  # MODIFICAR UN REGISTRO
+            indiceM = (respuesta[0])  # para que coincida con el indice de la base de datos
+            proyectoM = (respuesta[1])
+            direccionM = (respuesta[2])
+            descripcionM = (respuesta[3])
+            clienteM = (respuesta[4])
+            gestorM = (respuesta[5])
 
+            datos = {"Nombre":proyectoM, "Direccion":direccionM, "Descripcion":descripcionM,"id_Cliente":clienteM, "id_Gestor":gestorM}
+
+            print(indiceM)
+            print(datos)
+            ConsultasDBProyectos.modificarRegistro(indiceM,datos)
+
+
+        elif len(respuesta) == 1:   # ELIMINAR UN REGISTRO
+            indiceM = int(respuesta['indice'])  # para que coincida con el indice de la base de datos
+            ConsultasDBProyectos.eliminarRegistro(indiceM)
+
+
+    # METODO GET            
+    dfProyectos = ConsultasDBProyectos.consultaProyectosCompleta()
+    dfProyectos.set_index('id_Proyecto')
+    dfClientes = ConsultasDB.consultaClientes()
+    dfGestores = ConsultasDB.consultaGestores()
+    dfGestores["NombreGestor"] = dfGestores["Nombre"] + " " + dfGestores["Apellidos"]
+
+    # Convertimos el dataframe en una lista para pasarlo al template donde lo recogerá javascript
+    clientes = dfClientes.set_index('id_Cliente')['Nombre'].to_dict()
+    gestores = dfGestores.set_index('id_Gestor')['NombreGestor'].to_dict()
+
+    form = ProyectosForm()
+    return render_template("home/proyectos.html", segment='proyectos', tables=[dfProyectos.to_html(header=True, classes='table table-hover table-striped table-bordered',
+                table_id="tabla_proyectos", index=False)], clientes=clientes, gestores = gestores, form = form)
+
+
+@blueprint.route('/registrar_p', methods=['POST'])
+@login_required
+def registrar_proyectos():
+
+    form = ProyectosForm(request.form)
+    print("FORMULARIO HTML")
+    print(request.form)
+    print("FORMULARIO VALIDACIÓN")
+    print(form.data)
+
+    if form.validate_on_submit():
+        nuevo_registro = Proyectos(
+            Nombre = form.Nombre.data,
+            Direccion = form.Direccion.data,
+            Descripcion = form.Descripcion.data,
+            id_Cliente = form.id_Cliente.data,
+            id_Gestor = form.id_Gestor.data,
+        )
+
+        try:
+            db.session.add(nuevo_registro)
+            db.session.commit()
+            return redirect(url_for('home_blueprint.proyectos'))  # redirige al usuario a la página principal después de registrar
+        
+        except SQLAlchemyError as e:
+            
+            db.session.rollback()
+            return f'Error en la base de datos: {str(e)}'  # si ocurre un error en la base de datos, devuelve este error
+        
+    else:
+        print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
+        return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
 
 
 # Helper - Extract current page name from request
@@ -445,3 +514,6 @@ def get_segment(request):
 
     except:
         return None
+
+
+
