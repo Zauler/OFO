@@ -11,13 +11,13 @@
                     <div class="collapse navbar-collapse justify-content-end" id="navigation">
                         {% if current_user.is_authenticated %}
                         <ul class="nav navbar-nav mr-auto">
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <a href="#" class="nav-link" data-toggle="dropdown">
                                     <i class="nc-icon nc-palette"></i>
                                     <span class="d-lg-none">Dashboard</span>
                                 </a>
-                            </li>
-                            <li class="dropdown nav-item">
+                            </li> -->
+                            <!-- <li class="dropdown nav-item">
                                 <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
                                     <i class="nc-icon nc-planet"></i>
                                     <span class="notification">5</span>
@@ -30,20 +30,47 @@
                                     <a class="dropdown-item" href="#">Notification 4</a>
                                     <a class="dropdown-item" href="#">Another notification</a>
                                 </ul>
-                            </li>
+                            </li> -->
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="nc-icon nc-zoom-split"></i>
                                     <span class="d-lg-block">&nbsp;Search</span>
                                 </a>
                             </li>
-                        </ul>
-                        <ul class="navbar-nav ml-auto">
                             <li class="nav-item">
+                                <div class="nav-link">
+                                    <div>
+                                        <select id="tipo" name="tipo" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
+                                            <option>Moneda Origen...</option>
+                                            <option>Compra</option>
+                                            <option>Venta</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <input type="number" id="importe" name="importe" step="0.01" placeholder="0000.00"
+                                        class="form-control form-control-sm"/>
+                                    </div>
+                                    <div>
+                                        <select id="tipo" name="tipo" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
+                                            <option>Moneda Destino...</option>
+                                            <option>Compra</option>
+                                            <option>Venta</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <input type="number" id="importe2" name="importe2" step="0.01" placeholder="0000.00"
+                                        class="form-control form-control-sm"/>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <ul class="navbar-nav ml-auto">
+                            <!-- <li class="nav-item">
                                 <a class="nav-link" href="/user.html">
                                     <span class="no-icon">Account</span>
                                 </a>
-                            </li>
+                            </li> -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" 
                                    href="https://appseed.us" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
