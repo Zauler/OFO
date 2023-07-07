@@ -1,10 +1,12 @@
 import pandas as pd
+import sqlite3
 from apps import db
 from apps.config import *
 from apps.home.models import *
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy import create_engine, MetaData, Table
+from sqlalchemy import create_engine, MetaData, Table, event
 from sqlalchemy.orm import Session
+
 
 class ConsultasDB():
     def consultaRegisClient():
@@ -233,9 +235,13 @@ class ConsultaDBClientes():
 
     # --------------------CONSULTA --------------------
     def consultaClientesCompleta():
+        @event.listens_for(db.engine, "connect")
+        def connect(dbapi_connection, connection_rec):
+            if isinstance(dbapi_connection, sqlite3.Connection):  # ensure we are working with sqlite3
+                dbapi_connection.text_factory = sqlite3.OptimizedUnicode
+        
         queryClientes = db.session.query(Clientes.id_Cliente, Clientes.CIF, Clientes.Nombre, Clientes.Direccion, Clientes.Telefono, Clientes.Tipo_Cliente).select_from(Clientes)
         dfClientes = pd.read_sql(queryClientes.statement, db.session.bind)
-
         return dfClientes
 
     #-----------------ELIMINTAR REGISTROS------------------

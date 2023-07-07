@@ -361,8 +361,11 @@ def proveedores():
             Tipo_ProveedorM = (respuesta[5])
             Condiciones_confirmingM = (respuesta[6])
 
+            datos = {"CIF":CifM, "Nombre":NombreM, "Direccion":DireccionM, "Tipo_Proveedor":Tipo_ProveedorM ,"Condiciones_confirming":Condiciones_confirmingM }
 
-            datos = {"CIF":CifM, "Nombre":NombreM, "Direccion":DireccionM,"Telefono":TelefonoM, "Tipo_Proveedor":Tipo_ProveedorM ,"Condiciones_confirming":Condiciones_confirmingM }
+            # Valida el número de teléfono
+            if isinstance(TelefonoM, int) and len(str(TelefonoM)) == 9:
+                datos["Telefono"] = TelefonoM
 
             print(indiceM)
             print(datos)
@@ -498,6 +501,88 @@ def registrar_proyectos():
     else:
         print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
         return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
+
+
+@blueprint.route('/clientes.html', methods=('GET', 'POST', 'PUT'))
+@login_required
+def clientes():
+    
+    # METODO PUT
+    if request.method == 'PUT':
+        respuesta = request.get_json()
+                
+        if len(respuesta) == 6:  # MODIFICAR UN REGISTRO
+            indiceM = (respuesta[0])  # para que coincida con el indice de la base de datos
+            CifM = (respuesta[1])
+            NombreM = (respuesta[2])
+            DireccionM = (respuesta[3])
+            TelefonoM = (respuesta[4])
+            Tipo_clienteM = (respuesta[5])
+
+
+            datos = {"CIF":CifM, "Nombre":NombreM, "Direccion":DireccionM, "Tipo_Cliente":Tipo_clienteM }
+
+
+            # Valida el número de teléfono
+            if isinstance(TelefonoM, int) and len(str(TelefonoM)) == 9:
+                datos["Telefono"] = TelefonoM
+
+            print(indiceM)
+            print(datos)
+            ConsultaDBClientes.modificarRegistro(indiceM,datos)
+
+
+        elif len(respuesta) == 1:   # ELIMINAR UN REGISTRO
+            indiceM = int(respuesta['indice'])  # Indice de la base de datos
+            ConsultaDBClientes.eliminarRegistro(indiceM)
+
+
+    # METODO GET            
+    dfClientes = ConsultaDBClientes.consultaClientesCompleta()
+    dfClientes.set_index('id_Cliente')
+    dfClientes['Telefono'] = dfClientes['Telefono'].fillna(0).astype(int)
+    dfClientes['Telefono'] = dfClientes['Telefono'].astype(int) #Forzamos tipo para lectura en página
+    print(dfClientes.dtypes)
+    form = ClientesForm()
+    return render_template("home/clientes.html", segment='clientes', tables=[dfClientes.to_html(header=True, classes='table table-hover table-striped table-bordered',
+                table_id="tabla_clientes", index=False)], form = form)
+
+
+@blueprint.route('/registrar_cliente', methods=['POST'])
+@login_required
+def registrar_clientes():
+
+    form = ClientesForm(request.form)
+    print("FORMULARIO HTML")
+    print(request.form)
+    print("FORMULARIO VALIDACIÓN")
+    print(form.data)
+
+
+    if form.validate_on_submit():
+        nuevo_registro = Clientes(
+            CIF = form.CIF.data,
+            Nombre = form.Nombre.data,
+            Direccion = form.Direccion.data,
+            Telefono = form.Telefono.data,
+            Tipo_Cliente = form.Tipo_Cliente.data,
+        )
+
+        try:
+            db.session.add(nuevo_registro)
+            db.session.commit()
+            return redirect(url_for('home_blueprint.clientes'))  # redirige al usuario a la página principal después de registrar
+        
+        except SQLAlchemyError as e:
+            
+            db.session.rollback()
+            return f'Error en la base de datos: {str(e)}'  # si ocurre un error en la base de datos, devuelve este error
+        
+    else:
+        print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
+        return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
+
+
 
 
 # Helper - Extract current page name from request

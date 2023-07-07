@@ -12,7 +12,7 @@ class ClientesForm(FlaskForm):
     CIF = StringField('CIF', validators=[DataRequired(), Length(max=9)])
     Nombre = StringField('Nombre', validators=[DataRequired(), Length(max=60)])
     Direccion = StringField('Direccion', validators=[Length(max=60)])
-    Telefono = StringField('Telefono', validators=[Optional()])
+    Telefono = StringField('Telefono', validators=[Optional(), Regexp(r'^\d{9}$', message="El teléfono debe ser un número entero de 9 dígitos")])
     Tipo_Cliente = StringField('Tipo_Cliente', validators=[Length(max=20)])
 
 class ProyectosForm(FlaskForm):

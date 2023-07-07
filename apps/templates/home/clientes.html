@@ -13,7 +13,7 @@
             <p style="color: slategrey; text-align: center;">AÑADIR REGISTRO</p>
             </div>
             <div class="row" style="flex-direction: column;">
-                <form action="/registrar_prove" method="post" id="form_registro">
+                <form action="/registrar_cliente" method="post" id="form_registro">
                     <!-- Campo oculto para el token CSRF -->
                     <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
                     <!-- PRIMERA FILA DE CONTROLES -->
@@ -40,17 +40,12 @@
                         </div>
 
                         <div class="form-group col">
-                            <label for="Tipo_Proveedor" style="color: slategrey; font-size:14px;">Tipo de proveedor</label>
-                            <input type="text" id="Tipo_Proveedor" name="Tipo_Proveedor" placeholder="Materiales o Servicios"
+                            <label for="Tipo_Cliente" style="color: slategrey; font-size:14px;">Tipo de proveedor</label>
+                            <input type="text" id="Tipo_Cliente" name="Tipo_Cliente" placeholder="Materiales o Servicios"
                             class="form-control form-control-sm"/>
     
                         </div>
-    
-                        <div class="form-group col">
-                            <label for="Condiciones_confirming" style="color: slategrey; font-size:14px;">Condiciones confirming</label>
-                            <input type="text" id="Condiciones_confirming" name="Condiciones_confirming" placeholder="Condiciones especiales del confirming"
-                            class="form-control form-control-sm"/>
-                        </div>
+
 
                     </div>
 
@@ -131,7 +126,7 @@
 
     function validarFormulario(evento) {//Comprobamos que los campos del formulario no están vacios
         evento.preventDefault();
-        if (CIF.value == "" || Nombre.value=='' || Direccion.value=='' || Telefono.value=='' || Tipo_Proveedor.value==''  || Condiciones_confirming.value=='' ){ 
+        if (CIF.value == "" || Nombre.value=='' || Direccion.value=='' || Telefono.value=='' || Tipo_Cliente.value=='' ){ 
             Swal.fire({
                 title: 'Falta algún campo por cumplimentar',
                 icon: 'error'
@@ -147,7 +142,7 @@
 <script type = "text/javascript">
    
     function addRowHandlers() {
-        var table = document.getElementById("tabla_proveedores");
+        var table = document.getElementById("tabla_clientes");
         var rows = table.getElementsByTagName("tr");
 
         for (i = 0; i < rows.length; i++) {
@@ -166,7 +161,7 @@
 
     
     function cambiarValor(){
-        var table = document.getElementById("tabla_proveedores");
+        var table = document.getElementById("tabla_clientes");
         var rows = table.getElementsByTagName("tr");
 
         for (i = 0; i < rows.length; i++) {
@@ -204,7 +199,6 @@
         var direccion = elemento.getElementsByTagName("td")[3].innerHTML;
         var telefono = elemento.getElementsByTagName("td")[4].innerHTML;
         var tipo = elemento.getElementsByTagName("td")[5].innerHTML;
-        var condiciones = elemento.getElementsByTagName("td")[6].innerHTML;
 
                 
         //CONFIGURAMOS EL ALERT
@@ -225,34 +219,30 @@
                     <div class="form-row" style="width:100%">
                         <div class="form-group col-md-3">
                             <label for="cifm" style="color: slategrey; font-size:14px;">CIF</label>
-                            <input type="text" id="cifm" name="cifm" placeholder="CIF del proveedor"
+                            <input type="text" id="cifm" name="cifm" placeholder="CIF del cliente"
                             class="form-control form-control-sm" value="`+cif+`"/>
                         </div>
                         <div class="form-group col-md-3">
                             <label for="nombrem" style="color: slategrey; font-size:14px;">Nombre</label>
-                            <input type="text" id="nombrem" name="nombrem" placeholder="Nombre del proveedor"
+                            <input type="text" id="nombrem" name="nombrem" placeholder="Nombre del cliente"
                             class="form-control form-control-sm" value="`+nombre+`"/>
                         </div> 
                         <div class="form-group col-md-3">
                             <label for="direccionm" style="color: slategrey; font-size:14px;">Número de Cuenta</label>
-                            <input type="text" id="direccionm" name="direccionm" placeholder="Dirección del proveedor"
+                            <input type="text" id="direccionm" name="direccionm" placeholder="Dirección del cliente"
                             class="form-control form-control-sm" value="`+direccion+`"/>
                         </div> 
                         <div class="form-group col-md-3">
                             <label for="telefonom" style="color: slategrey; font-size:14px;">Teléfono</label>
-                            <input type="tel" id="telefonom" name="telefonom" placeholder="Telefono del proveedor"
+                            <input type="tel" id="telefonom" name="telefonom" placeholder="Telefono del cliente"
                             class="form-control form-control-sm" value="`+parsePhoneNumber(telefono)+`"/>
                         </div> 
                         <div class="form-group col-md-3">
                             <label for="tipom" style="color: slategrey; font-size:14px;">Tipo</label>
-                            <input type="text" id="tipom" name="tipom" placeholder="Tipo del proveedor"
+                            <input type="text" id="tipom" name="tipom" placeholder="Tipo del cliente"
                             class="form-control form-control-sm" value="`+tipo+`"/>
                         </div> 
-                        <div class="form-group col-md-3">
-                            <label for="condicionesm" style="color: slategrey; font-size:14px;">Línea de Confirming</label>
-                            <input type="text" id="condicionesm" name="condicionesm"  placeholder="0000.00"
-                            class="form-control form-control-sm" value="`+condiciones+`"/>
-                        </div>  
+
                     </div>
                 `,
                             
@@ -267,7 +257,6 @@
                     document.getElementById('direccionm').value,
                     parsePhoneNumber(document.getElementById('telefonom').value),
                     document.getElementById('tipom').value,
-                    document.getElementById('condicionesm').value,
 
                 ];
                 
@@ -277,7 +266,7 @@
         }) .then((result) => {
             if (result.isConfirmed) {
 
-                fetch('proveedores.html', {
+                fetch('clientes.html', {
                         method: 'PUT',
                         body: JSON.stringify(result.value), // data can be `string` or {object}!
                         headers:{
@@ -308,7 +297,7 @@
                         if (result.isConfirmed) {
 
                             const datosM = {indice: id};
-                            fetch('proveedores.html', {
+                            fetch('clientes.html', {
                                 method: 'PUT',
                                 body: JSON.stringify(datosM), // data can be `string` or {object}!
                                 headers:{
@@ -340,7 +329,7 @@
             var filtroTelefono = $("#filtroTelefono").val();
             var filtroTipo = $("#filtroTipo").val().toLowerCase();
 
-            $("#tabla_proveedores tbody tr").each(function() {
+            $("#tabla_clientes tbody tr").each(function() {
                 var columnaCif = $(this).find('td:eq(1)').text().replace(/\s+/g, ' ').toLowerCase();
                 var columnaNombre = $(this).find('td:eq(2)').text().replace(/\s+/g, ' ').toLowerCase();
                 var columnaDireccion = $(this).find('td:eq(3)').text().replace(/\s+/g, ' ').toLowerCase();
