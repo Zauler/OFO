@@ -59,35 +59,35 @@ def grafico(meses,listMeses):
 
     return img_url
 
-@blueprint.route('/registrar_pregunta', methods=['POST'])
-@login_required
-def registrar_clientes():
+# @blueprint.route('/registrar_pregunta', methods=['POST'])
+# @login_required
+# def registrar_clientes():
 
-    form = ClientesForm(request.form)
-    print("FORMULARIO HTML")
-    print(request.form)
-    print("FORMULARIO VALIDACIÓN")
-    print(form.data)
+#     form = ClientesForm(request.form)
+#     print("FORMULARIO HTML")
+#     print(request.form)
+#     print("FORMULARIO VALIDACIÓN")
+#     print(form.data)
 
 
-    if form.validate_on_submit():
-        nuevo_registro = Clientes(
-            CIF = form.Pregunta_df.data,
-        )
+#     if form.validate_on_submit():
+#         nuevo_registro = Clientes(
+#             CIF = form.Pregunta_df.data,
+#         )
 
-        try:
-            db.session.add(nuevo_registro)
-            db.session.commit()
-            return redirect(url_for('home_blueprint.clientes'))  # redirige al usuario a la página principal después de registrar
+#         try:
+#             db.session.add(nuevo_registro)
+#             db.session.commit()
+#             return redirect(url_for('home_blueprint.clientes'))  # redirige al usuario a la página principal después de registrar
         
-        except SQLAlchemyError as e:
+#         except SQLAlchemyError as e:
             
-            db.session.rollback()
-            return f'Error en la base de datos: {str(e)}'  # si ocurre un error en la base de datos, devuelve este error
+#             db.session.rollback()
+#             return f'Error en la base de datos: {str(e)}'  # si ocurre un error en la base de datos, devuelve este error
         
-    else:
-        print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
-        return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
+#     else:
+#         print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
+#         return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
 
 
 
@@ -547,8 +547,10 @@ def clientes():
     dfClientes['Telefono'] = dfClientes['Telefono'].astype(int) #Forzamos tipo para lectura en página
     print(dfClientes.dtypes)
     form = ClientesForm()
+    valorMonedas = Monedas.consulta_api()
+
     return render_template("home/clientes.html", segment='clientes', tables=[dfClientes.to_html(header=True, classes='table table-hover table-striped table-bordered',
-                table_id="tabla_clientes", index=False)], form = form)
+                table_id="tabla_clientes", index=False)], form = form, datosConsultaMonedas=valorMonedas)
 
 
 @blueprint.route('/registrar_cliente', methods=['POST'])
