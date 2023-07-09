@@ -5,6 +5,7 @@ Copyright (c) 2019 - present AppSeed.us
 import pandas as pd
 import time
 import pygal
+import json
 
 from pygal.style import Style
 from apps import db
@@ -14,7 +15,7 @@ from apps.home.models import *
 from sqlalchemy import join
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, jsonify
 from flask_login import login_required
 from jinja2 import TemplateNotFound
 from datetime import datetime
@@ -23,6 +24,7 @@ from apps.home.validation import *
 from datetime import datetime
 from apps.home.funciones import *
 from apps.home.funciones2 import *
+from apps.home.consultasMoneda import *
 
 
 def graficoFlujoDisponible():
@@ -69,9 +71,14 @@ def index():
     dfLineaConfirming = dfLineaConfirming.to_json()
     image_url_conf = grafico(meses,listMeses)
     image_url_flujo_Disponible = graficoFlujoDisponible()
+    valorMonedas = Monedas.consulta_api()
+    valorMonedas2 = json.dumps(valorMonedas)
+    print (type(valorMonedas))
+    print (type(valorMonedas2))
 
     return render_template('home/index.html', segment='index', image_url_flujo = image_url_flujo_Disponible, listConfirming = dfLineaConfirming, dictTeso = dictTeso,
-                           dictTesoDis = dictTesoDis, dictConfir = dictConfir, listMeses = listMeses, image_url_config = image_url_conf)
+                           dictTesoDis = dictTesoDis, dictConfir = dictConfir, listMeses = listMeses, image_url_config = image_url_conf,
+                           datosConsultaMonedas=valorMonedas2)
 
 
 @blueprint.route('/<template>')
