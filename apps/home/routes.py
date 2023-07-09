@@ -57,6 +57,38 @@ def grafico(meses,listMeses):
 
     return img_url
 
+@blueprint.route('/registrar_pregunta', methods=['POST'])
+@login_required
+def registrar_clientes():
+
+    form = ClientesForm(request.form)
+    print("FORMULARIO HTML")
+    print(request.form)
+    print("FORMULARIO VALIDACIÓN")
+    print(form.data)
+
+
+    if form.validate_on_submit():
+        nuevo_registro = Clientes(
+            CIF = form.Pregunta_df.data,
+        )
+
+        try:
+            db.session.add(nuevo_registro)
+            db.session.commit()
+            return redirect(url_for('home_blueprint.clientes'))  # redirige al usuario a la página principal después de registrar
+        
+        except SQLAlchemyError as e:
+            
+            db.session.rollback()
+            return f'Error en la base de datos: {str(e)}'  # si ocurre un error en la base de datos, devuelve este error
+        
+    else:
+        print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
+        return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
+
+
+
 
 @blueprint.route('/index')
 @login_required
@@ -101,42 +133,6 @@ def route_template(template):
 @login_required
 def table():
     
-    # # METODO POST
-    # if request.method == 'POST':
-    #     proyecto = request.form['proyecto']
-    #     proveedor = request.form['proveedor']
-    #     cliente = ""
-    #     concepto = request.form['concepto']
-    #     importe = request.form['importe']
-    #     modalidad = request.form['tipo']
-    #     tipoPago = request.form['tipoPago']
-    #     fecha_fact = request.form['fechaFactura']
-    #     banco = request.form['entidad']
-    #     gestor = request.form['gestor']
-
-    # # Le cambiamos el formato a la fecha de factura para aparezca como YYYY-MM-DD
-    #     ano,mes,dia = fecha_fact.split("-")
-    #     fecha_fact = (f"{ano}/{mes}/{dia}")
-
-    #     if modalidad == "Compra":
-    #         fecha_venc = request.form['fechaVencimiento']
-    #         ano,mes,dia = fecha_venc.split("-")
-    #         fecha_venc = (f"{ano}/{mes}/{dia}")
-    #         cliente = ""
-    #     else:
-    #         fecha_venc = request.form['fechaVencimientoDate']
-    #         ano,mes,dia = fecha_venc.split("-")
-    #         fecha_venc = (f"{ano}/{mes}/{dia}")
-    #         cliente = proveedor
-    #         proveedor = ""
-        
-    #     lista_datos = [proyecto,proveedor,cliente,concepto,modalidad,importe,tipoPago,fecha_fact,fecha_venc,banco,gestor,False,False]  # Los 2 últimos "False" corresponden a los checkbox
-
-    #     # with open('datos/pedidos.csv', 'a', newline='', encoding='utf-8') as file:
-    #     #     writer = csv.writer(file)
-    #     #     writer.writerow(lista_datos)
-
-
     # METODO PUT
     if request.method == 'PUT':
         respuesta = request.get_json()
@@ -581,6 +577,8 @@ def registrar_clientes():
     else:
         print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
         return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
+
+
 
 
 

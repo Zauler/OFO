@@ -218,6 +218,27 @@
         </div>
     </div>
 
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row" style="flex-direction: column;">
+            <p style="color: slategrey; text-align: center;">AÑADIR REGISTRO</p>
+            </div>
+            <div class="row" style="flex-direction: column;">
+                <form action="/registrar_pregunta" method="post" id="form_registro">
+                    <!-- Campo oculto para el token CSRF -->
+                    <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
+                    <!-- PRIMERA FILA DE CONTROLES -->
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="Pregunta_df" style="color: slategrey; font-size:14px;">CIF</label>
+                            <input type="text" id="Pregunta_df" name="Pregunta_df" placeholder="Pregunta_df"
+                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                        </div>
+                    <hr>
+                </form>
+            </div>
+
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
