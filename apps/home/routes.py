@@ -72,13 +72,13 @@ def index():
     image_url_conf = grafico(meses,listMeses)
     image_url_flujo_Disponible = graficoFlujoDisponible()
     valorMonedas = Monedas.consulta_api()
-    valorMonedas2 = json.dumps(valorMonedas)
     print (type(valorMonedas))
+    valorMonedas2 = json.dumps(valorMonedas)
     print (type(valorMonedas2))
 
     return render_template('home/index.html', segment='index', image_url_flujo = image_url_flujo_Disponible, listConfirming = dfLineaConfirming, dictTeso = dictTeso,
                            dictTesoDis = dictTesoDis, dictConfir = dictConfir, listMeses = listMeses, image_url_config = image_url_conf,
-                           datosConsultaMonedas=valorMonedas2)
+                           datosConsultaMonedas=valorMonedas)
 
 
 @blueprint.route('/<template>')
