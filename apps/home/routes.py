@@ -72,9 +72,6 @@ def index():
     image_url_conf = grafico(meses,listMeses)
     image_url_flujo_Disponible = graficoFlujoDisponible()
     valorMonedas = Monedas.consulta_api()
-    print (type(valorMonedas))
-    valorMonedas2 = json.dumps(valorMonedas)
-    print (type(valorMonedas2))
 
     return render_template('home/index.html', segment='index', image_url_flujo = image_url_flujo_Disponible, listConfirming = dfLineaConfirming, dictTeso = dictTeso,
                            dictTesoDis = dictTesoDis, dictConfir = dictConfir, listMeses = listMeses, image_url_config = image_url_conf,
@@ -85,6 +82,8 @@ def index():
 @login_required
 def route_template(template):
 
+    valorMonedas = Monedas.consulta_api()
+
     try:
 
         if not template.endswith('.html'):
@@ -94,7 +93,7 @@ def route_template(template):
         segment = get_segment(request)
 
         # Serve the file (if exists) from app/templates/home/FILE.html
-        return render_template("home/" + template, segment=segment)
+        return render_template("home/" + template, segment=segment, datosConsultaMonedas=valorMonedas)
 
     except TemplateNotFound:
         return render_template('home/page-404.html'), 404
@@ -214,6 +213,7 @@ def table():
     dfProyectos = ConsultasDB.consultaProyectos()
     dfGestores = ConsultasDB.consultaGestores()
     dfGestores["NombreGestor"] = dfGestores["Nombre"] + " " + dfGestores["Apellidos"]
+    valorMonedas = Monedas.consulta_api()
 
 
     # Convertimos el dataframe en una lista para pasarlo al template donde lo recogerá javascript
@@ -230,7 +230,7 @@ def table():
                 bancos = bancos,
                 condicionesProve=lista_condiciones_proveedores,
                 listaProyectos = listaProyectos,
-                listaContact=clientes, gestores = gestores, form = form)
+                listaContact=clientes, gestores = gestores, form = form, datosConsultaMonedas=valorMonedas)
 
 
 @blueprint.route('/registrar_r', methods=['POST'])
@@ -304,8 +304,6 @@ def bancos():
 
             datos = {"Num_cuenta":cuentaM, "Banco":bancoM, "Cash":cashM,"Linea_max_Confirming":confirmingM}
 
-            print(indiceM)
-            print(datos)
             ConsultasDBBancos.modificarRegistro(indiceM,datos)
 
         elif len(respuesta) == 1:   # ELIMINAR UN REGISTRO
@@ -316,10 +314,11 @@ def bancos():
     # METODO GET            
     dfBancos = ConsultasDBBancos.consultaBancosCompleta()
     dfBancos.set_index('id_Banco')
+    valorMonedas = Monedas.consulta_api()
 
     form = BancosForm()
     return render_template("home/bancos.html", segment='bancos', tables=[dfBancos.to_html(header=True, classes='table table-hover table-striped table-bordered',
-                table_id="tabla_bancos", index=False)], form = form)
+                table_id="tabla_bancos", index=False)], form = form, datosConsultaMonedas=valorMonedas)
 
 
 @blueprint.route('/registrar_b', methods=['POST'])
@@ -388,8 +387,10 @@ def proveedores():
     dfProveedores['Telefono'] = dfProveedores['Telefono'].astype(int) #Forzamos tipo para lectura en página
     print(dfProveedores.dtypes)
     form = ProveedoresForm()
+    valorMonedas = Monedas.consulta_api()
+
     return render_template("home/proveedores.html", segment='proveedores', tables=[dfProveedores.to_html(header=True, classes='table table-hover table-striped table-bordered',
-                table_id="tabla_proveedores", index=False)], form = form)
+                table_id="tabla_proveedores", index=False)], form = form, datosConsultaMonedas=valorMonedas)
 
 
 @blueprint.route('/registrar_prove', methods=['POST'])
@@ -447,8 +448,6 @@ def proyectos():
 
             datos = {"Nombre":proyectoM, "Direccion":direccionM, "Descripcion":descripcionM,"id_Cliente":clienteM, "id_Gestor":gestorM}
 
-            print(indiceM)
-            print(datos)
             ConsultasDBProyectos.modificarRegistro(indiceM,datos)
 
 
@@ -467,10 +466,11 @@ def proyectos():
     # Convertimos el dataframe en una lista para pasarlo al template donde lo recogerá javascript
     clientes = dfClientes.set_index('id_Cliente')['Nombre'].to_dict()
     gestores = dfGestores.set_index('id_Gestor')['NombreGestor'].to_dict()
+    valorMonedas = Monedas.consulta_api()
 
     form = ProyectosForm()
     return render_template("home/proyectos.html", segment='proyectos', tables=[dfProyectos.to_html(header=True, classes='table table-hover table-striped table-bordered',
-                table_id="tabla_proyectos", index=False)], clientes=clientes, gestores = gestores, form = form)
+                table_id="tabla_proyectos", index=False)], clientes=clientes, gestores = gestores, form = form, datosConsultaMonedas=valorMonedas)
 
 
 @blueprint.route('/registrar_p', methods=['POST'])

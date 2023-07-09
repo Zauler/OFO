@@ -39,14 +39,13 @@
                             </li> -->
                         </ul>
 
-                        <ul class="navbar-nav mr-auto">
+                        <!-- <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
                                 <div class="nav-link">
-                                    <!-- <button onClick= 'javascript:myFunc()'> -->
                                     <a href="javascript:myFunc()" class="navbar-brand"><span class="bi bi-chat-left-text"></span>&nbsp;Chat</a>
                                 </div>
                             </li>
-                        </ul>
+                        </ul> -->
 
                         <ul class="navbar-nav ml-auto" style="margin-top: 1%;">
                             <!-- <li class="nav-item">
@@ -58,8 +57,10 @@
                             <li class="nav-item">
                                 <div class="nav-link">
                                     <i class="bi bi-graph-up-arrow"></i>
-                                    <label id="bandera" style="margin-left: 10%;">bandera:</label>
-                                    <label id="valorMoneda" style="margin-left: 2%;">1.235</label>
+                                    <label>&nbsp;1€&nbsp;=&nbsp;</label>
+                                    <label id="bandera"></label>
+                                    <label>:</label>
+                                    <label id="valorMoneda" style="margin-left: 2%;"></label>
                                   </div>
                             </li>
                             <!-- <li class="nav-item dropdown">
@@ -89,7 +90,9 @@
 
 
 
-
+{% if current_user.is_authenticated %}
 <script type = "text/javascript">
-const datosConsultaMonedas_js = JSON.parse('{{ datosConsultaMonedas | tojson | safe }}');
+    // Parseo de los datos de python para función cambiovalormoneda
+    const datosConsultaMonedas_js = JSON.parse('{{ datosConsultaMonedas | tojson | safe }}');
 </script>
+{% endif %}
