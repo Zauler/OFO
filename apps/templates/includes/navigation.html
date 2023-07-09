@@ -2,7 +2,7 @@
             <!-- Navbar -->
             <nav class="navbar navbar-expand-lg " color-on-scroll="500">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#pablo"> Dashboard </a>
+                    <a class="navbar-brand" href="#"> Dashboard </a>
                     <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-bar burger-lines"></span>
                         <span class="navbar-toggler-bar burger-lines"></span>
@@ -31,47 +31,39 @@
                                     <a class="dropdown-item" href="#">Another notification</a>
                                 </ul>
                             </li> -->
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="nc-icon nc-zoom-split"></i>
                                     <span class="d-lg-block">&nbsp;Search</span>
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <div class="nav-link">
-                                    <div>
-                                        <select id="tipo" name="tipo" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
-                                            <option>Moneda Origen...</option>
-                                            <option>Compra</option>
-                                            <option>Venta</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <input type="number" id="importe" name="importe" step="0.01" placeholder="0000.00"
-                                        class="form-control form-control-sm"/>
-                                    </div>
-                                    <div>
-                                        <select id="tipo" name="tipo" class="col-md-10 form-control" style="font-size:14px; max-width: 100%;">
-                                            <option>Moneda Destino...</option>
-                                            <option>Compra</option>
-                                            <option>Venta</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <input type="number" id="importe2" name="importe2" step="0.01" placeholder="0000.00"
-                                        class="form-control form-control-sm"/>
-                                    </div>
-                                </div>
-                            </li>
+                            </li> -->
                         </ul>
 
-                        <ul class="navbar-nav ml-auto">
+                        <!-- <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <div class="nav-link">
+                                    <a href="javascript:myFunc()" class="navbar-brand"><span class="bi bi-chat-left-text"></span>&nbsp;Chat</a>
+                                </div>
+                            </li>
+                        </ul> -->
+
+                        <ul class="navbar-nav ml-auto" style="margin-top: 1%;">
                             <!-- <li class="nav-item">
                                 <a class="nav-link" href="/user.html">
                                     <span class="no-icon">Account</span>
                                 </a>
                             </li> -->
-                            <li class="nav-item dropdown">
+                            
+                            <li class="nav-item">
+                                <div class="nav-link">
+                                    <i class="bi bi-graph-up-arrow"></i>
+                                    <label>&nbsp;1€&nbsp;=&nbsp;</label>
+                                    <label id="bandera"></label>
+                                    <label>:</label>
+                                    <label id="valorMoneda" style="margin-left: 2%;"></label>
+                                  </div>
+                            </li>
+                            <!-- <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" 
                                    href="https://appseed.us" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="no-icon">Dropdown</span>
@@ -84,7 +76,7 @@
                                     <div class="divider"></div>
                                     <a class="dropdown-item" href="#">Separated link</a>
                                 </div>
-                            </li>
+                            </li> -->
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('authentication_blueprint.logout') }}">
                                     <span class="no-icon">Log out</span>
@@ -95,3 +87,12 @@
                     </div>
                 </div>
             </nav>
+
+
+
+{% if current_user.is_authenticated %}
+<script type = "text/javascript">
+    // Parseo de los datos de python para función cambiovalormoneda
+    const datosConsultaMonedas_js = JSON.parse('{{ datosConsultaMonedas | tojson | safe }}');
+</script>
+{% endif %}
