@@ -1259,3 +1259,29 @@ content: " ↓";
     background-repeat: no-repeat;
     cursor: pointer;
 }
+
+.float-button {
+    transition: .2s;
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    z-index: 9999;
+    background-color: #c7ddf5;
+    color: #fff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 15px;
+    line-height: 40px;
+    cursor: pointer;
+}
+
+.float-button:hover {
+    transition: .2s;
+    background-color: #9ac3f0;
+    font-size: 25px;
+    line-height: 60px;
+    width: 60px;
+    height: 60px;
+}

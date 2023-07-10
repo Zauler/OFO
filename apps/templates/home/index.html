@@ -7,6 +7,8 @@
 
 {% block content %}
 
+    <a class="float-button bi bi-chat-square-text" onclick="popup_chat()"></a>
+
     <div class="content">
         <div class="container-fluid">
 
@@ -223,6 +225,8 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script type="text/javascript">
 
     $(document).ready(function(e) {
@@ -230,6 +234,8 @@
         var animationInitTexto = "clash-card__unit-description";    // Clase inicial antes de animar el elemento
         var animacionMes = "clash-card__level clash-card__level--barbarian animated animate__fadeIn";
         var animationInitMes = "clash-card__level clash-card__level--barbarian";    // Clase inicial antes de animar el elemento
+
+        let conversation = []; // Almacena las preguntas y respuestas del popup_chat
 
         document.getElementById('Slider1').onclick = function () {
             cargaDatos(0);
@@ -475,6 +481,43 @@
     
     window.onload = function(){
         cargaDatos(0);
+    }
+
+    function popup_chat() {
+        Swal.fire({
+        title: '¿Qué le gustaría saber?',
+        input: 'textarea',
+        inputAttributes: {
+            autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Ok',
+        cancelButtonText: 'Cancelar',
+        showLoaderOnConfirm: true,
+        preConfirm: (text) => {
+            return new Promise((resolve) => {
+            if (text) {
+                resolve(text);
+            } else {
+                Swal.showValidationMessage('Debe ingresar un texto');
+            }
+            });
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const inputValue = result.value;
+                Swal.fire({
+                title: 'Respuesta',
+                html: `
+                    <p>A continuación le mostramos la respuesta:</p>
+                    <input type="textarea" value="${inputValue}" disabled="disabled">
+                `,
+                showCancelButton: false,
+                confirmButtonText: 'Ok'
+                });
+            }
+        });
     }
 
 </script>
