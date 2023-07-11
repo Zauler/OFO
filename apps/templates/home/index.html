@@ -484,7 +484,7 @@
     }
 
     function popup_chat() {
-        Swal.fire({
+    Swal.fire({
         title: '¿Qué le gustaría saber?',
         input: 'textarea',
         inputAttributes: {
@@ -495,31 +495,39 @@
         cancelButtonText: 'Cancelar',
         showLoaderOnConfirm: true,
         preConfirm: (text) => {
-            return new Promise((resolve) => {
-            if (text) {
-                resolve(text);
-            } else {
-                Swal.showValidationMessage('Debe ingresar un texto');
-            }
+            return fetch('/index', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({question: text}),
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(response.statusText)
+                }
+                return response.json();
+            }).then(data => {
+                return data.status;  // return the 'status' field of the response
+            }).catch(error => {
+                Swal.showValidationMessage(`Request failed: ${error}`);
             });
         },
         allowOutsideClick: () => !Swal.isLoading()
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const inputValue = result.value;
-                Swal.fire({
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const serverResponse = result.value;
+            Swal.fire({
                 title: 'Respuesta',
                 html: `
                     <p>A continuación le mostramos la respuesta:</p>
-                    <input type="textarea" value="${inputValue}" disabled="disabled">
+                    <textarea readonly>${serverResponse}</textarea>
                 `,
                 showCancelButton: false,
                 confirmButtonText: 'Ok'
-                });
-            }
-        });
-    }
-
+            });
+        }
+    });
+}
 </script>
 
 {% endblock javascripts %}

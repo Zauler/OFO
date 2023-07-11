@@ -10,4 +10,5 @@ load_dotenv(find_dotenv())
 def realizar_consulta_agente(consulta,df):
     chat = ChatOpenAI(model_name="gpt-3.5-turbo",temperature=0.0)
     agent = create_pandas_dataframe_agent(chat,df, verbose=False)
-    agent.run(consulta)
+    respuesta = agent.run(consulta)
+    return respuesta

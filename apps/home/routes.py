@@ -25,7 +25,7 @@ from datetime import datetime
 from apps.home.funciones import *
 from apps.home.funciones2 import *
 from apps.home.consultasMoneda import *
-
+from apps.home.agente import realizar_consulta_agente
 
 def graficoFlujoDisponible():
     custom_style = Style(colors=('#008b9e','#c7483f'))
@@ -92,9 +92,12 @@ def grafico(meses,listMeses):
 
 
 
-@blueprint.route('/index')
+@blueprint.route('/index', methods=('GET', 'POST', 'PUT'))
 @login_required
 def index():
+
+    df = ConsultasDB.consultaRegistros()
+    
     meses = 5   # Son los meses a analizar en las gráficas
     dictConfir = calculaConfirming(meses)
     dictTeso, dictTesoDis, listMeses = calculaTesoreria(meses)
@@ -104,6 +107,19 @@ def index():
     image_url_conf = grafico(meses,listMeses)
     image_url_flujo_Disponible = graficoFlujoDisponible()
     valorMonedas = Monedas.consulta_api()
+
+
+         # METODO PUT
+    if request.method == 'PUT':
+        respuesta = request.get_json()
+        if respuesta:
+            print(respuesta['question'])
+            pregunta = respuesta['question']
+            pregunta_respondida=realizar_consulta_agente(pregunta,df)
+            print(pregunta_respondida)
+            return jsonify({'status': pregunta_respondida}), 200
+        else:
+            return jsonify({'status': 'error', 'message': 'No data received'}), 400
 
     return render_template('home/index.html', segment='index', image_url_flujo = image_url_flujo_Disponible, listConfirming = dfLineaConfirming, dictTeso = dictTeso,
                            dictTesoDis = dictTesoDis, dictConfir = dictConfir, listMeses = listMeses, image_url_config = image_url_conf,
