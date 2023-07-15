@@ -16,7 +16,7 @@ from sqlalchemy import join
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from flask import render_template, redirect, url_for, request, jsonify
-from flask_login import login_required
+from flask_login import login_required, current_user
 from jinja2 import TemplateNotFound
 from datetime import datetime
 from apps.home.consultasDB import *
@@ -573,6 +573,48 @@ def registrar_clientes():
 
 
 
+@blueprint.route('/user.html', methods=('GET', 'POST', 'PUT'))
+@login_required
+def user():
+    
+    # METODO GET    
+    # usuario = current_user
+
+    # indice = usuario.id
+    # username = usuario.username
+    # email = usuario.email
+    # nombre = usuario.Nombre
+    # apellidos = usuario.Apellidos
+    # direccion = usuario.Direccion
+    # rol = usuario.Rol
+
+    # datos = {"id": indice, "username":username, "email":email, "Nombre": nombre, "Apellidos": apellidos, "Direccion":direccion, "Rol": rol}
+
+    valorMonedas = Monedas.consulta_api()
+
+    return render_template("home/user.html", segment='user', datosConsultaMonedas=valorMonedas)
+
+
+@blueprint.route('/actualizar_usuario', methods=['POST'])
+@login_required
+def actualizar_usuario():
+
+    form = request.form
+    print ("pulsado boton de formulario usuario")
+    print(form)
+
+    # indiceM = (form[0])  # para que coincida con el indice de la base de datos
+    # usernameM = (form[1])
+    # emailM = (form[2])
+    # nombreM = (form[3])
+    # apellidosM = (form[4])
+    # direccionM = (form[5])
+
+    # datos = {"username":usernameM, "email":emailM, "Nombre": nombreM, "Apellidos": apellidosM, "Direccion":direccionM}
+
+    # print(indiceM)
+    # print(datos)
+    # ConsultasDBUsuarios.modificarRegistro(indiceM,datos)
 
 
 

@@ -10,90 +10,68 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Edit Profile</h4>
+                            <h4 class="card-title">Editar Cuenta</h4>
                         </div>
                         <div class="card-body">
-                            <form>
+                            <form action="/actualizar_usuario" method="post" id="form_registro">
                                 <div class="row">
-                                    <div class="col-md-5 pr-1">
+                                    <!-- <div class="col-md-5 pr-1">
                                         <div class="form-group">
                                             <label>UserID (disabled)</label>
                                             <input type="text" class="form-control" disabled="" placeholder="Company" value="{{ current_user.id }}">
                                         </div>
-                                    </div>
-                                    <div class="col-md-3 px-1">
+                                    </div> -->
+                                    <div class="col-md">
                                         <div class="form-group">
                                             <label>Username</label>
-                                            <input type="text" class="form-control" placeholder="Username" value="{{ current_user.username }}">
+                                            <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Username" value="{{ current_user.username }}">
                                         </div>
                                     </div>
-                                    <div class="col-md-4 pl-1">
+                                    <div class="col-md">
                                         <div class="form-group">
-                                            <label for="exampleInputEmail1">Email address</label>
-                                            <input type="email" class="form-control" placeholder="Email" value="{{ current_user.email }}">
+                                            <label>Email</label>
+                                            <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="{{ current_user.email }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label>ROL</label>
+                                            <input type="text" id="rol" name="rol" class="form-control" value="{{ current_user.Rol }}" disabled>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 pr-1">
                                         <div class="form-group">
-                                            <label>First Name</label>
-                                            <input type="text" class="form-control" placeholder="Company" value="Mike">
+                                            <label>Nombre</label>
+                                            <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" value="{{ current_user.Nombre }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6 pl-1">
                                         <div class="form-group">
-                                            <label>Last Name</label>
-                                            <input type="text" class="form-control" placeholder="Last Name" value="Andrew">
+                                            <label>Apellidos</label>
+                                            <input type="text" id="apellidos" name="apellidos" class="form-control" placeholder="Apellidos" value="{{ current_user.Apellidos }}">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>Address</label>
-                                            <input type="text" class="form-control" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
+                                            <label>Dirección</label>
+                                            <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Calle..." value="{{ current_user.Direccion }}">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4 pr-1">
-                                        <div class="form-group">
-                                            <label>City</label>
-                                            <input type="text" class="form-control" placeholder="City" value="Mike">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 px-1">
-                                        <div class="form-group">
-                                            <label>Country</label>
-                                            <input type="text" class="form-control" placeholder="Country" value="Andrew">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 pl-1">
-                                        <div class="form-group">
-                                            <label>Postal Code</label>
-                                            <input type="number" class="form-control" placeholder="ZIP Code">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label>About Me</label>
-                                            <textarea rows="4" cols="80" class="form-control" placeholder="Here can be your description" value="Mike">Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-info btn-fill pull-right">Update Profile</button>
+                                <button type="submit" class="btn btn-info btn-fill pull-right">Actualizar cuenta</button>
                                 <div class="clearfix"></div>
                             </form>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <!-- <div class="col-md-4">
                     <div class="card card-user">
                         <div class="card-image">
                             <img src="https://ununsplash.imgix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400" alt="...">
@@ -127,7 +105,7 @@
                             </button>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -135,4 +113,9 @@
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+<script>
+
+</script>
+
+{% endblock javascripts %}

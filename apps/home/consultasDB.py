@@ -2,6 +2,7 @@ import pandas as pd
 from apps import db
 from apps.config import *
 from apps.home.models import *
+from apps.authentication.models import *
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm import Session
@@ -321,6 +322,59 @@ class ConsultasDBProyectos():
 
         try:
             registro_a_modificar = db.session.query(Proyectos).filter(Proyectos.id_Proyecto == id).first()
+
+            if registro_a_modificar is not None:
+                for campo, nuevo_valor in datosActualizar.items():
+                    setattr(registro_a_modificar, campo, nuevo_valor) #Esta función cambia el atributo de la clase.
+                db.session.commit()
+                print("Registro modificado: ", id)
+            else:
+                print("Registro no encontrado")
+        
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print("Ocurrió un error al actualizar el registro: ",e)
+
+
+class ConsultasDBUsuarios():
+     # --------------------CONSULTA --------------------
+    def consultaUsuariosCompleta():
+        queryUsuarios = db.session.query(Users.id, Users.username, Users.Rol, Users.Nombre, Users.Apellidos, Users.Direccion, Users.email).select_from(Users)
+        dfUsuarios = pd.read_sql(queryUsuarios.statement, db.session.bind)
+        
+        return dfUsuarios
+    
+
+    def consultaUsuarioActual(id):
+        queryUsuario = db.session.query(Users).filter(Users.id == id).first()
+        
+        return queryUsuario
+     
+
+
+    #-----------------ELIMINTAR REGISTROS------------------
+    def eliminarRegistro(id):
+        
+        try:
+            registro_a_eliminar = db.session.query(Users).filter(Users.id == id).first()
+
+            if registro_a_eliminar is not None:
+                db.session.delete(registro_a_eliminar)
+                db.session.commit()
+                print("Registro Eliminado: ", id) #Si queremos añadimos más info
+            else:
+                print("Registro no encontrado")
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print("Ocurrió un error al eliminar el registro: ",e)
+
+
+    #-----------------MODIFICAR REGISTROS--------------------------
+    def modificarRegistro(id,datosActualizar):
+
+        try:
+            registro_a_modificar = db.session.query(Users).filter(Users.id == id).first()
 
             if registro_a_modificar is not None:
                 for campo, nuevo_valor in datosActualizar.items():
