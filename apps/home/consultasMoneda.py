@@ -1,10 +1,17 @@
 import requests
+from os import getenv
+from dotenv import load_dotenv, find_dotenv
+
+
+load_dotenv(find_dotenv())
+MONEDAS_API = getenv("MONEDAS_API")
+
 
 class Monedas():
 
     def consulta_api():
         API = "16675157b671a5ebe69d2597fe498406"
-        url = f"http://api.exchangeratesapi.io/v1/latest?access_key={API}"
+        url = f"http://api.exchangeratesapi.io/v1/latest?access_key={MONEDAS_API}"
         #url = "https://api.ejemplo.com/endpoint"  # Reemplaza con la URL de la API que deseas consultar
 
         try:

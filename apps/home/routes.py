@@ -59,45 +59,13 @@ def grafico(meses,listMeses):
 
     return img_url
 
-# @blueprint.route('/registrar_pregunta', methods=['POST'])
-# @login_required
-# def registrar_clientes():
-
-#     form = ClientesForm(request.form)
-#     print("FORMULARIO HTML")
-#     print(request.form)
-#     print("FORMULARIO VALIDACIÓN")
-#     print(form.data)
-
-
-#     if form.validate_on_submit():
-#         nuevo_registro = Clientes(
-#             CIF = form.Pregunta_df.data,
-#         )
-
-#         try:
-#             db.session.add(nuevo_registro)
-#             db.session.commit()
-#             return redirect(url_for('home_blueprint.clientes'))  # redirige al usuario a la página principal después de registrar
-        
-#         except SQLAlchemyError as e:
-            
-#             db.session.rollback()
-#             return f'Error en la base de datos: {str(e)}'  # si ocurre un error en la base de datos, devuelve este error
-        
-#     else:
-#         print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
-#         return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
-
-
-
 
 @blueprint.route('/index', methods=('GET', 'POST', 'PUT'))
 @login_required
 def index():
 
     df = ConsultasDB.consultaRegistros()
-    
+    print(df.head())
     meses = 5   # Son los meses a analizar en las gráficas
     dictConfir = calculaConfirming(meses)
     dictTeso, dictTesoDis, listMeses = calculaTesoreria(meses)
