@@ -49,3 +49,25 @@ class RegistrosForm(FlaskForm):
     #fechaVencimiento = DateField('fechaVencimiento', validators=[Optional()])
     fechaVencimientoDate = DateField('fechaVencimientoDate', validators=[Optional()])
     entidad = IntegerField('entidad', validators=[DataRequired()])
+
+
+def validar_dni(DniM):
+    letras = "TRWAGMYFPDXBNJZSQVHLCKE"
+    
+    # Comprueba que el DNI tenga exactamente 9 caracteres
+    if len(DniM) != 9:
+        return False
+
+    # Comprueba que los primeros 8 caracteres sean dígitos
+    if not DniM[:8].isdigit():
+        return False
+
+    # Comprueba que el último carácter sea una letra
+    if not DniM[8].isalpha():
+        return False
+
+    # Comprueba que la letra sea correcta
+    if letras[int(DniM[:8]) % 23] != DniM[8].upper():
+        return False
+
+    return True
