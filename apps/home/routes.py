@@ -15,17 +15,19 @@ from apps.home.models import *
 from sqlalchemy import join
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
-from flask import render_template, redirect, url_for, request, jsonify
+from flask import render_template, redirect, url_for, request, jsonify, session
 from flask_login import login_required, current_user
 from jinja2 import TemplateNotFound
 from datetime import datetime
 from apps.home.consultasDB import *
 from apps.home.validation import *
+from apps.authentication.forms import *
 from datetime import datetime
 from apps.home.funciones import *
 from apps.home.funciones2 import *
 from apps.home.consultasMoneda import *
 from apps.home.agente import realizar_consulta_agente
+from functools import wraps
 
 def graficoFlujoDisponible():
     custom_style = Style(colors=('#008b9e','#c7483f'))
@@ -58,6 +60,16 @@ def grafico(meses,listMeses):
     img_url = f'static/assets/img/bar_chart_Confirming.svg?cache=' + str(time.time())   # Lo usamos para que no exista problemas con las cookies
 
     return img_url
+
+
+# Función decoradora para verificar el acceso de administrador
+def admin_required(view_func):
+    @wraps(view_func)
+    def decorated_view(*args, **kwargs):
+        if not current_user.is_authenticated or current_user.Rol != "administrador":
+            return redirect(url_for('home_blueprint.index'))  # Redirige al usuario a la página de inicio si no cumple las condiciones
+        return view_func(*args, **kwargs)
+    return decorated_view
 
 
 @blueprint.route('/index', methods=('GET', 'POST', 'PUT'))
@@ -576,20 +588,20 @@ def registrar_clientes():
 @blueprint.route('/user.html', methods=('GET', 'POST', 'PUT'))
 @login_required
 def user():
+
+    # METODO PUT
+    if request.method == 'PUT':
+        respuesta = request.get_json()
+        indiceM = int(respuesta['indice'])  # Indice de la base de datos
+        ConsultasDBUsuarios.eliminarRegistro(indiceM)
+
+        print ("eliminar cuenta")
+
+        #session.clear() # Cierra la sesión
+        return redirect('home/login.html')   # Redirecciona a la página de login
+
     
     # METODO GET    
-    # usuario = current_user
-
-    # indice = usuario.id
-    # username = usuario.username
-    # email = usuario.email
-    # nombre = usuario.Nombre
-    # apellidos = usuario.Apellidos
-    # direccion = usuario.Direccion
-    # rol = usuario.Rol
-
-    # datos = {"id": indice, "username":username, "email":email, "Nombre": nombre, "Apellidos": apellidos, "Direccion":direccion, "Rol": rol}
-
     valorMonedas = Monedas.consulta_api()
 
     return render_template("home/user.html", segment='user', datosConsultaMonedas=valorMonedas)
@@ -600,21 +612,19 @@ def user():
 def actualizar_usuario():
 
     form = request.form
-    print ("pulsado boton de formulario usuario")
-    print(form)
 
-    # indiceM = (form[0])  # para que coincida con el indice de la base de datos
-    # usernameM = (form[1])
-    # emailM = (form[2])
-    # nombreM = (form[3])
-    # apellidosM = (form[4])
-    # direccionM = (form[5])
+    indiceM = form['id']  # para que coincida con el indice de la base de datos
+    usernameM = form['usuario']
+    emailM = form['email']
+    rolM = form['rol']
+    nombreM = form['nombre']
+    apellidosM = form['apellidos']
+    direccionM = form['direccion']
 
-    # datos = {"username":usernameM, "email":emailM, "Nombre": nombreM, "Apellidos": apellidosM, "Direccion":direccionM}
+    datos = {"username":usernameM, "email":emailM, "Rol": rolM, "Nombre": nombreM, "Apellidos": apellidosM, "Direccion":direccionM}
+    ConsultasDBUsuarios.modificarRegistro(indiceM,datos)
 
-    # print(indiceM)
-    # print(datos)
-    # ConsultasDBUsuarios.modificarRegistro(indiceM,datos)
+    return redirect(url_for('home_blueprint.user'))  # redirige al usuario a la página principal después de actualizar
 
 
 
@@ -730,7 +740,78 @@ def actualizar_usuario():
 
 
 
+@blueprint.route('/lista_usuarios.html', methods=('GET', 'POST', 'PUT'))
+@login_required
+@admin_required  # Utiliza nuestra función decoradora personalizada para verificar el acceso de administrador
+def usuarios():
+    
+    # METODO PUT
+    if request.method == 'PUT':
+        respuesta = request.get_json()
+                
+        if len(respuesta) == 7:  # MODIFICAR UN REGISTRO
+            indiceM = (respuesta[0])  # para que coincida con el indice de la base de datos
+            usernameM = (respuesta[1])
+            emailM = (respuesta[2])
+            rolM = (respuesta[3])
+            nombreM = (respuesta[4])
+            apellidosM = (respuesta[5])
+            direccionM = (respuesta[6])
 
+            datos = {"username":usernameM, "email":emailM, "Rol":rolM, "Nombre":nombreM, "Apellidos":apellidosM, "Direccion":direccionM }
+
+            ConsultasDBUsuarios.modificarRegistro(indiceM,datos)
+
+
+        elif len(respuesta) == 1:   # ELIMINAR UN REGISTRO
+            indiceM = int(respuesta['indice'])  # Indice de la base de datos
+            ConsultasDBUsuarios.eliminarRegistro(indiceM)
+
+
+    # METODO GET            
+    dfUsuarios = ConsultasDBUsuarios.consultaUsuariosCompleta()
+    dfUsuarios.set_index('id')
+    form = CreateAccountForm()
+    valorMonedas = Monedas.consulta_api()
+
+    return render_template("home/lista_usuarios.html", segment='lista_usuarios', tables=[dfUsuarios.to_html(header=True, classes='table table-hover table-striped table-bordered',
+                table_id="tabla_usuarios", index=False)], form = form, datosConsultaMonedas=valorMonedas)
+
+
+@blueprint.route('/registrar_usuarios', methods=['POST'])
+@login_required
+def registrar_usuarios():
+    pass
+
+    # form = ClientesForm(request.form)
+    # print("FORMULARIO HTML")
+    # print(request.form)
+    # print("FORMULARIO VALIDACIÓN")
+    # print(form.data)
+
+
+    # if form.validate_on_submit():
+    #     nuevo_registro = Clientes(
+    #         CIF = form.CIF.data,
+    #         Nombre = form.Nombre.data,
+    #         Direccion = form.Direccion.data,
+    #         Telefono = form.Telefono.data,
+    #         Tipo_Cliente = form.Tipo_Cliente.data,
+    #     )
+
+    #     try:
+    #         db.session.add(nuevo_registro)
+    #         db.session.commit()
+    #         return redirect(url_for('home_blueprint.lista_usuarios'))  # redirige al usuario a la página principal después de registrar
+        
+    #     except SQLAlchemyError as e:
+            
+    #         db.session.rollback()
+    #         return f'Error en la base de datos: {str(e)}'  # si ocurre un error en la base de datos, devuelve este error
+        
+    # else:
+    #     print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
+    #     return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
 
 
 
