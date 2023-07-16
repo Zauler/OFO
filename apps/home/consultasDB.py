@@ -387,3 +387,50 @@ class ConsultasDBUsuarios():
         except SQLAlchemyError as e:
             db.session.rollback()
             print("Ocurrió un error al actualizar el registro: ",e)
+
+
+
+class ConsultaDBGestores():
+
+    # --------------------CONSULTA --------------------
+    def consultaCompleta():
+        queryGestores = db.session.query(Gestores.id_Gestor, Gestores.Nombre, Gestores.Apellidos, Gestores.DNI, Gestores.Zona_Geo).select_from(Gestores)
+        dfGestores = pd.read_sql(queryGestores.statement, db.session.bind)
+
+        return dfGestores
+
+    #-----------------ELIMINTAR REGISTROS------------------
+    def eliminarRegistro(id):
+        
+        try:
+            registro_a_eliminar = db.session.query(Gestores).filter(Gestores.id_Gestor == id).first()
+
+            if registro_a_eliminar is not None:
+                db.session.delete(registro_a_eliminar)
+                db.session.commit()
+                print("Registro Eliminado: ", id) #Si queremos añadimos más info
+            else:
+                print("Registro no encontrado")
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print("Ocurrió un error al eliminar el registro: ",e)
+
+
+    #-----------------MODIFICAR REGISTROS--------------------------
+    def modificarRegistro(id,datosActualizar):
+
+        try:
+            registro_a_modificar = db.session.query(Gestores).filter(Gestores.id_Gestor == id).first()
+
+            if registro_a_modificar is not None:
+                for campo, nuevo_valor in datosActualizar.items():
+                    setattr(registro_a_modificar, campo, nuevo_valor) #Esta función cambia el atributo de la clase.
+                db.session.commit()
+                print("Registro modificado: ", id)
+            else:
+                print("Registro no encontrado")
+        
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            print("Ocurrió un error al actualizar el registro: ",e)

@@ -51,6 +51,13 @@ Tip 2: you can also add an image using data-image tag
                     <p>Clientes</p>
                 </a>
             </li>
+
+            <li class="nav-item nav-item {% if 'clientes' in segment %} active {% endif %}">
+                <a class="nav-link" href="/gestores.html">
+                    <i class="nc-icon nc-single-02"></i>
+                    <p>Gestores</p>
+                </a>
+            </li>
             <li class="nav-item nav-item {% if 'user' in segment %} active {% endif %}">
                 <a class="nav-link" href="/user.html">
                     <i class="nc-icon nc-single-02"></i>
