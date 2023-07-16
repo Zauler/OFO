@@ -646,88 +646,82 @@ def actualizar_usuario():
 
 
 
-    # @blueprint.route('/gestores.html', methods=('GET', 'POST', 'PUT'))
-    # @login_required
-    # def gestores():
-        
-    #     # METODO PUT
-    #     if request.method == 'PUT':
-    #         respuesta = request.get_json()
-                    
-    #         if len(respuesta) == 6:  # MODIFICAR UN REGISTRO
-    #             indiceM = (respuesta[0])  # para que coincida con el indice de la base de datos
-    #             NombreM = (respuesta[1])
-    #             ApellidosM = (respuesta[3])
-    #             DniM = (respuesta[4])
-    #             Zona_GeoM = (respuesta[5])
-
-
-    #             datos = {"Nombre":NombreM, "Apellidos":ApellidosM ,"Zona_Geo":Zona_GeoM }
-
-    #             # Valida el DNI
-    #             if validar_dni(DniM): #Función en el archivo de validaciones
-    #                 datos["DNI"] = DniM
-
-    #             print(indiceM)
-    #             print(datos)
-    #             ConsultaDBGestores.modificarRegistro(indiceM,datos)
-
-
-    #         elif len(respuesta) == 1:   # ELIMINAR UN REGISTRO
-    #             indiceM = int(respuesta['indice'])  # Indice de la base de datos
-    #             ConsultaDBGestores.eliminarRegistro(indiceM)
-
-
-    #     # METODO GET            
-    #     dfGestores = ConsultaDBGestores.consultaCompleta()
-    #     dfGestores.set_index('id_Gestor')
-    #     print(dfGestores.dtypes)
-    #     form = GestoresForm()
-    #     valorMonedas = Monedas.consulta_api()
-
-    #     return render_template("home/gestores.html", segment='gestores', tables=[dfGestores.to_html(header=True, classes='table table-hover table-striped table-bordered',
-    #                 table_id="tabla_gestores", index=False)], form = form, datosConsultaMonedas=valorMonedas)
-
-
-
-    # @blueprint.route('/registrar_gestor', methods=['POST'])
-    # @login_required
-    # def registrar_clientes():
-
-    #     form = GestoresForm(request.form)
-    #     print("FORMULARIO HTML")
-    #     print(request.form)
-    #     print("FORMULARIO VALIDACIÓN")
-    #     print(form.data)
-
-
-    #     if form.validate_on_submit():
-    #         nuevo_registro = GestoresForm(
-    #             Nombre = form.Nombre.data,
-    #             Apellidos = form.Apellidos.data,
-    #             DNI = form.DNI.data,
-    #             Zona_Geo = form.Zona_Geo.data,
-    #         )
-
-    #         try:
-    #             db.session.add(nuevo_registro)
-    #             db.session.commit()
-    #             return redirect(url_for('home_blueprint.gestores'))  # redirige al usuario a la página principal después de registrar
-            
-    #         except SQLAlchemyError as e:
+@blueprint.route('/gestores.html', methods=('GET', 'POST', 'PUT'))
+@login_required
+def gestores():
+    
+    # METODO PUT
+    if request.method == 'PUT':
+        respuesta = request.get_json()
                 
-    #             db.session.rollback()
-    #             return f'Error en la base de datos: {str(e)}'  # si ocurre un error en la base de datos, devuelve este error
+        if len(respuesta) == 6:  # MODIFICAR UN REGISTRO
+            indiceM = (respuesta[0])  # para que coincida con el indice de la base de datos
+            NombreM = (respuesta[1])
+            ApellidosM = (respuesta[2])
+            DniM = (respuesta[3])
+            Zona_GeoM = (respuesta[4])
+
+
+            datos = {"Nombre":NombreM, "Apellidos":ApellidosM ,"Zona_Geo":Zona_GeoM }
+
+            # Valida el DNI
+            if validar_dni(DniM): #Función en el archivo de validaciones
+                datos["DNI"] = DniM
+
+            print(indiceM)
+            print(datos)
+            ConsultaDBGestores.modificarRegistro(indiceM,datos)
+
+
+        elif len(respuesta) == 1:   # ELIMINAR UN REGISTRO
+            indiceM = int(respuesta['indice'])  # Indice de la base de datos
+            ConsultaDBGestores.eliminarRegistro(indiceM)
+
+
+    # METODO GET            
+    dfGestores = ConsultaDBGestores.consultaCompleta()
+    dfGestores.set_index('id_Gestor')
+    print(dfGestores.dtypes)
+    form = GestoresForm()
+    valorMonedas = Monedas.consulta_api()
+
+    return render_template("home/gestores.html", segment='gestores', tables=[dfGestores.to_html(header=True, classes='table table-hover table-striped table-bordered',
+                table_id="tabla_gestores", index=False)], form = form, datosConsultaMonedas=valorMonedas)
+
+
+
+@blueprint.route('/registrar_gestor', methods=['POST'])
+@login_required
+def registrar_gestor():
+
+    form = GestoresForm(request.form)
+    print("FORMULARIO HTML")
+    print(request.form)
+    print("FORMULARIO VALIDACIÓN")
+    print(form.data)
+
+
+    if form.validate_on_submit():
+        nuevo_registro = Gestores(
+            Nombre = form.Nombre.data,
+            Apellidos = form.Apellidos.data,
+            DNI = form.DNI.data,
+            Zona_Geo = form.Zona_Geo.data,
+        )
+
+        try:
+            db.session.add(nuevo_registro)
+            db.session.commit()
+            return redirect(url_for('home_blueprint.gestores'))  # redirige al usuario a la página principal después de registrar
+        
+        except SQLAlchemyError as e:
             
-    #     else:
-    #         print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
-    #         return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
-
-
-
-
-
-
+            db.session.rollback()
+            return f'Error en la base de datos: {str(e)}'  # si ocurre un error en la base de datos, devuelve este error
+        
+    else:
+        print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
+        return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
 
 
 
