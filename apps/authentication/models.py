@@ -20,7 +20,7 @@ class Users(db.Model, UserMixin):
     Nombre = db.Column(db.String(64), unique=True)
     Apellidos = db.Column(db.String(64), unique=True)
     Direccion = db.Column(db.String(64), unique=True)
-    Rol = db.Column(db.String(64), unique=True, default="gestor")
+    Rol = db.Column(db.String(64), unique=False, default="gestor")
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():

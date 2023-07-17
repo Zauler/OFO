@@ -13,20 +13,20 @@
             <p style="color: slategrey; text-align: center;">AÑADIR USUARIO</p>
             </div>
             <div class="row" style="flex-direction: column;">
-                <form method="" action="/">
+                <form method="post" action="/registrar_usuarios">
                                 
                     <div class="row">
 
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Username</label>
-                                <input type="text" class="form-control" placeholder="Username" value="">
+                                <input type="text" id="username" name="username" class="form-control" placeholder="Username" value="">
                             </div>
                         </div>
                         <div class="col-md">
                             <div class="form-group">
                                 <label>eMail</label>
-                                <input type="email" class="form-control" placeholder="Email" value="">
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="">
                             </div>
                         </div>
                         <div class="col-md">
@@ -56,6 +56,16 @@
         </div>
     </div>
 
+<!------------------------------------------- INICIO DE MENSAJES DE ALERTA  ------------------------------------------------------>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li style="color: red;">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %} 
 
 {% endblock content %}
 

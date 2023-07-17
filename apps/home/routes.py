@@ -7,6 +7,7 @@ import time
 import pygal
 import json
 
+from flask import flash
 from pygal.style import Style
 from apps import db
 from apps.config import *
@@ -16,7 +17,7 @@ from sqlalchemy import join
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from flask import render_template, redirect, url_for, request, jsonify, session
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, logout_user
 from jinja2 import TemplateNotFound
 from datetime import datetime
 from apps.home.consultasDB import *
@@ -124,10 +125,10 @@ def route_template(template):
         return render_template("home/" + template, segment=segment, datosConsultaMonedas=valorMonedas)
 
     except TemplateNotFound:
-        return render_template('home/page-404.html'), 404
+        return render_template('home/page-404.html', datosConsultaMonedas=valorMonedas), 404
 
     except:
-        return render_template('home/page-500.html'), 500
+        return render_template('home/page-500.html', datosConsultaMonedas=valorMonedas), 500
 
 
 
@@ -737,7 +738,7 @@ def registrar_gestor():
 @blueprint.route('/lista_usuarios.html', methods=('GET', 'POST', 'PUT'))
 @login_required
 @admin_required  # Utiliza nuestra función decoradora personalizada para verificar el acceso de administrador
-def usuarios():
+def lista_usuarios():
     
     # METODO PUT
     if request.method == 'PUT':
@@ -775,37 +776,35 @@ def usuarios():
 @blueprint.route('/registrar_usuarios', methods=['POST'])
 @login_required
 def registrar_usuarios():
-    pass
 
-    # form = ClientesForm(request.form)
-    # print("FORMULARIO HTML")
-    # print(request.form)
-    # print("FORMULARIO VALIDACIÓN")
-    # print(form.data)
+    username = request.form['username']
+    email = request.form['email']
 
-
-    # if form.validate_on_submit():
-    #     nuevo_registro = Clientes(
-    #         CIF = form.CIF.data,
-    #         Nombre = form.Nombre.data,
-    #         Direccion = form.Direccion.data,
-    #         Telefono = form.Telefono.data,
-    #         Tipo_Cliente = form.Tipo_Cliente.data,
-    #     )
-
-    #     try:
-    #         db.session.add(nuevo_registro)
-    #         db.session.commit()
-    #         return redirect(url_for('home_blueprint.lista_usuarios'))  # redirige al usuario a la página principal después de registrar
+    # Check usename exists
+    user = Users.query.filter_by(username=username).first()
+    if user:
+        flash('Error: el username ya existe.', 'error')
+        return redirect(url_for('home_blueprint.lista_usuarios'))
         
-    #     except SQLAlchemyError as e:
-            
-    #         db.session.rollback()
-    #         return f'Error en la base de datos: {str(e)}'  # si ocurre un error en la base de datos, devuelve este error
+
+    # Check email exists
+    user = Users.query.filter_by(email=email).first()
+    if user:
+        flash('Error: el email ya existe.', 'error')
+        return redirect(url_for('home_blueprint.lista_usuarios'))
         
-    # else:
-    #     print('Errores en el formulario: ', form.errors)  # imprime los errores de validación
-    #     return 'Error en el formulario'  # si el formulario no es válido, devuelve este error
+
+    # else we can create the user
+    user = Users(**request.form)
+    db.session.add(user)
+    db.session.commit()
+
+    # Delete user from session
+    #logout_user()
+
+    print (user)
+
+    return redirect(url_for('home_blueprint.lista_usuarios'))
 
 
 
