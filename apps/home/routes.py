@@ -65,6 +65,7 @@ def grafico(meses,listMeses):
 def index():
 
     df = ConsultasDB.consultaRegistros()
+    df2= ConsultaDBGestores.consultaCompleta()
     print(df.head())
     meses = 5   # Son los meses a analizar en las gráficas
     dictConfir = calculaConfirming(meses)
@@ -83,7 +84,7 @@ def index():
         if respuesta:
             print(respuesta['question'])
             pregunta = respuesta['question']
-            pregunta_respondida=realizar_consulta_agente(pregunta,df)
+            pregunta_respondida=realizar_consulta_agente(pregunta,[df,df2])
             print(pregunta_respondida)
             return jsonify({'status': pregunta_respondida}), 200
         else:
