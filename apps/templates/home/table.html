@@ -561,16 +561,16 @@ console.log(proveedores);
     function calcularFechaTransferProveedor(proveedor){ // Calcula la fecha de la trasferencia en funcion de las condiciones del proveedor
         var fechaFactura = crearFecha(fechaFactura_text.value);
         switch (proveedor) {
-            case 'Eurogruas Occidental':
+            case 'Proveedor A':
                 var fechaPropuesta = sumarDias(fechaFactura,120);
                 var fechaDef = forzarFecha(fechaPropuesta,5);
                 return fechaDef;
                 break;
-            case 'Gruas y Transportes Jaldo':
+            case 'Proveedor B':
                 var fechaDef = sumarDias(fechaFactura,60);
                 return fechaDef;
                 break;
-            case 'Grupo Electrostock':
+            case 'Proveedor C':
                 var dia = fechaFactura.getDate();
                 if (dia>15){ //Sumamos 6 meses y hacemos que el día sea = 15
                     var fechaPropuesta = sumarMes(fechaFactura,6);
@@ -585,11 +585,11 @@ console.log(proveedores);
                 }
                 return fechaDef;
                 break;
-            case 'IBC Solar (CREDITO)':
+            case 'Proveedor D':
                 var fechaDef = sumarDias(fechaFactura,60);
                 return fechaDef;
                 break;
-            case 'Rexel Spain':
+            case 'Proveedor E':
                 var fechaPropuesta = sumarDias(fechaFactura,120);
                 fechaDef = forzarFecha(fechaPropuesta,5);
                 return fechaDef;

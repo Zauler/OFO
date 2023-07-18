@@ -20,19 +20,19 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Username</label>
-                                <input type="text" id="username" name="username" class="form-control" placeholder="Username" value="">
+                                <input type="text" id="username" name="username" class="form-control" placeholder="Username" value="" required>
                             </div>
                         </div>
                         <div class="col-md">
                             <div class="form-group">
                                 <label>eMail</label>
-                                <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="">
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="" required>
                             </div>
                         </div>
                         <div class="col-md">
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" class="form-control" placeholder="Password" value="">
+                                <input type="password" class="form-control" placeholder="Password" value="" required>
                             </div>
                         </div>
                     </div>
@@ -251,15 +251,7 @@
                 }).then(res => res.json())
                 .then(response => console.log('Success:', JSON.stringify(response)))
                 .catch(error => console.error('Error:', error));
-
-                Swal.fire({
-                    title: 'Cambios realizados correctamente', 
-                    icon: 'success'
-                }) .then((result) => {  //UNA VEZ SE ACEPTE EL POPUP DE CAMBIOS REALIZADOS SE RECARGARÁ LA PÁGINA
-                    if (result.isConfirmed) {
-                        location.reload();
-                    }
-                });
+                location.reload();
 
             } else if (result.isDenied) { //SI EL USUARIO SELECCIONA BORRAR, LE VOLVEMOS A PREGUNTAR SI ESTÁ SEGURO
                 swal.fire({

@@ -754,24 +754,53 @@ def lista_usuarios():
             apellidosM = (respuesta[5])
             direccionM = (respuesta[6])
 
+            # Averiguamos cual es el rol que tenía antes de la modificacion de datos
+            usuario = ConsultasDBUsuarios.consultaUsuarioActual(indiceM)
+            rolInicial = usuario.Rol
+
             datos = {"username":usernameM, "email":emailM, "Rol":rolM, "Nombre":nombreM, "Apellidos":apellidosM, "Direccion":direccionM }
 
-            ConsultasDBUsuarios.modificarRegistro(indiceM,datos)
+            if (rolInicial != rolM) and (rolM == "gestor"): # Si se ha modificado el rol tenemos que comprobar cuantos administradores quedan en la BD
+                # Comprobamos si existe algun administrador más aparte de él mismo
+                n_administradores = ConsultasDBUsuarios.consultaUsuariosAdministradores()
+                print (n_administradores)
+
+                if n_administradores > 1:
+                    ConsultasDBUsuarios.modificarRegistro(indiceM,datos)
+                
+                else:
+                    flash(f'Error: No se puede modificar el rol de este usuario', 'error')
+                    print ('No se puede modificar el rol de este usuario')
+            
+            else:  # Si no se ha modificado el rol podemos actualizar los datos  
+                ConsultasDBUsuarios.modificarRegistro(indiceM,datos)
 
 
         elif len(respuesta) == 1:   # ELIMINAR UN REGISTRO
-            indiceM = int(respuesta['indice'])  # Indice de la base de datos
-            ConsultasDBUsuarios.eliminarRegistro(indiceM)
+            n_administradores = ConsultasDBUsuarios.consultaUsuariosAdministradores()
+
+            if n_administradores > 1: 
+                indiceM = int(respuesta['indice'])  # Indice de la base de datos
+                ConsultasDBUsuarios.eliminarRegistro(indiceM)
+            
+            else:
+                flash(f'Error: No se puede eliminar este usuario', 'error')
+                print ('No se puede eliminar este usuario')
+    
+        
+        return redirect(url_for('home_blueprint.lista_usuarios'))
+
 
 
     # METODO GET            
-    dfUsuarios = ConsultasDBUsuarios.consultaUsuariosCompleta()
-    dfUsuarios.set_index('id')
-    form = CreateAccountForm()
-    valorMonedas = Monedas.consulta_api()
+    if request.method == 'GET':
+        dfUsuarios = ConsultasDBUsuarios.consultaUsuariosCompleta()
+        dfUsuarios.set_index('id')
+        form = CreateAccountForm()
+        valorMonedas = Monedas.consulta_api()
 
-    return render_template("home/lista_usuarios.html", segment='lista_usuarios', tables=[dfUsuarios.to_html(header=True, classes='table table-hover table-striped table-bordered',
-                table_id="tabla_usuarios", index=False)], form = form, datosConsultaMonedas=valorMonedas)
+        return render_template("home/lista_usuarios.html", segment='lista_usuarios', tables=[dfUsuarios.to_html(header=True, classes='table table-hover table-striped table-bordered',
+                    table_id="tabla_usuarios", index=False)], form = form, datosConsultaMonedas=valorMonedas)
 
 
 @blueprint.route('/registrar_usuarios', methods=['POST'])

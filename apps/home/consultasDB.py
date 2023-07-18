@@ -349,8 +349,14 @@ class ConsultasDBUsuarios():
         queryUsuario = db.session.query(Users).filter(Users.id == id).first()
         
         return queryUsuario
-     
+    
 
+    def consultaUsuariosAdministradores():
+        rol_a_buscar = "administrador"
+        n_administradores = db.session.query(db.func.count()).filter(Users.Rol == rol_a_buscar).scalar()
+        
+        return n_administradores
+     
 
     #-----------------ELIMINTAR REGISTROS------------------
     def eliminarRegistro(id):
