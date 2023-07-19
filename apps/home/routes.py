@@ -666,7 +666,7 @@ def gestores():
     if request.method == 'PUT':
         respuesta = request.get_json()
                 
-        if len(respuesta) == 6:  # MODIFICAR UN REGISTRO
+        if len(respuesta) == 5:  # MODIFICAR UN REGISTRO
             indiceM = (respuesta[0])  # para que coincida con el indice de la base de datos
             NombreM = (respuesta[1])
             ApellidosM = (respuesta[2])
@@ -679,6 +679,7 @@ def gestores():
             # Valida el DNI
             if validar_dni(DniM): #Función en el archivo de validaciones
                 datos["DNI"] = DniM
+                print(DniM)
 
             print(indiceM)
             print(datos)

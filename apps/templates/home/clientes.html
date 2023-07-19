@@ -21,27 +21,27 @@
                         <div class="form-group col">
                             <label for="CIF" style="color: slategrey; font-size:14px;">CIF</label>
                             <input type="text" id="CIF" name="CIF" placeholder="CIF del Proveedor"
-                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                            class="form-control form-control-sm" pattern="[A-Za-z0-9]{1,9}" title="Solo se permiten número y letras en este campo" maxlength="9"/>
                         </div>
                         <div class="form-group col">
                             <label for="Nombre" style="color: slategrey; font-size:14px;">Nombre</label>
-                            <input type="text" id="Nombre" name="Nombre" placeholder="Nombre de la empresa proveedora"
-                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                            <input type="text" id="Nombre" name="Nombre" placeholder="Nombre de la empresa cliente"
+                            class="form-control form-control-sm" pattern="[A-Za-z0-9]{1,9}" title="Solo se permiten número y letras en este campo" maxlength="60"/>
                         </div>
                         <div class="form-group col">
                             <label for="Direccion" style="color: slategrey; font-size:14px;">Dirección</label>
-                            <input type="text" id="Direccion" name="Direccion" placeholder="Dirección del Proveedor"
+                            <input type="text" id="Direccion" name="Direccion" pattern="[A-Za-z0-9,-]{1,9}" title="Solo se permiten número, letras ',' y '-' en este campo" placeholder="Dirección del Proveedor" maxlength="60"
                             class="form-control form-control-sm"/>
                         </div>
                         <div class="form-group col">
                             <label for="Telefono" style="color: slategrey; font-size:14px;">Teléfono</label>
-                            <input type="tel" id="Telefono" name="Telefono" pattern="\d{9}" placeholder="Teléfono de 9 dígitos"
+                            <input type="tel" id="Telefono" name="Telefono" pattern="\d{9}" placeholder="Teléfono de 9 dígitos" maxlength="9"
                             class="form-control form-control-sm"/>
                         </div>
 
                         <div class="form-group col">
                             <label for="Tipo_Cliente" style="color: slategrey; font-size:14px;">Tipo de Cliente</label>
-                            <input type="text" id="Tipo_Cliente" name="Tipo_Cliente" placeholder="Categoría"
+                            <input type="text" id="Tipo_Cliente" name="Tipo_Cliente" pattern="[A-Za-z0-9]{1,9}" placeholder="Categoría"
                             class="form-control form-control-sm"/>
     
                         </div>
@@ -219,27 +219,27 @@
                     <div class="form-row" style="width:100%">
                         <div class="form-group col-md-3">
                             <label for="cifm" style="color: slategrey; font-size:14px;">CIF</label>
-                            <input type="text" id="cifm" name="cifm" placeholder="CIF del cliente"
+                            <input type="text" id="cifm" name="cifm" placeholder="CIF del cliente" maxlength="9"
                             class="form-control form-control-sm" value="`+cif+`"/>
                         </div>
                         <div class="form-group col-md-3">
                             <label for="nombrem" style="color: slategrey; font-size:14px;">Nombre</label>
-                            <input type="text" id="nombrem" name="nombrem" placeholder="Nombre del cliente"
+                            <input type="text" id="nombrem" name="nombrem" placeholder="Nombre del cliente" maxlength="60" 
                             class="form-control form-control-sm" value="`+nombre+`"/>
                         </div> 
                         <div class="form-group col-md-3">
-                            <label for="direccionm" style="color: slategrey; font-size:14px;">Número de Cuenta</label>
-                            <input type="text" id="direccionm" name="direccionm" placeholder="Dirección del cliente"
+                            <label for="direccionm" style="color: slategrey; font-size:14px;">Dirección</label>
+                            <input type="text" id="direccionm" name="direccionm" placeholder="Dirección del cliente" maxlength="60" 
                             class="form-control form-control-sm" value="`+direccion+`"/>
                         </div> 
                         <div class="form-group col-md-3">
                             <label for="telefonom" style="color: slategrey; font-size:14px;">Teléfono</label>
-                            <input type="tel" id="telefonom" name="telefonom" placeholder="Telefono del cliente"
+                            <input type="tel" id="telefonom" name="telefonom" pattern="{1,9}" placeholder="Telefono del cliente" maxlength="9" 
                             class="form-control form-control-sm" value="`+parsePhoneNumber(telefono)+`"/>
                         </div> 
                         <div class="form-group col-md-3">
-                            <label for="tipom" style="color: slategrey; font-size:14px;">Tipo</label>
-                            <input type="text" id="tipom" name="tipom" placeholder="Tipo del cliente"
+                            <label for="tipom" style="color: slategrey; font-size:14px;">Tipo de cliente</label>
+                            <input type="text" id="tipom" name="tipom" placeholder="Tipo del cliente" maxlength="20" 
                             class="form-control form-control-sm" value="`+tipo+`"/>
                         </div> 
 

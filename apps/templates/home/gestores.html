@@ -21,21 +21,21 @@
                         <div class="form-group col">
                             <label for="Nombre" style="color: slategrey; font-size:14px;">Nombre</label>
                             <input type="text" id="Nombre" name="Nombre" placeholder="Nombre del Gestor"
-                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo" maxlength="60"/>
                         </div>
                         <div class="form-group col">
                             <label for="Apellidos" style="color: slategrey; font-size:14px;">Apellidos</label>
                             <input type="text" id="Apellidos" name="Apellidos" placeholder="Apellidos del gestor"
-                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo" maxlength="60"/>
                         </div>
                         <div class="form-group col">
                             <label for="DNI" style="color: slategrey; font-size:14px;">DNI</label>
-                            <input type="text" id="DNI" name="DNI" pattern="[A-Za-z0-9]{9}" placeholder="DNI del gestor"
+                            <input type="text" id="DNI" name="DNI" pattern="[A-Za-z0-9]{9}" placeholder="DNI del gestor" maxlength="9"
                             class="form-control form-control-sm"/>
                         </div>
                         <div class="form-group col">
                             <label for="Zona_Geo" style="color: slategrey; font-size:14px;">Zona Geográfica</label>
-                            <input type="text" id="Zona_Geo" name="Zona_Geo" placeholder="12345678A"
+                            <input type="text" id="Zona_Geo" name="Zona_Geo" placeholder="12345678A" maxlength="20"
                             class="form-control form-control-sm"/>
                         </div>
 
@@ -169,9 +169,10 @@
     function parseDNI(DniM) {
     // Esta regex valida un DNI de 9 caracteres con 8 dígitos y una letra
     var regex = /^\d{8}[A-Za-z]$/;
-    
+
     // Comprueba que el DNI tenga exactamente 9 caracteres y que los primeros 8 sean dígitos y el último una letra
     if (!regex.test(DniM)) {
+        console.log("Formato incorrecto");
         return NaN;
     }
 
@@ -179,11 +180,12 @@
     var letras = "TRWAGMYFPDXBNJZSQVHLCKE";
     var numero = parseInt(DniM.substring(0, 8), 10);
     var letra = DniM[8].toUpperCase();
-    if (letras[numero % 23] !== letra) {
-        return NaN;
-    }
+    // if (letras[numero % 23] !== letra) {
+    //     console.log("Letra incorrecta");
+    //     return NaN;
+    // }
 
-    // Si el DNI es válido, devuélvelo tal cual
+    // Si el DNI es válido, devuélvelo tal cual. HE COMENTADO LA ÚLTIMA PARTE PORQUE AUNQUE ES VALIDO TODOS NUESTROS DNI'S SON INVENTADOS Y NOS DARÍA PROBLEMAS.
     return DniM;
 }
 
@@ -192,7 +194,7 @@
 
         var Nombre = elemento.getElementsByTagName("td")[1].innerHTML;
         var Apellidos = elemento.getElementsByTagName("td")[2].innerHTML;
-        var DNI = elemento.getElementsByTagName("td")[3].innerHTML;
+        var Dni = elemento.getElementsByTagName("td")[3].innerHTML;
         var Zona_Geo = elemento.getElementsByTagName("td")[4].innerHTML;
 
 
@@ -215,22 +217,22 @@
                     <div class="form-row" style="width:100%">
                         <div class="form-group col-md-3">
                             <label for="Nombrem" style="color: slategrey; font-size:14px;">Nombre</label>
-                            <input type="text" id="Nombrem" name="Nombrem" placeholder="CIF del cliente"
+                            <input type="text" id="Nombrem" name="Nombrem" placeholder="CIF del cliente" maxlength="60"
                             class="form-control form-control-sm" value="`+Nombre+`"/>
                         </div>
                         <div class="form-group col-md-3">
                             <label for="Apellidosm" style="color: slategrey; font-size:14px;">Apelidos</label>
-                            <input type="text" id="Apellidosm" name="Apellidosm" placeholder="Nombre del cliente"
+                            <input type="text" id="Apellidosm" name="Apellidosm" placeholder="Nombre del cliente" maxlength="60"
                             class="form-control form-control-sm" value="`+Apellidos+`"/>
                         </div> 
                         <div class="form-group col-md-3">
                             <label for="DNIm" style="color: slategrey; font-size:14px;">DNI</label>
-                            <input type="text" id="DNIm" name="DNIm" pattern="[A-Za-z0-9]{9}" placeholder="Dirección del cliente"
-                            class="form-control form-control-sm" value="`+parseDNI(DNI)+`"/>
+                            <input type="text" id="DNIm" name="DNIm" pattern="[A-Za-z0-9]{9}" placeholder="Dirección del cliente" maxlength="9"
+                            class="form-control form-control-sm" value="`+parseDNI(Dni)+`"/>
                         </div> 
                         <div class="form-group col-md-3">
                             <label for="Zona_Geom" style="color: slategrey; font-size:14px;">Zona Geográfica</label>
-                            <input type="text" id="Zona_Geom" name="Zona_Geom" placeholder="Tipo del cliente"
+                            <input type="text" id="Zona_Geom" name="Zona_Geom" placeholder="Tipo del cliente" maxlength="60"
                             class="form-control form-control-sm" value="`+Zona_Geo+`"/>
                         </div> 
 
