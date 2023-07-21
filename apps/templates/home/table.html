@@ -54,7 +54,7 @@
                         <div class="form-group col-md-4">
                             <label for="inputconcepto" style="color: slategrey; font-size:14px;">Concepto</label>
                             <input type="text" id="concepto" name="concepto" placeholder="Compra de material..."
-                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                            class="form-control form-control-sm" pattern="^[a-zA-Z0-9]*$" title="No se permiten símbolos en este campo"/>
                         </div>
                         <div class="form-group col">
                             <label for="inputimporte" style="color: slategrey; font-size:14px;">Importe</label>
@@ -84,8 +84,8 @@
 
                         <div class="form-group col-md">
                             <label for="inputfechaVencimiento" style="color: slategrey; font-size:14px;">Fecha de Vencimiento</label>
-                            <input type="text" id="fechaVencimiento" name="fechaVencimiento" class="form-control form-control-sm" readonly
-                            style="background-color: white;"/>
+                            <!-- <input type="text" id="fechaVencimiento" name="fechaVencimiento" class="form-control form-control-sm" readonly
+                            style="background-color: white;"/> -->
                             <input type="date" id="fechaVencimientoDate" name="fechaVencimientoDate" class="form-control form-control-sm"
                             style="background-color: white;"/>
                         </div>
@@ -141,7 +141,7 @@
             </div>  
 
             <!-- TABLA -->
-            <div class="row" style="flex-direction: column;">
+            <div class="row" >
                 <div class="table-wrap" style="height: 400px; background-color: rgba(201, 38, 38, 0);font-size: x-small">
                     {% for table in tables %}
                         {{ table|safe }}
@@ -151,9 +151,9 @@
             </div>
 
             <!-- BOTÓN DE DESCARGA -->
-            <div class="form-row" style="justify-content: center;">
+            <!-- <div class="form-row" style="justify-content: center;">
                 <input type="submit" id="descargaXLS" name="descargaXLS" value="Descargar XLS" class="btn btn-primary" style="margin-top: 10px;"/>
-            </div>
+            </div> -->
             
         </div>
     </div>
@@ -187,8 +187,8 @@
     document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("form_registro").addEventListener('submit', validarFormulario);
         // Añadimos la funcion validarFormulario para comprobar los datos antes de enviarlos
-        document.getElementById('importe').addEventListener('change', compruebaImporte);
-        document.getElementById('fechaFactura').addEventListener('change', cambioFecha);
+        //document.getElementById('importe').addEventListener('change', compruebaImporte);
+        //document.getElementById('fechaFactura').addEventListener('change', cambioFecha);
         document.getElementById('tipo').addEventListener('change', cambioTipo);
         //document.getElementById('descargaXLS').addEventListener('click', descargaXLS);
 
@@ -199,7 +199,7 @@
         llenarSelect(Object.keys(gestores),Object.values(gestores),'gestor');
         
         
-        $('#fechaVencimientoDate').hide(); //Ocultamos al inicio el input date de fecha de vencimiento
+        //$('#fechaVencimientoDate').hide(); //Ocultamos al inicio el input date de fecha de vencimiento
 
         $('#filtroFechasFac').daterangepicker({ // DATAPICKER PARA FILTRAR POR FECHA
             "autoApply": true,
@@ -237,7 +237,7 @@
             "drops": "auto"
         }, function(start, end, label) {
             //console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
-            filtroFechas(start,end,6);
+            filtroFechas(start,end,7);
         });
 
 
@@ -277,7 +277,7 @@
             "drops": "auto"
         }, function(start, end, label) {
             //console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
-            filtroFechas(start,end,7);
+            filtroFechas(start,end,8);
         });
 
         addCheckbox();
@@ -349,7 +349,7 @@
     modalidad_select = document.getElementById('tipo'); //Venta o Compra
     tipoPago_select = document.getElementById('tipoPago');  //Confirming o transferencia
     fechaFactura_text = document.getElementById('fechaFactura');
-    fechaVencimiento_text = document.getElementById('fechaVencimiento');//Si es una compra utilizaremos este input text readonly
+    //fechaVencimiento_text = document.getElementById('fechaVencimiento');//Si es una compra utilizaremos este input text readonly
     fechaVencimiento_Date = document.getElementById('fechaVencimientoDate');//Si es una venta utilizaremos este input date editable
     banco_select = document.getElementById('entidad');
     //etiqTipo = document.getElementById('etiqTipo');
@@ -390,13 +390,13 @@
     }
     
     
-    function compruebaImporte(evento){   // Si están los campos cumplimentados se calculará la fecha de vencimiento
-        evento.preventDefault();
-        condicionesPago();  // Comprobaremos cuales son las condiciones de un proveedor, si indica "NO" no se le hará confirming
-        if (compruebaCampos()){
-            fechaVencimiento_text.value = calculaFechaVencimiento();
-        }
-    }
+    // function compruebaImporte(evento){   // Si están los campos cumplimentados se calculará la fecha de vencimiento
+    //     evento.preventDefault();
+    //     condicionesPago();  // Comprobaremos cuales son las condiciones de un proveedor, si indica "NO" no se le hará confirming
+    //     if (compruebaCampos()){
+    //         fechaVencimiento_text.value = calculaFechaVencimiento();
+    //     }
+    // }
 
 
     function compruebaCampos(){ // Comprueba si los campos de importe, fechaFactura, tipoPago están rellenos. Devuelve booleano
@@ -473,14 +473,14 @@
     }
   
   
-    function cambioFecha(){// Se ejecutará cuando cambiemos la fecha del Input Date (Fecha Factura) 
-        if (compruebaCampos() && modalidad_select.value == 'Compra'){ //Si es un Compra se calculará la fecha de vencimiento
-            const opciones = { day: 'numeric', month: 'numeric', year: 'numeric' }; // Estas son las opciones que queremos de formato
-            var fechaDef = calculaFechaVencimiento();
-            var fechaDefText = fechaDef.toLocaleDateString('es-ES', opciones);
-            fechaVencimiento_text.value = fechaDefText;
-        }
-    }
+    // function cambioFecha(){// Se ejecutará cuando cambiemos la fecha del Input Date (Fecha Factura) 
+    //     if (compruebaCampos() && modalidad_select.value == 'Compra'){ //Si es un Compra se calculará la fecha de vencimiento
+    //         const opciones = { day: 'numeric', month: 'numeric', year: 'numeric' }; // Estas son las opciones que queremos de formato
+    //         var fechaDef = calculaFechaVencimiento();
+    //         var fechaDefText = fechaDef.toLocaleDateString('es-ES', opciones);
+    //         fechaVencimiento_text.value = fechaDefText;
+    //     }
+    // }
     
 
 
@@ -491,22 +491,21 @@
     
         if (tipo === 'Compra' || tipo === 'Elegir...') {
             $('#fechaVencimientoDate').value = "";
-            $('#fechaVencimientoDate').hide();
-            $('#fechaVencimiento').show();
+            //$('#fechaVencimientoDate').hide();
+            //$('#fechaVencimiento').show();
             document.getElementById('etiqProv').innerHTML = 'Proveedor';
             data = proveedores;
             llenarSelect(Object.keys(data), Object.values(data), 'proveedor');
 
         } else if (tipo === 'Venta') {
-            $('#fechaVencimientoDate').show();
-            $('#fechaVencimiento').hide();
+            //$('#fechaVencimientoDate').show();
+            //$('#fechaVencimiento').hide();
+            $('#fechaVencimientoDate').value = "";
             document.getElementById('etiqProv').innerHTML = 'Cliente';
             data = contactos;
             llenarSelect(Object.keys(data), Object.values(data), 'proveedor');
         }
     }
-
-console.log(proveedores);
 
 
     proveedor_select.onchange = function cambioProveedor(){
@@ -520,8 +519,8 @@ console.log(proveedores);
             importe_text.value = "";
             concepto_text.value = "";
             document.getElementById("fechaVencimientoDate").value = '';
-            $('#fechaVencimientoDate').hide();
-            $('#fechaVencimiento').show();
+            //$('#fechaVencimientoDate').hide();
+            //$('#fechaVencimiento').show();
 
         } else {                        // Si elegimos una opción, habilitaremos el campo fecha de certificación
             fechaVencimiento_text.value = '';

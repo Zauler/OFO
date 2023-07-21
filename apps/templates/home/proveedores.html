@@ -21,17 +21,17 @@
                         <div class="form-group col">
                             <label for="CIF" style="color: slategrey; font-size:14px;">CIF</label>
                             <input type="text" id="CIF" name="CIF" placeholder="CIF del Proveedor"
-                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                            class="form-control form-control-sm" pattern="^[a-zA-Z0-9]*$" title="No se permiten símbolos en este campo"/>
                         </div>
                         <div class="form-group col">
                             <label for="Nombre" style="color: slategrey; font-size:14px;">Nombre</label>
                             <input type="text" id="Nombre" name="Nombre" placeholder="Nombre de la empresa proveedora"
-                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                            class="form-control form-control-sm" pattern="^[a-zA-Z0-9,]*$" title="No se permiten símbolos en este campo"/>
                         </div>
                         <div class="form-group col">
                             <label for="Direccion" style="color: slategrey; font-size:14px;">Dirección</label>
                             <input type="text" id="Direccion" name="Direccion" placeholder="Dirección del Proveedor"
-                            class="form-control form-control-sm"/>
+                            class="form-control form-control-sm" pattern="^[a-zA-Z0-9,]*$" title="No se permiten símbolos en este campo"/>
                         </div>
                         <div class="form-group col">
                             <label for="Telefono" style="color: slategrey; font-size:14px;">Teléfono</label>
@@ -42,14 +42,14 @@
                         <div class="form-group col">
                             <label for="Tipo_Proveedor" style="color: slategrey; font-size:14px;">Tipo de proveedor</label>
                             <input type="text" id="Tipo_Proveedor" name="Tipo_Proveedor" placeholder="Materiales o Servicios"
-                            class="form-control form-control-sm"/>
+                            class="form-control form-control-sm" pattern="^[a-zA-Z0-9]*$" title="No se permiten símbolos en este campo"/>
     
                         </div>
     
                         <div class="form-group col">
                             <label for="Condiciones_confirming" style="color: slategrey; font-size:14px;">Condiciones confirming</label>
                             <input type="text" id="Condiciones_confirming" name="Condiciones_confirming" placeholder="Condiciones especiales del confirming"
-                            class="form-control form-control-sm"/>
+                            class="form-control form-control-sm" pattern="^[a-zA-Z0-9]*$" title="No se permiten símbolos en este campo"/>
                         </div>
 
                     </div>

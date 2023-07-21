@@ -21,12 +21,12 @@
                         <div class="form-group col">
                             <label for="inputbanco" style="color: slategrey; font-size:14px;">Entidad</label>
                             <input type="text" id="Banco" name="Banco" placeholder="Nombre Entidad"
-                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                            class="form-control form-control-sm" pattern="^[a-zA-Z0-9]*$" title="No se permiten símbolos en este campo"/>
                         </div>
                         <div class="form-group col">
                             <label for="inputcuenta" style="color: slategrey; font-size:14px;">Número de cuenta</label>
                             <input type="text" id="Num_Cuenta" name="Num_Cuenta" placeholder="Número de cuenta"
-                            class="form-control form-control-sm" pattern="[^,]*" title="No se permiten comas en este campo"/>
+                            class="form-control form-control-sm" pattern="^[a-zA-Z0-9]*$" title="No se permiten símbolos en este campo"/>
                         </div>
                         <div class="form-group col">
                             <label for="inputCash" style="color: slategrey; font-size:14px;">Tesorería</label>
@@ -170,12 +170,12 @@
                         <div class="form-group col-md-3">
                             <label for="inputbanco" style="color: slategrey; font-size:14px;">Entidad</label>
                             <input type="text" id="bancoM" name="bancoM" placeholder="Nombre Entidad"
-                            class="form-control form-control-sm" value="`+banco+`"/>
+                            class="form-control form-control-sm" value="`+banco+`" pattern="^[a-zA-Z0-9]*$"/>
                         </div>
                         <div class="form-group col-md-3">
                             <label for="inputcuenta" style="color: slategrey; font-size:14px;">Número de Cuenta</label>
                             <input type="text" id="cuentaM" name="cuentaM" placeholder="Número de Cuenta"
-                            class="form-control form-control-sm" value="`+cuenta+`"/>
+                            class="form-control form-control-sm" value="`+cuenta+`" pattern="^[a-zA-Z0-9]*$"/>
                         </div> 
                         <div class="form-group col-md-3">
                             <label for="inputcash" style="color: slategrey; font-size:14px;">Tesorería</label>
