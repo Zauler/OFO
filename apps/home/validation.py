@@ -66,8 +66,10 @@ def validar_dni(DniM):
     if not DniM[8].isalpha():
         return False
 
+    ##### La función es correcta, pero nos inventamos los DNI's por lo que no nos dejará meterlos y por eso lo comento ####
     # Comprueba que la letra sea correcta 
     #if letras[int(DniM[:8]) % 23] != DniM[8].upper(): 
-    #    return False  ## La función es correcta, pero nos inventamos los DNI's por lo que no nos dejará meterlos y por eso lo comento.
+    #    return False  
+
 
     return True

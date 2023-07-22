@@ -21,12 +21,12 @@
                         <div class="form-group col">
                             <label for="Nombre" style="color: slategrey; font-size:14px;">Nombre</label>
                             <input type="text" id="Nombre" name="Nombre" placeholder="Nombre del Gestor"
-                            class="form-control form-control-sm" pattern="[A-Za-z0-9]{1,9}" title="Solo se permiten número y letras en este campo" maxlength="60"/>
+                            class="form-control form-control-sm" pattern="^[a-zA-Z\s']+$" title="Solo se permiten  letras (mayúsculas o minúsculas), espacios y apóstrofos"  maxlength="60"/>
                         </div>
                         <div class="form-group col">
                             <label for="Apellidos" style="color: slategrey; font-size:14px;">Apellidos</label>
                             <input type="text" id="Apellidos" name="Apellidos" placeholder="Apellidos del gestor"
-                            class="form-control form-control-sm" pattern="[A-Za-z0-9]{1,9}" title="Solo se permiten número y letras en este campo" maxlength="60"/>
+                            class="form-control form-control-sm" pattern="^[a-zA-Z\s']+$" title="Solo se permiten  letras (mayúsculas o minúsculas), espacios y apóstrofos" maxlength="60"/>
                         </div>
                         <div class="form-group col">
                             <label for="DNI" style="color: slategrey; font-size:14px;">DNI</label>
@@ -35,7 +35,7 @@
                         </div>
                         <div class="form-group col">
                             <label for="Zona_Geo" style="color: slategrey; font-size:14px;">Zona Geográfica</label>
-                            <input type="text" id="Zona_Geo" name="Zona_Geo"  pattern="[A-Za-z0-9]{1,9}" title="Solo se permiten número y letras en este campo" placeholder="12345678A" maxlength="20"
+                            <input type="text" id="Zona_Geo" name="Zona_Geo"  pattern="[A-Za-z0-9,]{1,20}" title="Solo se permiten número y letras en este campo" placeholder="Zona geográfica del gestor" maxlength="20"
                             class="form-control form-control-sm"/>
                         </div>
 
