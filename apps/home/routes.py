@@ -180,10 +180,6 @@ def table():
                 clienteM = proveedorM
                 proveedorM = None
 
-            # Actualizamos el registro del pedido seleccionado
-            # datos = {"id_Proyecto": proyectoM, "id_Proveedor": proveedorM, "id_Cliente": clienteM, "Concepto": conceptoM, "Tipo": tipoM,
-            #         "Importe": importeM, "Tipo_Pago": tipoPagoM, "Fecha_Factura": fechaF, "Fecha_Vencimiento": fechaV, "id_Banco": entidadM, "gestor": gestorM}
-            
             datos = {"id_Proyecto":proyectoM, "id_Proveedor":proveedorM, "id_Cliente":clienteM, "Concepto": conceptoM,"Importe": importeM, "Tipo_Pago": tipoPagoM, "id_Banco": entidadM, "Fecha_Factura": fechaF, "Fecha_Vencimiento": fechaV}
 
             ConsultasDB.modificarRegistro(indiceM,datos)
@@ -617,25 +613,6 @@ def actualizar_usuario():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @blueprint.route('/gestores.html', methods=('GET', 'POST', 'PUT'))
 @login_required
 def gestores():
@@ -758,6 +735,7 @@ def lista_usuarios():
                 else:
                     flash(f'Error: No se puede modificar el rol de este usuario', 'error')
                     print ('No se puede modificar el rol de este usuario')
+                    return redirect(url_for('home_blueprint.lista_usuarios'))
             
             else:  # Si no se ha modificado el rol podemos actualizar los datos  
                 ConsultasDBUsuarios.modificarRegistro(indiceM,datos)
@@ -826,12 +804,7 @@ def registrar_usuarios():
     db.session.add(user)
     db.session.commit()
 
-    # Delete user from session
-    #logout_user()
-
     return redirect(url_for('home_blueprint.lista_usuarios'))
-
-
 
 
 
