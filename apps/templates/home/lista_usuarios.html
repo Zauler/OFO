@@ -20,19 +20,19 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Username</label>
-                                <input type="text" id="username" name="username" class="form-control" placeholder="Username" value="" required>
+                                <input type="text" id="username" name="username" class="form-control" pattern="^[a-zA-Z0-9_]{3,64}$"  maxlength="64" title="Solo se permiten número y letras en este campo" required>
                             </div>
                         </div>
                         <div class="col-md">
                             <div class="form-group">
                                 <label>eMail</label>
-                                <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="" required>
+                                <input type="email" id="email" name="email" class="form-control" class="form-control" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" maxlength="64"  placeholder="Email" value="" required>
                             </div>
                         </div>
                         <div class="col-md">
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" class="form-control" placeholder="Password" value="" required>
+                                <input type="password" class="form-control" placeholder="Password" value="" maxlength="64"  required>
                             </div>
                         </div>
                     </div>
@@ -44,6 +44,31 @@
                     <hr>
                 </form>
             </div>
+
+            <!-- FILTROS DE BUSQUEDA -->
+            <div class="row" style="flex-direction: column;">
+                <div class="form-row" style="justify-content: center;">
+                    <div class="form-group col-2">
+                        <input class="form-control" id="filtroUsername" type="text" placeholder="Nombre Usuario...">
+                    </div>
+                    <div class="form-group col-2">
+                        <input class="form-control" id="filtroRol" type="text" placeholder="Rol...">
+                    </div>
+                    <div class="form-group col-2">
+                        <input class="form-control" id="filtroNombre" type="text" placeholder="Nombre...">
+                    </div>
+                    <div class="form-group col-2">
+                        <input class="form-control" id="filtroApellido" type="text" placeholder="Apellidos...">
+                    </div>
+                    <div class="form-group col-2">
+                        <input class="form-control" id="filtroDireccion" type="text" placeholder="Direccion...">
+                    </div>
+                    <div class="form-group col-2">
+                        <input class="form-control" id="filtroEmail" type="text" placeholder="Email...">
+                    </div>
+                </div>
+            </div>  
+
 
             <!-- TABLA -->
             <div class="row" style="flex-direction: column;">
@@ -284,5 +309,46 @@
         }
 
 </script>
+
+<script type = "text/javascript">
+
+    // FUNCIONES DE BUSQUEDA PARA APLICAR A LOS FILTROS DE LA TABLA
+    $(document).ready(function(){
+    
+        function applyFilters() {
+            var filtroUsername = $("#filtroUsername").val().toLowerCase();
+            var filtroRol = $("#filtroRol").val().toLowerCase();
+            var filtroNombre = $("#filtroNombre").val().toLowerCase();
+            var filtroApellido = $("#filtroApellido").val().toLowerCase();
+            var filtroDireccion = $("#filtroDireccion").val().toLowerCase();
+            var filtroEmail = $("#filtroEmail").val().toLowerCase();
+
+
+            $("#tabla_usuarios tbody tr").each(function() {
+                var columnaUsername = $(this).find('td:eq(1)').text().replace(/\s+/g, ' ').toLowerCase();
+                var columnaRol = $(this).find('td:eq(2)').text().replace(/\s+/g, ' ').toLowerCase();
+                var columnaNombre = $(this).find('td:eq(3)').text().replace(/\s+/g, ' ').toLowerCase();
+                var columnaApellido = $(this).find('td:eq(4)').text().replace(/\s+/g, '').toLowerCase();
+                var columnaDireccion = $(this).find('td:eq(5)').text().replace(/\s+/g, ' ').toLowerCase();
+                var columnaEmail = $(this).find('td:eq(6)').text().replace(/\s+/g, '').toLowerCase();
+
+                var mostrar = true;
+
+                if (filtroUsername && columnaUsername.indexOf(filtroUsername) === -1) mostrar = false;
+                if (filtroRol && columnaRol.indexOf(filtroRol) === -1) mostrar = false;
+                if (filtroNombre && columnaNombre.indexOf(filtroNombre) === -1) mostrar = false;
+                if (filtroApellido && columnaApellido.indexOf(filtroApellido) === -1) mostrar = false;
+                if (filtroDireccion && columnaDireccion.indexOf(filtroDireccion) === -1) mostrar = false;
+                if (filtroEmail && columnaEmail.indexOf(filtroEmail) === -1) mostrar = false;
+
+                $(this).toggle(mostrar);
+            });
+        }
+    
+        $("#filtroUsername, #filtroRol, #filtroNombre, #filtroApellido, #filtroDireccion, #filtroEmail").on("keyup", applyFilters);
+    });
+</script>
+
+
 
 {% endblock javascripts %}

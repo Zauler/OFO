@@ -26,11 +26,11 @@
                         <div class="form-group col">
                             <label for="Nombre" style="color: slategrey; font-size:14px;">Nombre</label>
                             <input type="text" id="Nombre" name="Nombre" placeholder="Nombre de la empresa cliente"
-                            class="form-control form-control-sm" pattern="[A-Za-z0-9]{1,9}" title="Solo se permiten número y letras en este campo" maxlength="60"/>
+                            class="form-control form-control-sm"  pattern="^[a-zA-Z\s']+$" title="Solo se permiten  letras (mayúsculas o minúsculas), espacios y apóstrofos" maxlength="60"/>
                         </div>
                         <div class="form-group col">
                             <label for="Direccion" style="color: slategrey; font-size:14px;">Dirección</label>
-                            <input type="text" id="Direccion" name="Direccion" pattern="[A-Za-z0-9,-]{1,9}" title="Solo se permiten número, letras ',' y '-' en este campo" placeholder="Dirección del Proveedor" maxlength="60"
+                            <input type="text" id="Direccion" name="Direccion" pattern="^[a-zA-Z0-9\s,.]+$" title="Solo se permiten número y letras en este campo" placeholder="Dirección del Proveedor" maxlength="60"
                             class="form-control form-control-sm"/>
                         </div>
                         <div class="form-group col">
@@ -41,7 +41,7 @@
 
                         <div class="form-group col">
                             <label for="Tipo_Cliente" style="color: slategrey; font-size:14px;">Tipo de Cliente</label>
-                            <input type="text" id="Tipo_Cliente" name="Tipo_Cliente" pattern="[A-Za-z0-9]{1,9}" placeholder="Categoría"
+                            <input type="text" id="Tipo_Cliente" name="Tipo_Cliente" pattern="[A-Za-z0-9]{1,9}"  maxlength="20" placeholder="Categoría"
                             class="form-control form-control-sm"/>
     
                         </div>

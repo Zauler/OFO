@@ -7,6 +7,7 @@
 
 {% block content %}
 
+
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -27,13 +28,13 @@
                                     <div class="col-md">
                                         <div class="form-group">
                                             <label>Username</label>
-                                            <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Username" value="{{ current_user.username }}">
+                                            <input type="text" id="usuario" name="usuario"  pattern="^[a-zA-Z0-9_]{3,64}$"  title="Solo se permiten número y letras en este campo" maxlength="64"  class="form-control" placeholder="Username" value="{{ current_user.username }}" required>
                                         </div>
                                     </div>
                                     <div class="col-md">
                                         <div class="form-group">
                                             <label>Email</label>
-                                            <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="{{ current_user.email }}">
+                                            <input type="email" id="email" name="email" class="form-control" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" tittle="Introduce una dirección email válida " placeholder="Email" value="{{ current_user.email }}" required>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -47,13 +48,13 @@
                                     <div class="col-md-6 pr-1">
                                         <div class="form-group">
                                             <label>Nombre</label>
-                                            <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" value="{{ current_user.Nombre }}">
+                                            <input type="text" id="nombre" name="nombre" class="form-control"  pattern="^[a-zA-Z\s']+$" title="Solo se permiten  letras (mayúsculas o minúsculas), espacios y apóstrofos" maxlength="64" placeholder="Nombre" value="{{ current_user.Nombre }}" >
                                         </div>
                                     </div>
                                     <div class="col-md-6 pl-1">
                                         <div class="form-group">
                                             <label>Apellidos</label>
-                                            <input type="text" id="apellidos" name="apellidos" class="form-control" placeholder="Apellidos" value="{{ current_user.Apellidos }}">
+                                            <input type="text" id="apellidos" name="apellidos" class="form-control" pattern="^[a-zA-Z\s']+$" title="Solo se permiten  letras (mayúsculas o minúsculas), espacios y apóstrofos" maxlength="64"  placeholder="Apellidos" value="{{ current_user.Apellidos }}" required>
                                         </div>
                                     </div>
                                 </div>
@@ -61,7 +62,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Dirección</label>
-                                            <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Calle..." value="{{ current_user.Direccion }}">
+                                            <input type="text" id="direccion" name="direccion" class="form-control" pattern="^[a-zA-Z0-9\s,.]+$" title="Solo se permiten número y letras en este campo" maxlength="64" placeholder="Calle..." value="{{ current_user.Direccion }}" required>
                                         </div>
                                     </div>
                                 </div>
@@ -72,46 +73,15 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col-md-4">
-                    <div class="card card-user">
-                        <div class="card-image">
-                            <img src="https://ununsplash.imgix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400" alt="...">
-                        </div>
-                        <div class="card-body">
-                            <div class="author">
-                                <a href="#">
-                                    <img class="avatar border-gray" src="{{ config.ASSETS_ROOT }}/img/faces/face-3.jpg" alt="...">
-                                    <h5 class="title">Mike Andrew</h5>
-                                </a>
-                                <p class="description">
-                                    michael24
-                                </p>
-                            </div>
-                            <p class="description text-center">
-                                "Lamborghini Mercy
-                                <br> Your chick she so thirsty
-                                <br> I'm in that two seat Lambo"
-                            </p>
-                        </div>
-                        <hr>
-                        <div class="button-container mr-auto ml-auto">
-                            <button href="#" class="btn btn-simple btn-link btn-icon">
-                                <i class="fa fa-facebook-square"></i>
-                            </button>
-                            <button href="#" class="btn btn-simple btn-link btn-icon">
-                                <i class="fa fa-twitter"></i>
-                            </button>
-                            <button href="#" class="btn btn-simple btn-link btn-icon">
-                                <i class="fa fa-google-plus-square"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </div>
     </div>
 
+
+
+
 {% endblock content %}
+
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
@@ -135,7 +105,7 @@
             if (result.isConfirmed) {
                 fetch('user.html', {
                         method: 'PUT',
-                        body: JSON.stringify(datosM), // data can be `string` or {object}!
+                        body: JSON.stringify(datosM), // Los datos pueden ser `string` o {object}!
                         headers:{
                             'Content-Type': 'application/json'
                         }
@@ -143,17 +113,6 @@
                 location.reload();
             }
         });
-
-
-        // const datosM = {indice: document.getElementById('id').value};
-
-        // fetch('user.html', {
-        //                 method: 'PUT',
-        //                 body: JSON.stringify(datosM), // data can be `string` or {object}!
-        //                 headers:{
-        //                     'Content-Type': 'application/json'
-        //                 }
-        // });
     }
 
 </script>

@@ -623,19 +623,27 @@ def actualizar_usuario():
     apellidosM = form['apellidos']
     direccionM = form['direccion']
 
-    datos = {"username":usernameM, "email":emailM, "Rol": rolM, "Nombre": nombreM, "Apellidos": apellidosM, "Direccion":direccionM}
+
+    # Comprueba si alguno de los campos está vacío
+    if not all([usernameM, emailM, rolM, nombreM, apellidosM, direccionM]):
+        return redirect(url_for('home_blueprint.user'))
+    
+    # Comprueba si el nombre de usuario ya existe
+    user = Users.query.filter_by(username=usernameM).first()
+    if user and user.id != int(indiceM):
+        return redirect(url_for('home_blueprint.user'))
+
+    # Comprueba si el correo electrónico ya existe
+    user = Users.query.filter_by(email=emailM).first()
+    if user and user.id != int(indiceM):
+        return redirect(url_for('home_blueprint.user'))
+
+
+
+    datos = {"username": usernameM, "email":emailM, "Rol": rolM, "Nombre": nombreM, "Apellidos": apellidosM, "Direccion":direccionM}
     ConsultasDBUsuarios.modificarRegistro(indiceM,datos)
 
     return redirect(url_for('home_blueprint.user'))  # redirige al usuario a la página principal después de actualizar
-
-
-
-
-
-
-
-
-
 
 
 
@@ -755,11 +763,28 @@ def lista_usuarios():
             apellidosM = (respuesta[5])
             direccionM = (respuesta[6])
 
+
+            # Comprueba si alguno de los campos está vacío
+            if not all([usernameM, emailM, rolM]):
+                return redirect(url_for('home_blueprint.user'))
+
+            # Verificamos si el usuario existe ya
+            user = Users.query.filter_by(username=usernameM).first()
+            if user and user.id != indiceM:
+                flash('Error: el username ya existe.', 'error')
+                return redirect(url_for('home_blueprint.lista_usuarios'))
+
+            # Verificamos si el mail existe ya
+            user = Users.query.filter_by(email=emailM).first()
+            if user and user.id != indiceM:
+                flash('Error: el email ya existe.', 'error')
+                return redirect(url_for('home_blueprint.lista_usuarios'))
+
             # Averiguamos cual es el rol que tenía antes de la modificacion de datos
             usuario = ConsultasDBUsuarios.consultaUsuarioActual(indiceM)
             rolInicial = usuario.Rol
 
-            datos = {"username":usernameM, "email":emailM, "Rol":rolM, "Nombre":nombreM, "Apellidos":apellidosM, "Direccion":direccionM }
+            datos = {"username":usernameM, "email":emailM, "Rol":rolM, "Nombre":nombreM, "Apellidos":apellidosM, "Direccion":direccionM,}
 
             if (rolInicial != rolM) and (rolM == "gestor"): # Si se ha modificado el rol tenemos que comprobar cuantos administradores quedan en la BD
                 # Comprobamos si existe algun administrador más aparte de él mismo
@@ -768,6 +793,7 @@ def lista_usuarios():
 
                 if n_administradores > 1:
                     ConsultasDBUsuarios.modificarRegistro(indiceM,datos)
+                    return redirect(url_for('home_blueprint.lista_usuarios'))
                 
                 else:
                     flash(f'Error: No se puede modificar el rol de este usuario', 'error')
@@ -775,19 +801,29 @@ def lista_usuarios():
             
             else:  # Si no se ha modificado el rol podemos actualizar los datos  
                 ConsultasDBUsuarios.modificarRegistro(indiceM,datos)
+                return redirect(url_for('home_blueprint.lista_usuarios'))
 
 
         elif len(respuesta) == 1:   # ELIMINAR UN REGISTRO
-            n_administradores = ConsultasDBUsuarios.consultaUsuariosAdministradores()
+            indiceM = respuesta["indice"]
 
-            if n_administradores > 1: 
-                indiceM = int(respuesta['indice'])  # Indice de la base de datos
-                ConsultasDBUsuarios.eliminarRegistro(indiceM)
-            
+            # Averiguamos cual es el rol que tenía antes de la modificacion de datos
+            usuario = ConsultasDBUsuarios.consultaUsuarioActual(indiceM)
+            rolInicial = usuario.Rol
+
+            if (rolInicial == "administrador"):
+                # Comprobamos si existe algun administrador más aparte de él mismo
+                n_administradores = ConsultasDBUsuarios.consultaUsuariosAdministradores()
+
+                if n_administradores == 1: 
+                    flash(f'Error: No se puede eliminar este usuario', 'error')
+                    indiceM = int(respuesta['indice'])  # Indice de la base de datos
+                    return redirect(url_for('home_blueprint.lista_usuarios'))
+                    
             else:
-                flash(f'Error: No se puede eliminar este usuario', 'error')
-                print ('No se puede eliminar este usuario')
-    
+                ConsultasDBUsuarios.eliminarRegistro(indiceM)
+                return redirect(url_for('home_blueprint.lista_usuarios'))
+                
         
         return redirect(url_for('home_blueprint.lista_usuarios'))
 
