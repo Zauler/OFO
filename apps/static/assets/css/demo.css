@@ -830,6 +830,7 @@
 .table-wrap {
     height: 80px;
     overflow-y: auto;
+    overflow-x: auto;
 }
 
 table tr th {

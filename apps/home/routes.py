@@ -79,7 +79,6 @@ def index():
 
     df = ConsultasDB.consultaRegistros()
     df2= ConsultaDBGestores.consultaCompleta()
-    print(df.head())
     meses = 5   # Son los meses a analizar en las gráficas
     dictConfir = calculaConfirming(meses)
     dictTeso, dictTesoDis, listMeses = calculaTesoreria(meses)
@@ -145,15 +144,13 @@ def table():
             indice = (respuesta['indice'] ) # para que coincida con el indice de la base de datos
             estado = (respuesta['estado'])
             tipo = (respuesta['tipo'])
-            print(indice,estado,tipo)
 
             #MODIFICAR VALOR DE UN CHECBOX
             if tipo == "cobrado":   # Si es un checkbox de cobrado
                 datos = { "Fact_Emit_Recib": estado}
             elif tipo == "pagoEmitido":   # Si es un checkbox de cobrado
                 datos = { "Pago_Emit_Recib": estado}
-            print(datos)
-            print(type(datos.values()))
+
             # Actualizamos el registro del pedido seleccionado
             ConsultasDB.modificarRegistro(indice,datos)
                 
@@ -188,8 +185,7 @@ def table():
             #         "Importe": importeM, "Tipo_Pago": tipoPagoM, "Fecha_Factura": fechaF, "Fecha_Vencimiento": fechaV, "id_Banco": entidadM, "gestor": gestorM}
             
             datos = {"id_Proyecto":proyectoM, "id_Proveedor":proveedorM, "id_Cliente":clienteM, "Concepto": conceptoM,"Importe": importeM, "Tipo_Pago": tipoPagoM, "id_Banco": entidadM, "Fecha_Factura": fechaF, "Fecha_Vencimiento": fechaV}
-            print("El índice es: ", indiceM)
-            print(datos)
+
             ConsultasDB.modificarRegistro(indiceM,datos)
 
 
@@ -232,10 +228,6 @@ def table():
 def registrar_registros():
 
     form = RegistrosForm(request.form)
-    print("FORMULARIO HTML")
-    print(request.form)
-    print("FORMULARIO VALIDACIÓN")
-    print(form.data)
 
     if request.form["tipo"] =="Compra":
         fechavencimiento_str = request.form["fechaVencimiento"]
@@ -367,8 +359,6 @@ def proveedores():
             if isinstance(TelefonoM, int) and len(str(TelefonoM)) == 9:
                 datos["Telefono"] = TelefonoM
 
-            print(indiceM)
-            print(datos)
             ConsultasDBProveedores.modificarRegistro(indiceM,datos)
 
 
@@ -382,7 +372,6 @@ def proveedores():
     dfProveedores.set_index('id_Proveedor')
     dfProveedores['Telefono'] = dfProveedores['Telefono'].fillna(0).astype(int)
     dfProveedores['Telefono'] = dfProveedores['Telefono'].astype(int) #Forzamos tipo para lectura en página
-    print(dfProveedores.dtypes)
     form = ProveedoresForm()
     valorMonedas = Monedas.consulta_api()
 
@@ -395,11 +384,6 @@ def proveedores():
 def registrar_proveedores():
 
     form = ProveedoresForm(request.form)
-    print("FORMULARIO HTML")
-    print(request.form)
-    print("FORMULARIO VALIDACIÓN")
-    print(form.data)
-
 
     if form.validate_on_submit():
         nuevo_registro = Proveedores(
@@ -475,10 +459,6 @@ def proyectos():
 def registrar_proyectos():
 
     form = ProyectosForm(request.form)
-    print("FORMULARIO HTML")
-    print(request.form)
-    print("FORMULARIO VALIDACIÓN")
-    print(form.data)
 
     if form.validate_on_submit():
         nuevo_registro = Proyectos(
@@ -528,8 +508,6 @@ def clientes():
             if isinstance(TelefonoM, int) and len(str(TelefonoM)) == 9:
                 datos["Telefono"] = TelefonoM
 
-            print(indiceM)
-            print(datos)
             ConsultaDBClientes.modificarRegistro(indiceM,datos)
 
 
@@ -543,7 +521,6 @@ def clientes():
     dfClientes.set_index('id_Cliente')
     dfClientes['Telefono'] = dfClientes['Telefono'].fillna(0).astype(int)
     dfClientes['Telefono'] = dfClientes['Telefono'].astype(int) #Forzamos tipo para lectura en página
-    print(dfClientes.dtypes)
     form = ClientesForm()
     valorMonedas = Monedas.consulta_api()
 
@@ -556,11 +533,6 @@ def clientes():
 def registrar_clientes():
 
     form = ClientesForm(request.form)
-    print("FORMULARIO HTML")
-    print(request.form)
-    print("FORMULARIO VALIDACIÓN")
-    print(form.data)
-
 
     if form.validate_on_submit():
         nuevo_registro = Clientes(
@@ -596,8 +568,6 @@ def user():
         respuesta = request.get_json()
         indiceM = int(respuesta['indice'])  # Indice de la base de datos
         ConsultasDBUsuarios.eliminarRegistro(indiceM)
-
-        print ("eliminar cuenta")
 
         #session.clear() # Cierra la sesión
         return redirect('home/login.html')   # Redirecciona a la página de login
@@ -687,10 +657,7 @@ def gestores():
             # Valida el DNI
             if validar_dni(DniM): #Función en el archivo de validaciones
                 datos["DNI"] = DniM
-                print(DniM)
 
-            print(indiceM)
-            print(datos)
             ConsultaDBGestores.modificarRegistro(indiceM,datos)
 
 
@@ -702,7 +669,6 @@ def gestores():
     # METODO GET            
     dfGestores = ConsultaDBGestores.consultaCompleta()
     dfGestores.set_index('id_Gestor')
-    print(dfGestores.dtypes)
     form = GestoresForm()
     valorMonedas = Monedas.consulta_api()
 
@@ -716,11 +682,6 @@ def gestores():
 def registrar_gestor():
 
     form = GestoresForm(request.form)
-    print("FORMULARIO HTML")
-    print(request.form)
-    print("FORMULARIO VALIDACIÓN")
-    print(form.data)
-
 
     if form.validate_on_submit():
         nuevo_registro = Gestores(
@@ -789,7 +750,6 @@ def lista_usuarios():
             if (rolInicial != rolM) and (rolM == "gestor"): # Si se ha modificado el rol tenemos que comprobar cuantos administradores quedan en la BD
                 # Comprobamos si existe algun administrador más aparte de él mismo
                 n_administradores = ConsultasDBUsuarios.consultaUsuariosAdministradores()
-                print (n_administradores)
 
                 if n_administradores > 1:
                     ConsultasDBUsuarios.modificarRegistro(indiceM,datos)
@@ -868,8 +828,6 @@ def registrar_usuarios():
 
     # Delete user from session
     #logout_user()
-
-    print (user)
 
     return redirect(url_for('home_blueprint.lista_usuarios'))
 
