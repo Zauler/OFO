@@ -10,9 +10,8 @@ MONEDAS_API = getenv("MONEDAS_API")
 class Monedas():
 
     def consulta_api():
-        API = "16675157b671a5ebe69d2597fe498406"
+
         url = f"http://api.exchangeratesapi.io/v1/latest?access_key={MONEDAS_API}"
-        #url = "https://api.ejemplo.com/endpoint"  # Reemplaza con la URL de la API que deseas consultar
 
         try:
             response = requests.get(url)
