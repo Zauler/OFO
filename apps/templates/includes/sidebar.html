@@ -11,129 +11,131 @@ Tip 2: you can also add an image using data-image tag
             </a>
         </div>
         <ul class="nav">
-            {% if current_user.is_authenticated %}
-            <li class="nav-item nav-item {% if 'index' in segment %} active {% endif %}">
-                <a class="nav-link" href="/">
-                    <i class="nc-icon nc-chart-pie-35"></i>
-                    <p>Dashboard</p>
-                </a>
-            </li>
-
-            <li class="nav-item nav-item {% if 'table' in segment %} active {% endif %}">
-                <a class="nav-link" href="/table.html">
-                    <i class="nc-icon nc-notes"></i>
-                    <p>Registros</p>
-                </a>
-            </li>
-
-            <li class="nav-item nav-item {% if 'bancos' in segment %} active {% endif %}">
-                <a class="nav-link" href="/bancos.html">
-                    <i class="nc-icon nc-money-coins"></i>
-                    <p>Bancos</p>
-                </a>
-            </li>
-            <li class="nav-item nav-item {% if 'proyectos' in segment %} active {% endif %}">
-                <a class="nav-link" href="/proyectos.html">
-                    <i class="nc-icon nc-ruler-pencil"></i>
-                    <p>Proyectos</p>
-                </a>
-            </li>
-
-            <li class="nav-item nav-item {% if 'proveedores' in segment %} active {% endif %}">
-                <a class="nav-link" href="/proveedores.html">
-                    <i class="nc-icon nc-tag-content"></i>
-                    <p>Proveedores</p>
-                </a>
-            </li>
-            <li class="nav-item nav-item {% if 'clientes' in segment %} active {% endif %}">
-                <a class="nav-link" href="/clientes.html">
-                    <i class="nc-icon nc-grid-45"></i>
-                    <p>Clientes</p>
-                </a>
-            </li>
-
-            <li class="nav-item nav-item {% if 'clientes' in segment %} active {% endif %}">
-                <a class="nav-link" href="/gestores.html">
-                    <i class="nc-icon nc-single-02"></i>
-                    <p>Gestores</p>
-                </a>
-            </li>
-            <li class="nav-item nav-item {% if 'user' in segment %} active {% endif %}">
-                <a class="nav-link" href="/user.html">
-                    <i class="nc-icon nc-single-02"></i>
-                    <p>Cuenta de Usuario</p>
-                </a>
-            </li>
-            {% if current_user.is_authenticated and current_user.Rol == "administrador" %}
-            <li class="nav-item nav-item {% if 'clientes' in segment %} active {% endif %}">
-                <a class="nav-link" href="/lista_usuarios.html">
-                    <i class="nc-icon nc-grid-45"></i>
-                    <p>Gestion de Usuarios</p>
-                </a>
-            </li>
-            {% endif %}
-            <!--  QUITAR DEL MENU PORQUE NO NOS HACE FALTA POR AHORA:
-            <li class="nav-item nav-item {% if 'typography' in segment %} active {% endif %}">
-                <a class="nav-link" href="/typography.html">
-                    <i class="nc-icon nc-paper-2"></i>
-                    <p>Typography</p>
-                </a>
-            </li>
-            <li class="nav-item nav-item {% if 'icons' in segment %} active {% endif %}">
-                <a class="nav-link" href="/icons.html">
-                    <i class="nc-icon nc-atom"></i>
-                    <p>Icons</p>
-                </a>
-
-
+            {% if current_user.is_authenticated and not is_login_page %}
+                {% if current_user.is_authenticated and current_user.Rol == "administrador" %}
+                <li class="nav-item nav-item {% if 'dashboard' in segment %} active {% endif %}">
+                    <a class="nav-link" href="/dashboard.html">
+                        <i class="nc-icon nc-chart-pie-35"></i>
+                        <p>Dashboard</p>
+                    </a>
                 </li>
-                <li class="nav-item nav-item {% if 'maps' in segment %} active {% endif %}">
-                    <a class="nav-link" href="/maps.html">
-                        <i class="nc-icon nc-pin-3"></i>
-                        <p>Maps</p>
+                {% endif %}
+                <li class="nav-item nav-item {% if 'table' in segment %} active {% endif %}">
+                    <a class="nav-link" href="/table.html">
+                        <i class="nc-icon nc-notes"></i>
+                        <p>Registros</p>
+                    </a>
+                </li>
+                {% if current_user.is_authenticated and current_user.Rol == "administrador" %}
+                <li class="nav-item nav-item {% if 'bancos' in segment %} active {% endif %}">
+                    <a class="nav-link" href="/bancos.html">
+                        <i class="nc-icon nc-money-coins"></i>
+                        <p>Bancos</p>
+                    </a>
+                </li>
+                {% endif %}
+                <li class="nav-item nav-item {% if 'proyectos' in segment %} active {% endif %}">
+                    <a class="nav-link" href="/proyectos.html">
+                        <i class="nc-icon nc-ruler-pencil"></i>
+                        <p>Proyectos</p>
                     </a>
                 </li>
 
-            <li class="nav-item nav-item {% if 'notif' in segment %} active {% endif %}">
-                <a class="nav-link" href="/notifications.html">
-                    <i class="nc-icon nc-bell-55"></i>
-                    <p>Notifications</p>
-                </a>
-            </li>
-
-
-
-                <li class="nav-item nav-item {% if '404' in segment %} active {% endif %}">
-                    <a class="nav-link" href="/page-404.html">
-                        <i class="nc-icon nc-settings-gear-64"></i>
-                        <p>Error 404</p>
+                <li class="nav-item nav-item {% if 'proveedores' in segment %} active {% endif %}">
+                    <a class="nav-link" href="/proveedores.html">
+                        <i class="nc-icon nc-tag-content"></i>
+                        <p>Proveedores</p>
                     </a>
                 </li>
-            -->
+                <li class="nav-item nav-item {% if 'clientes' in segment %} active {% endif %}">
+                    <a class="nav-link" href="/clientes.html">
+                        <i class="nc-icon nc-grid-45"></i>
+                        <p>Clientes</p>
+                    </a>
+                </li>
+                {% if current_user.is_authenticated and current_user.Rol == "administrador" %}
+                <li class="nav-item nav-item {% if 'clientes' in segment %} active {% endif %}">
+                    <a class="nav-link" href="/gestores.html">
+                        <i class="nc-icon nc-single-02"></i>
+                        <p>Gestores</p>
+                    </a>
+                </li>
+                {% endif %}
+                <li class="nav-item nav-item {% if 'user' in segment %} active {% endif %}">
+                    <a class="nav-link" href="/user.html">
+                        <i class="nc-icon nc-single-02"></i>
+                        <p>Cuenta de Usuario</p>
+                    </a>
+                </li>
+                {% if current_user.is_authenticated and current_user.Rol == "administrador" %}
+                <li class="nav-item nav-item {% if 'clientes' in segment %} active {% endif %}">
+                    <a class="nav-link" href="/lista_usuarios.html">
+                        <i class="nc-icon nc-grid-45"></i>
+                        <p>Gestion de Usuarios</p>
+                    </a>
+                </li>
+                {% endif %}
+                <!--  QUITAR DEL MENU PORQUE NO NOS HACE FALTA POR AHORA:
+                <li class="nav-item nav-item {% if 'typography' in segment %} active {% endif %}">
+                    <a class="nav-link" href="/typography.html">
+                        <i class="nc-icon nc-paper-2"></i>
+                        <p>Typography</p>
+                    </a>
+                </li>
+                <li class="nav-item nav-item {% if 'icons' in segment %} active {% endif %}">
+                    <a class="nav-link" href="/icons.html">
+                        <i class="nc-icon nc-atom"></i>
+                        <p>Icons</p>
+                    </a>
 
 
-            <li>
-                <a class="nav-link" href="{{ url_for('authentication_blueprint.logout') }}">
-                    <i class="nc-icon nc-button-power"></i>
-                    <p>Logout</p>
-                </a>
-            </li>
-            
-            <!-- <li class="nav-item active active-pro">
-                <a class="nav-link active" target="_blank" 
-                   href="https://appseed.us/support/">
-                    <i class="nc-icon nc-spaceship"></i>
-                    <p>Support</p>
-                </a>
-            </li> -->
-            {% else %}
-            <!-- <li class="nav-item active">
-                <a class="nav-link active" target="_blank" 
-                   href="https://appseed.us/support/">
-                    <i class="nc-icon nc-spaceship"></i>
-                    <p>Support</p>
-                </a>
-            </li> -->
+                    </li>
+                    <li class="nav-item nav-item {% if 'maps' in segment %} active {% endif %}">
+                        <a class="nav-link" href="/maps.html">
+                            <i class="nc-icon nc-pin-3"></i>
+                            <p>Maps</p>
+                        </a>
+                    </li>
+
+                <li class="nav-item nav-item {% if 'notif' in segment %} active {% endif %}">
+                    <a class="nav-link" href="/notifications.html">
+                        <i class="nc-icon nc-bell-55"></i>
+                        <p>Notifications</p>
+                    </a>
+                </li>
+
+
+
+                    <li class="nav-item nav-item {% if '404' in segment %} active {% endif %}">
+                        <a class="nav-link" href="/page-404.html">
+                            <i class="nc-icon nc-settings-gear-64"></i>
+                            <p>Error 404</p>
+                        </a>
+                    </li>
+                -->
+
+
+                <li>
+                    <a class="nav-link" href="{{ url_for('authentication_blueprint.logout') }}">
+                        <i class="nc-icon nc-button-power"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
+                
+                <!-- <li class="nav-item active active-pro">
+                    <a class="nav-link active" target="_blank" 
+                    href="https://appseed.us/support/">
+                        <i class="nc-icon nc-spaceship"></i>
+                        <p>Support</p>
+                    </a>
+                </li> -->
+                <!-- <li class="nav-item active">
+                    <a class="nav-link active" target="_blank" 
+                    href="https://appseed.us/support/">
+                        <i class="nc-icon nc-spaceship"></i>
+                        <p>Support</p>
+                    </a>
+                </li> -->
             {% endif %}
         </ul>
     </div>

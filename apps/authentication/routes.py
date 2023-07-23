@@ -25,6 +25,14 @@ def route_default():
 
 # Login & Registration
 
+@blueprint.after_request
+def add_no_cache_headers(response):
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "-1"
+    return response
+
+
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm(request.form)
@@ -46,12 +54,13 @@ def login():
         # Something (user or pass) is not ok
         return render_template('accounts/login.html',
                                msg='Wrong user or password',
-                               form=login_form)
+                               form=login_form, is_login_page=True)
 
     if not current_user.is_authenticated:
         return render_template('accounts/login.html',
-                               form=login_form)
-    return redirect(url_for('home_blueprint.index'))
+                               form=login_form,is_login_page=True )
+    
+    return redirect(url_for('home_blueprint.table'))
 
 
 @blueprint.route('/register', methods=['GET', 'POST'])
@@ -97,6 +106,7 @@ def register():
 
 @blueprint.route('/logout')
 def logout():
+    
     logout_user()
     return redirect(url_for('authentication_blueprint.login'))
 
@@ -105,11 +115,13 @@ def logout():
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
+
     return render_template('home/page-403.html'), 403
 
 
 @blueprint.errorhandler(403)
 def access_forbidden(error):
+
     return render_template('home/page-403.html'), 403
 
 
@@ -120,4 +132,5 @@ def not_found_error(error):
 
 @blueprint.errorhandler(500)
 def internal_error(error):
+
     return render_template('home/page-500.html'), 500
