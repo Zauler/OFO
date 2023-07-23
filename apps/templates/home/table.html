@@ -513,7 +513,7 @@
 
         if (proveed == 'Elegir...'){    // Si no se ha elegido nada todavía lo ponemos todo a "cero"
             fechaFactura_text.value = "";
-            fechaVencimiento_text.value = "";
+            fechaVencimiento_Date.value = "";
             tipoPago_select.value = "Elegir...";
             //modalidad_select.value = "Elegir...";
             importe_text.value = "";
@@ -523,7 +523,7 @@
             //$('#fechaVencimiento').show();
 
         } else {                        // Si elegimos una opción, habilitaremos el campo fecha de certificación
-            fechaVencimiento_text.value = '';
+            fechaVencimiento_Date.value = '';
             //modalidad_select.value = "Elegir...";
             tipoPago_select.value = "Elegir...";
             fechaFactura_text.value = '';
@@ -605,7 +605,7 @@
         if (modalidad_select.value == "Elegir..." || modalidad_select.value == "Compra"){   //Si se ha seleccionado Compra
             if(proyecto_select.value == "Elegir..." || proveedor_select.value == "Elegir..." || concepto_text.value == "" || importe_text.value == "" ||
             modalidad_select.value == "Elegir..." || tipoPago_select.value == "Elegir..." ||
-            fechaFactura_text.value == "" || fechaVencimiento_text.value == "" || banco_select.value == "Elegir...") {
+            fechaFactura_text.value == "" || fechaVencimiento_Date.value == "" || banco_select.value == "Elegir...") {
                 Swal.fire({
                     title: 'Falta algún campo por cumplimentar',
                     icon: 'error'

@@ -170,8 +170,8 @@ def table():
             #gestorM = (respuesta[10])
 
             # Convertimos los datos de string a date para que lo admita la BD
-            fechaF = datetime.strptime(fechaF, '%Y-%m-%d')
-            fechaV = datetime.strptime(fechaV, '%Y-%m-%d')
+            fechaF = datetime.datetime.strptime(fechaF, '%Y-%m-%d')
+            fechaV = datetime.datetime.strptime(fechaV, '%Y-%m-%d')
 
             # Comprobamos si es compra o venta para rellenar el cliente o el proveedor
             if tipoM == "Compra":
@@ -223,15 +223,16 @@ def table():
 @blueprint.route('/registrar_r', methods=['POST'])
 @login_required
 def registrar_registros():
+    print ("pulsado")
 
     form = RegistrosForm(request.form)
 
     if request.form["tipo"] =="Compra":
-        fechavencimiento_str = request.form["fechaVencimiento"]
-        fechavencimiento = datetime.strptime(fechavencimiento_str, "%d/%m/%Y")
-        fechavencimiento = fechavencimiento.strftime('%Y-%m-%d')
-        fechavencimiento = datetime.strptime(fechavencimiento, '%Y-%m-%d').date()
-        form.fechaVencimientoDate.data = fechavencimiento
+        # fechavencimiento_str = request.form["fechaVencimientoDate"]
+        # fechavencimiento = datetime.strptime(fechavencimiento_str, "%d/%m/%Y")
+        # fechavencimiento = fechavencimiento.strftime('%Y-%m-%d')
+        # fechavencimiento = datetime.strptime(fechavencimiento, '%Y-%m-%d').date()
+        # form.fechaVencimientoDate.data = fechavencimiento
         form.cliente.data = None
 
     if request.form["tipo"] == "Venta":
