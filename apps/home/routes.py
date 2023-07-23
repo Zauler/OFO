@@ -74,11 +74,10 @@ def admin_required(view_func):
     return decorated_view
 
 
-@blueprint.route('/dashboard', methods=('GET', 'POST', 'PUT'))
+@blueprint.route('/dashboard.html', methods=('GET', 'POST', 'PUT'))
 @login_required
-#@admin_required  # Utiliza nuestra función decoradora personalizada para verificar el acceso de administrador
+@admin_required  # Utiliza nuestra función decoradora personalizada para verificar el acceso de administrador
 def dashboard():
-
     df = ConsultasDB.consultaRegistros()
     df2= ConsultaDBGestores.consultaCompleta()
     meses = 5   # Son los meses a analizar en las gráficas
@@ -89,10 +88,10 @@ def dashboard():
     dfLineaConfirming = dfLineaConfirming.to_json()
     image_url_conf = grafico(meses,listMeses)
     image_url_flujo_Disponible = graficoFlujoDisponible()
-    valorMonedas = Monedas.consulta_api()
+    valorMonedas = moneda.consulta_api()
 
 
-         # METODO PUT
+    # METODO PUT
     if request.method == 'PUT':
         respuesta = request.get_json()
         if respuesta:

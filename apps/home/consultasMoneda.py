@@ -18,8 +18,6 @@ class Monedas():
         if self.ha_pasado_una_hora():
             url = f"http://api.exchangeratesapi.io/v1/latest?access_key={MONEDAS_API}"
 
-            print ("HA CONSULTADO")
-
             try:
                 response = requests.get(url)
                 response.raise_for_status()  # Lanza una excepción si la respuesta tiene un código de error
@@ -39,18 +37,14 @@ class Monedas():
             with open("././datos/consultamoneda.json", "r") as archivo_json:
                 datos_cargados = json.load(archivo_json)
 
-            print("No ha pasado 1 hora desde la última consulta. Espere un poco más.")
             return datos_cargados
            
 
     # Función para comprobar si ha pasado 1 hora desde la última consulta
     def ha_pasado_una_hora(self):
-        print ("dentro")
         if not self.ultimo_instante:
             return True
         instante_actual = datetime.datetime.now()
         diferencia = instante_actual - self.ultimo_instante
 
-        print ("DIFERENCIA: ",diferencia.total_seconds())
-        print ("ULTIMO INSTANTE: ", self.ultimo_instante)
         return diferencia.total_seconds() >= 3600
