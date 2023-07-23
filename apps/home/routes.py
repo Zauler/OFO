@@ -29,6 +29,7 @@ from apps.home.funciones2 import *
 from apps.home.consultasMoneda import *
 from apps.home.agente import realizar_consulta_agente
 from functools import wraps
+from run import moneda
 
 def graficoFlujoDisponible():
     custom_style = Style(colors=('#008b9e','#c7483f'))
@@ -68,14 +69,15 @@ def admin_required(view_func):
     @wraps(view_func)
     def decorated_view(*args, **kwargs):
         if not current_user.is_authenticated or current_user.Rol != "administrador":
-            return redirect(url_for('home_blueprint.index'))  # Redirige al usuario a la página de inicio si no cumple las condiciones
+            return redirect(url_for('home_blueprint.table'))  # Redirige al usuario a la página de inicio si no cumple las condiciones
         return view_func(*args, **kwargs)
     return decorated_view
 
 
-@blueprint.route('/index', methods=('GET', 'POST', 'PUT'))
+@blueprint.route('/dashboard', methods=('GET', 'POST', 'PUT'))
 @login_required
-def index():
+#@admin_required  # Utiliza nuestra función decoradora personalizada para verificar el acceso de administrador
+def dashboard():
 
     df = ConsultasDB.consultaRegistros()
     df2= ConsultaDBGestores.consultaCompleta()
@@ -102,7 +104,7 @@ def index():
         else:
             return jsonify({'status': 'error', 'message': 'No data received'}), 400
 
-    return render_template('home/index.html', segment='index', image_url_flujo = image_url_flujo_Disponible, listConfirming = dfLineaConfirming, dictTeso = dictTeso,
+    return render_template('home/dashboard.html', segment='dashboard', image_url_flujo = image_url_flujo_Disponible, listConfirming = dfLineaConfirming, dictTeso = dictTeso,
                            dictTesoDis = dictTesoDis, dictConfir = dictConfir, listMeses = listMeses, image_url_config = image_url_conf,
                            datosConsultaMonedas=valorMonedas)
 
@@ -110,8 +112,7 @@ def index():
 @blueprint.route('/<template>')
 @login_required
 def route_template(template):
-
-    valorMonedas = Monedas.consulta_api()
+    valorMonedas = moneda.consulta_api()
 
     try:
 
@@ -127,7 +128,8 @@ def route_template(template):
     except TemplateNotFound:
         return render_template('home/page-404.html', datosConsultaMonedas=valorMonedas), 404
 
-    except:
+    except Exception as e:
+        print ("EXCEPCION: ",e)
         return render_template('home/page-500.html', datosConsultaMonedas=valorMonedas), 500
 
 
@@ -203,7 +205,7 @@ def table():
     dfProyectos = ConsultasDB.consultaProyectos()
     dfGestores = ConsultasDB.consultaGestores()
     dfGestores["NombreGestor"] = dfGestores["Nombre"] + " " + dfGestores["Apellidos"]
-    valorMonedas = Monedas.consulta_api()
+    valorMonedas = moneda.consulta_api()
 
 
     # Convertimos el dataframe en una lista para pasarlo al template donde lo recogerá javascript
@@ -275,6 +277,7 @@ def registrar_registros():
 
 @blueprint.route('/bancos.html', methods=('GET', 'POST', 'PUT'))
 @login_required
+@admin_required  # Utiliza nuestra función decoradora personalizada para verificar el acceso de administrador
 def bancos():
     
     # METODO PUT
@@ -300,7 +303,7 @@ def bancos():
     # METODO GET            
     dfBancos = ConsultasDBBancos.consultaBancosCompleta()
     dfBancos.set_index('id_Banco')
-    valorMonedas = Monedas.consulta_api()
+    valorMonedas = moneda.consulta_api()
 
     form = BancosForm()
     return render_template("home/bancos.html", segment='bancos', tables=[dfBancos.to_html(header=True, classes='table table-hover table-striped table-bordered',
@@ -373,7 +376,7 @@ def proveedores():
     dfProveedores['Telefono'] = dfProveedores['Telefono'].fillna(0).astype(int)
     dfProveedores['Telefono'] = dfProveedores['Telefono'].astype(int) #Forzamos tipo para lectura en página
     form = ProveedoresForm()
-    valorMonedas = Monedas.consulta_api()
+    valorMonedas = moneda.consulta_api()
 
     return render_template("home/proveedores.html", segment='proveedores', tables=[dfProveedores.to_html(header=True, classes='table table-hover table-striped table-bordered',
                 table_id="tabla_proveedores", index=False)], form = form, datosConsultaMonedas=valorMonedas)
@@ -447,7 +450,7 @@ def proyectos():
     # Convertimos el dataframe en una lista para pasarlo al template donde lo recogerá javascript
     clientes = dfClientes.set_index('id_Cliente')['Nombre'].to_dict()
     gestores = dfGestores.set_index('id_Gestor')['NombreGestor'].to_dict()
-    valorMonedas = Monedas.consulta_api()
+    valorMonedas = moneda.consulta_api()
 
     form = ProyectosForm()
     return render_template("home/proyectos.html", segment='proyectos', tables=[dfProyectos.to_html(header=True, classes='table table-hover table-striped table-bordered',
@@ -522,7 +525,7 @@ def clientes():
     dfClientes['Telefono'] = dfClientes['Telefono'].fillna(0).astype(int)
     dfClientes['Telefono'] = dfClientes['Telefono'].astype(int) #Forzamos tipo para lectura en página
     form = ClientesForm()
-    valorMonedas = Monedas.consulta_api()
+    valorMonedas = moneda.consulta_api()
 
     return render_template("home/clientes.html", segment='clientes', tables=[dfClientes.to_html(header=True, classes='table table-hover table-striped table-bordered',
                 table_id="tabla_clientes", index=False)], form = form, datosConsultaMonedas=valorMonedas)
@@ -574,7 +577,7 @@ def user():
 
     
     # METODO GET    
-    valorMonedas = Monedas.consulta_api()
+    valorMonedas = moneda.consulta_api()
 
     return render_template("home/user.html", segment='user', datosConsultaMonedas=valorMonedas)
 
@@ -630,6 +633,7 @@ def actualizar_usuario():
 
 @blueprint.route('/gestores.html', methods=('GET', 'POST', 'PUT'))
 @login_required
+@admin_required  # Utiliza nuestra función decoradora personalizada para verificar el acceso de administrador
 def gestores():
     
     # METODO PUT
@@ -662,7 +666,7 @@ def gestores():
     dfGestores = ConsultaDBGestores.consultaCompleta()
     dfGestores.set_index('id_Gestor')
     form = GestoresForm()
-    valorMonedas = Monedas.consulta_api()
+    valorMonedas = moneda.consulta_api()
 
     return render_template("home/gestores.html", segment='gestores', tables=[dfGestores.to_html(header=True, classes='table table-hover table-striped table-bordered',
                 table_id="tabla_gestores", index=False)], form = form, datosConsultaMonedas=valorMonedas)
@@ -758,7 +762,7 @@ def lista_usuarios():
         dfUsuarios = ConsultasDBUsuarios.consultaUsuariosCompleta()
         dfUsuarios.set_index('id')
         form = CreateAccountForm()
-        valorMonedas = Monedas.consulta_api()
+        valorMonedas = moneda.consulta_api()
 
         return render_template("home/lista_usuarios.html", segment='lista_usuarios', tables=[dfUsuarios.to_html(header=True, classes='table table-hover table-striped table-bordered',
                     table_id="tabla_usuarios", index=False)], form = form, datosConsultaMonedas=valorMonedas)
@@ -804,8 +808,9 @@ def registrar_usuarios():
 def get_segment(request):
 
     try:
-
+        
         segment = request.path.split('/')[-1]
+        print(segment)
 
         if segment == '':
             segment = 'index'

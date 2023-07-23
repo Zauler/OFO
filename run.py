@@ -7,9 +7,9 @@ import os
 from   flask_migrate import Migrate
 from   flask_minify  import Minify
 from   sys import exit
-
 from apps.config import config_dict
 from apps import create_app, db
+from apps.home.consultasMoneda import *
 
 # WARNING: Don't run with debug turned on in production!
 DEBUG = (os.getenv('DEBUG', 'False') == 'True')
@@ -30,6 +30,8 @@ app = create_app(app_config)
 app.secret_key = "12345678"
 
 Migrate(app, db)
+
+moneda = Monedas()  # Creamos una instancia de la clase moneda para realizar la consulta a la API de terceros y controlar si ha pasado más de 1 hora
 
 if not DEBUG:
     Minify(app=app, html=True, js=False, cssless=False)
